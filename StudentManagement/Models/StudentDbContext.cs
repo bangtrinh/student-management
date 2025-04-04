@@ -6,6 +6,10 @@ namespace StudentManagement.Models
 {
     public class StudentDbContext : IdentityDbContext
     {
+        public StudentDbContext()
+        {
+        }
+
         public StudentDbContext(DbContextOptions<StudentDbContext>options) : base(options)
         {
         }

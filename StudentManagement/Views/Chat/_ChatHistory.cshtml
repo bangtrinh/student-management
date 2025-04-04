@@ -1,0 +1,51 @@
+﻿@model List<StudentManagement.Models.Message>
+@using System.Security.Claims
+@{
+    var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+}
+
+@if (Model != null && Model.Any())
+{
+    @foreach (var message in Model)
+    {
+        var isCurrentUser = message.SenderId == currentUserId;
+        <div class="message @(isCurrentUser ? "sent" : "received")">
+            <div class="message-content">
+                <div class="message-text">@message.Content</div>
+                <div class="message-meta">
+                    <span class="message-time">@message.SentTime.ToString("HH:mm dd/MM")</span>
+                    @if (isCurrentUser)
+                    {
+                        <span class="read-status @(message.IsRead ? "read" : "")">
+                            @if (message.IsRead)
+                            {
+                                <i class="fas fa-check"></i>
+                            }
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+}
+else
+{
+    <div class="no-messages">
+        <p>Chưa có tin nhắn nào trong cuộc trò chuyện này</p>
+    </div>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/chat.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+}
+
+<script>
+    setTimeout(function () {
+        const chatMessages = document.getElementById("chatMessages");
+        if (chatMessages) {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    },10); // Delay để đảm bảo DOM được render xong
+</script>
