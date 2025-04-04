@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace StudentManagement.Controllers
 {
+    //Thực hiện code, chỉnh sửa 
     // Controller dùng để xử lý trang ChatBot
     public class ChatBotController : Controller
     {
