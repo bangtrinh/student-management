@@ -1,0 +1,25 @@
+﻿@model Microsoft.AspNetCore.Identity.IdentityUser
+
+<h2 class="text-center">Xóa tài khoản</h2>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">Xác nhận xóa</h4>
+                </div>
+                <div class="card-body">
+                    <p>Bạn có chắc muốn xóa tài khoản <strong>@Model.Email</strong> không?</p>
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <div class="form-group text-center">
+                            <button type="submit" class="btn btn-danger">Xóa</button>
+                            <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

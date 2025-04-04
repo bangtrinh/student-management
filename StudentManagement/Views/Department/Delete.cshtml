@@ -1,0 +1,25 @@
+﻿@model StudentManagement.Models.Department
+
+@{
+    ViewData["Title"] = "Xóa khoa";
+}
+
+<h2>Xóa khoa</h2>
+
+<h3>Bạn có chắc muốn xóa khoa này?</h3>
+<div>
+    <h4>@Model.DepartmentName</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Mã khoa</dt>
+        <dd class="col-sm-10">@Model.DepartmentID</dd>
+        <dt class="col-sm-2">Tên khoa</dt>
+        <dd class="col-sm-10">@Model.DepartmentName</dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="DepartmentID" />
+        <input type="submit" value="Xóa" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    </form>
+</div>

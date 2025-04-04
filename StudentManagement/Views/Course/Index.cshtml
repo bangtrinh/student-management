@@ -1,0 +1,43 @@
+﻿@model IEnumerable<StudentManagement.Models.Course>
+
+@{
+    ViewData["Title"] = "Danh sách môn học";
+}
+
+<h2>Danh sách môn học</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Thêm môn học mới</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Mã môn học</th>
+            <th>Tên môn học</th>
+            <th>Số tín chỉ</th>
+            <th>Mã ngành</th>
+            <th>Mã GV</th>
+            <th>Phòng học</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.CourseID</td>
+                <td>@item.CourseName</td>
+                <td>@item.Credits</td>
+                <td>@item.MajorID</td>
+                <td>@item.TeacherID</td>
+                <td>@item.Room</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.CourseID" class="btn btn-info btn-sm">Chi tiết</a>
+                    <a asp-action="Edit" asp-route-id="@item.CourseID" class="btn btn-warning btn-sm">Sửa</a>
+                    <a asp-action="Delete" asp-route-id="@item.CourseID" class="btn btn-danger btn-sm">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

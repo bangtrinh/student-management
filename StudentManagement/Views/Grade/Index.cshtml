@@ -1,0 +1,43 @@
+﻿@model IEnumerable<StudentManagement.Models.Grade>
+
+@{
+    ViewData["Title"] = "Danh sách điểm số";
+}
+
+<h2>Danh sách điểm số</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Thêm điểm số mới</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Mã điểm</th>
+            <th>Mã SV</th>
+            <th>Mã môn học</th>
+            <th>Điểm</th>
+            <th>Học kỳ</th>
+            <th>Năm học</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.GradeID</td>
+                <td>@item.StudentID</td>
+                <td>@item.CourseID</td>
+                <td>@item.Score</td>
+                <td>@item.Semester</td>
+                <td>@item.AcademicYear</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.GradeID" class="btn btn-info btn-sm">Chi tiết</a>
+                    <a asp-action="Edit" asp-route-id="@item.GradeID" class="btn btn-warning btn-sm">Sửa</a>
+                    <a asp-action="Delete" asp-route-id="@item.GradeID" class="btn btn-danger btn-sm">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

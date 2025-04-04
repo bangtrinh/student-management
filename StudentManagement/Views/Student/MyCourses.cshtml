@@ -1,0 +1,56 @@
+﻿@model List<StudentManagement.Models.Grade>
+
+<h4 class="mb-3 fw-bold">📚 Danh sách môn học</h4>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-warning">@ViewBag.Message</div>
+}
+
+else if (Model != null && Model.Any())
+{
+    var groupedCourses = Model.GroupBy(g => new { g.AcademicYear, g.Semester });
+
+    @foreach (var group in groupedCourses)
+    {
+        <div class="mb-4">
+            <h6 class="text-primary fw-semibold">📅 Học kỳ @group.Key.Semester - Năm học @group.Key.AcademicYear</h6>
+            <table class="table table-striped mt-2">
+                <thead class="bg-light">
+                    <tr>
+                        <th>Mã MH</th>
+                        <th>Môn học</th>
+                        <th class="text-center">Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var course in group)
+                    {
+                        <tr>
+                            <td>@(course.Course?.CourseID ?? "N/A")</td>
+                            <td>@(course.Course?.CourseName ?? "N/A")</td>
+                            <td class="text-center">
+                                @if (course.Score == null)
+                                {
+                                    <span class="badge bg-success">🟢 Đang học</span>
+                                }
+                                else if (course.Score < 5)
+                                {
+                                    <span class="badge bg-danger">🔴 Rớt</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-primary">🔵 Hoàn thành</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}
+else
+{
+    <div class="alert alert-info">Bạn chưa có môn học nào.</div>
+}

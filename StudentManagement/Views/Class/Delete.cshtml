@@ -1,0 +1,27 @@
+﻿@model StudentManagement.Models.Class
+
+@{
+    ViewData["Title"] = "Xóa lớp học";
+}
+
+<h2>Xóa lớp học</h2>
+
+<h3>Bạn có chắc muốn xóa lớp học này?</h3>
+<div>
+    <h4>@Model.ClassName</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Mã lớp</dt>
+        <dd class="col-sm-10">@Model.ClassID</dd>
+        <dt class="col-sm-2">Tên lớp</dt>
+        <dd class="col-sm-10">@Model.ClassName</dd>
+        <dt class="col-sm-2">Mã GV</dt>
+        <dd class="col-sm-10">@Model.TeacherID</dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="ClassID" />
+        <input type="submit" value="Xóa" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    </form>
+</div>

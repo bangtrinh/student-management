@@ -1,0 +1,55 @@
+﻿@model IEnumerable<StudentManagement.Models.CourseRegistrationItem>
+
+<h2>Đăng ký môn học</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["Success"]
+    </div>
+}
+
+<form method="post">
+    <input type="hidden" name="StudentID" value="@ViewBag.StudentId" />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Mã môn</th>
+                <th>Tên môn</th>
+                <th>Giảng viên</th>
+				<th>Phòng</th>
+                <th>Chọn đăng ký</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Count(); i++)
+            {
+                <tr>
+                    <td>
+                        <input type="hidden" name="[@i].CourseID" value="@Model.ElementAt(i).CourseID" />
+                        @Model.ElementAt(i).CourseID
+                    </td>
+                    <td>
+                        <input type="hidden" name="[@i].CourseName" value="@Model.ElementAt(i).CourseName" />
+                        @Model.ElementAt(i).CourseName
+                    </td>
+                    <td>
+                        <input type="hidden" name="[@i].TeacherName" value="@Model.ElementAt(i).TeacherName" />
+                        @Model.ElementAt(i).TeacherName
+                    </td>
+                    <td>
+                        <input type="hidden" name="[@i].Room" value="@Model.ElementAt(i).Room" />
+                        @Model.ElementAt(i).Room
+                    </td>
+                    <td>
+                        <input type="checkbox" name="[@i].IsSelected" value="true" @(Model.ElementAt(i).IsSelected ? "checked" : "") />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-primary">Lưu đăng ký</button>
+
+</form>
+

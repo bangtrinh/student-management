@@ -1,0 +1,50 @@
+﻿@model StudentManagement.Models.Grade
+
+@{
+    ViewData["Title"] = "Thêm điểm số mới";
+}
+
+<h2>Thêm điểm số mới</h2>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="GradeID" class="control-label"></label>
+        <input asp-for="GradeID" class="form-control" />
+        <span asp-validation-for="GradeID" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="StudentID" class="control-label"></label>
+        <input asp-for="StudentID" class="form-control" />
+        <span asp-validation-for="StudentID" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CourseID" class="control-label"></label>
+        <input asp-for="CourseID" class="form-control" />
+        <span asp-validation-for="CourseID" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Score" class="control-label"></label>
+        <input asp-for="Score" class="form-control" type="number" step="0.1" />
+        <span asp-validation-for="Score" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Semester" class="control-label"></label>
+        <input asp-for="Semester" class="form-control" />
+        <span asp-validation-for="Semester" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="AcademicYear" class="control-label"></label>
+        <input asp-for="AcademicYear" class="form-control" />
+        <span asp-validation-for="AcademicYear" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Thêm" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

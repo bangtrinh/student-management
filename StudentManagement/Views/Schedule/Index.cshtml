@@ -1,0 +1,248 @@
+﻿@model List<StudentManagement.Models.Schedule>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Thêm Bootstrap CSS và JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<h2 class="text-center">Thời Khóa Biểu</h2>
+
+<!-- Form nhập studentId -->
+<form asp-action="Index" method="get" class="mb-3 text-center">
+    <div class="form-group d-inline-block">
+        <label for="studentId">Mã sinh viên:</label>
+        <input type="text" name="studentId" id="studentId" class="form-control d-inline-block" style="width: 200px;" value="@Context.Request.Query["studentId"]" />
+        <button type="submit" class="btn btn-primary">Tìm</button>
+    </div>
+</form>
+
+<!-- Điều hướng tuần -->
+
+
+<!-- Bảng thời khóa biểu -->
+@if (Model != null && Model.Any())
+{
+    @if (ViewBag.StartOfWeek != null && ViewBag.EndOfWeek != null)
+    {
+        <div class="text-center mb-3">
+            <a href="@Url.Action("Index", new { studentId = Context.Request.Query["studentId"], weekStart = ViewBag.PrevWeek })" class="btn btn-outline-dark">←</a>
+            <strong>@ViewBag.StartOfWeek.ToString("dd/MM/yyyy") - @ViewBag.EndOfWeek.ToString("dd/MM/yyyy")</strong>
+            <a href="@Url.Action("Index", new { studentId = Context.Request.Query["studentId"], weekStart = ViewBag.NextWeek })" class="btn btn-outline-dark">→</a>
+        </div>
+    }
+    <table class="table table-bordered text-center">
+        <thead class="thead-dark">
+            <tr>
+                <th class="border">Tiết</th>
+                @for (int i = 0; i < 7; i++)
+                {
+                    var date = ViewBag.StartOfWeek.AddDays(i);
+                    <th class="border">@date.ToString("dddd") <br> (@date.ToString("dd/MM"))</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @for (int lesson = 1; lesson <= 15; lesson++)
+            {
+                <tr>
+                    <td class="font-weight-bold border bg-light">Tiết @lesson</td>
+                    @for (int i = 0; i < 7; i++)
+                    {
+                        var date = ViewBag.StartOfWeek.AddDays(i);
+                        var schedule = Model.FirstOrDefault(s => s.ClassDate.Date == date.Date && GetLessonStart(s.StartTime) == lesson);
+
+                        // Kiểm tra xem ô này có nằm trong khoảng đã gộp từ trước không
+                        var isCoveredByPreviousRowspan = Model.Any(s => s.ClassDate.Date == date.Date &&
+                        GetLessonStart(s.StartTime) < lesson &&
+                        GetLessonStart(s.StartTime) + GetLessonCount(s.StartTime, s.EndTime) > lesson);
+
+                        if (!isCoveredByPreviousRowspan)
+                        {
+                            if (schedule != null)
+                            {
+                                int rowspan = GetLessonCount(schedule.StartTime, schedule.EndTime);
+                                if (rowspan > 0)
+                                {
+                                    <td rowspan="@rowspan" class="align-middle border bg-light schedule-cell" data-schedule-id="@schedule.ScheduleID" style="cursor: pointer;">
+                                        <div class="font-weight-bold">
+                                            @if (schedule.Course != null)
+                                            {
+                                                @schedule.Course.CourseName
+                                            }
+                                            else
+                                            {
+                                                <text>(Khóa học không tồn tại)</text>
+                                            }
+                                        </div>
+                                        <div>Mã: @schedule.CourseID</div>
+                                        <div>
+                                            @if (schedule.Course != null && schedule.Course.Teacher != null)
+                                            {
+                                                <text>GV: @schedule.Course.Teacher.FullName</text>
+                                            }
+                                            else
+                                            {
+                                                <text>GV: (Chưa có giáo viên)</text>
+                                            }
+                                        </div>
+                                        <div>@schedule.StartTime.ToString(@"hh\:mm") - @schedule.EndTime.ToString(@"hh\:mm")</div>
+                                    </td>
+                                }
+                            }
+                            else
+                            {
+                                <td class="border empty-cell schedule-cell" data-date="@date.ToString("yyyy-MM-dd")" data-lesson="@lesson" style="cursor: pointer;"> </td>
+                            }
+                        }
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+<!-- Modal để hiển thị form chỉnh sửa/thêm mới -->
+<div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="scheduleModalLabel">Chỉnh sửa/Thêm mới lịch học</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Nội dung form sẽ được load động qua AJAX -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    int GetLessonStart(TimeSpan startTime)
+    {
+        var minutes = (int)startTime.TotalMinutes;
+        var baseTime6h45 = 6 * 60 + 45; // 6h45 = 405 phút
+        var baseTime9h20 = 9 * 60 + 20; // 9h20 = 560 phút
+        var baseTime12h30 = 12 * 60 + 30; // 12h30 = 750 phút
+        var baseTime18h = 18 * 60; // 18h = 1080 phút
+
+        // Buổi sáng: Tiết 1-3 (6h45 - 9h00)
+        if (minutes >= baseTime6h45 && minutes < baseTime6h45 + 45 * 3)
+        {
+            return 1 + (minutes - baseTime6h45) / 45;
+        }
+        // Buổi sáng: Tiết 4-6 (9h30 - 11h45)
+        else if (minutes >= baseTime9h20 && minutes < baseTime9h20 + 45 * 3)
+        {
+            return 4 + (minutes - baseTime9h20) / 45;
+        }
+        // Buổi chiều: Tiết 7-12 (12h30 - 17h00)
+        else if (minutes >= baseTime12h30 && minutes < baseTime12h30 + 45 * 6)
+        {
+            return 7 + (minutes - baseTime12h30) / 45;
+        }
+        // Buổi tối: Tiết 13-15 (18h - 20h15)
+        else if (minutes >= baseTime18h && minutes < baseTime18h + 45 * 3)
+        {
+            return 13 + (minutes - baseTime18h) / 45;
+        }
+        return -1;
+    }
+
+    int GetLessonCount(TimeSpan startTime, TimeSpan endTime)
+    {
+        return (int)((endTime - startTime).TotalMinutes / 45);
+    }
+
+    TimeSpan GetStartTimeFromLesson(int lesson)
+    {
+        if (lesson >= 1 && lesson <= 3)
+        {
+            return TimeSpan.FromMinutes(6 * 60 + 45 + (lesson - 1) * 45); // 6h45 + (lesson-1)*45
+        }
+        else if (lesson >= 4 && lesson <= 6)
+        {
+            return TimeSpan.FromMinutes(9 * 60 + 20 + (lesson - 4) * 45); // 9h20 + (lesson-4)*45
+        }
+        else if (lesson >= 7 && lesson <= 12)
+        {
+            return TimeSpan.FromMinutes(12 * 60 + 30 + (lesson - 7) * 45); // 12h30 + (lesson-7)*45
+        }
+        else if (lesson >= 13 && lesson <= 15)
+        {
+            return TimeSpan.FromMinutes(18 * 60 + (lesson - 13) * 45); // 18h + (lesson-13)*45
+        }
+        return TimeSpan.Zero;
+    }
+}
+
+<script>
+    $(document).ready(function () {
+        $('.schedule-cell').click(function () {
+            var scheduleId = $(this).data('schedule-id');
+            var date = $(this).data('date');
+            var lesson = $(this).data('lesson');
+            var studentId = '@Context.Request.Query["studentId"]';
+
+            if (scheduleId) {
+                // Nếu ô có lịch học, mở form chỉnh sửa
+                $.ajax({
+                    url: '@Url.Action("Details", "Schedule")',
+                    type: 'GET',
+                    data: { id: scheduleId },
+                    success: function (data) {
+                        $('#modalBody').html(data);
+                        $('#scheduleModal').modal('show');
+                    },
+                    error: function () {
+                        alert('Không thể tải form chỉnh sửa.');
+                    }
+                });
+            } else {
+                // Nếu ô trống, mở form thêm mới với thông tin ngày và tiết
+                $.ajax({
+                    url: '@Url.Action("Create", "Schedule")',
+                    type: 'GET',
+                    data: { studentId: studentId, classDate: date, lesson: lesson },
+                    success: function (data) {
+                        $('#modalBody').html(data);
+                        $('#scheduleModal').modal('show');
+                    },
+                    error: function () {
+                        alert('Không thể tải form thêm mới.');
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<style>
+    .table th, .table td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+        .table td span {
+            display: block;
+        }
+
+    .form-control {
+        width: 200px;
+        display: inline-block;
+    }
+
+    .btn {
+        margin: 0 10px;
+    }
+
+    .thead-dark th {
+        background-color: #343a40;
+        color: white;
+    }
+
+    .empty-cell {
+        background-color: #f8f9fa;
+    }
+</style>

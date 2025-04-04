@@ -1,0 +1,136 @@
+﻿@model List<StudentManagement.Models.ViewModel.StudentGradeSummary>
+@{
+    ViewData["Title"] = "Báo cáo điểm trung bình";
+}
+
+<h2>Báo cáo điểm trung bình sinh viên</h2>
+
+<form asp-action="GradeReport" method="post" class="mb-4">
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="academicYear">Năm học (VD: 2023-2024)</label>
+            <input type="text" class="form-control" id="academicYear" name="academicYear"
+                   pattern="\d{4}-\d{4}" title="Nhập năm học theo định dạng YYYY-YYYY" required>
+        </div>
+        <div class="form-group col-md-2">
+            <label for="semester">Học kỳ</label>
+            <select class="form-control" id="semester" name="semester" required>
+                <option value="">Chọn học kỳ</option>
+                <option value="HK1">Học kỳ 1</option>
+                <option value="HK2">Học kỳ 2</option>
+                <option value="HK3">Học kỳ hè</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2">
+            <label for="classId">Lớp</label>
+            <select class="form-control" id="classId" name="classId" asp-items="ViewBag.Classes">
+                <option value="">Tất cả lớp</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2">
+            <label for="majorId">Ngành</label>
+            <select class="form-control" id="majorId" name="majorId" asp-items="ViewBag.Majors">
+                <option value="">Tất cả ngành</option>
+            </select>
+        </div>
+        <div class="form-group col-md-3 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary mr-2">Tạo báo cáo</button>
+            @if (Model != null && Model.Any())
+            {
+                <a href="@Url.Action("ExportToExcel", new {
+                    academicYear = ViewBag.AcademicYear,
+                    semester = ViewBag.Semester,
+                    classId = ViewBag.ClassId,
+                    majorId = ViewBag.MajorId
+                })" class="btn btn-success">
+                    Xuất Excel
+                </a>
+            }
+        </div>
+    </div>
+</form>
+
+@if (Model != null)
+{
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Tổng quan</h5>
+                </div>
+                <div class="card-body">
+                    <p>Tổng số sinh viên: @ViewBag.TotalCount</p>
+                    <p>Điểm cao nhất: @Model.Max(s => s.AverageScore)?.ToString("0.00")</p>
+                    <p>Điểm thấp nhất: @Model.Min(s => s.AverageScore)?.ToString("0.00")</p>
+                    <p>Điểm trung bình chung: @Model.Average(s => s.AverageScore)?.ToString("0.00")</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive mb-4">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Mã SV</th>
+                    <th>Họ và tên</th>
+                    <th>Lớp</th>
+                    <th>Ngành</th>
+                    <th>Năm học</th>
+                    <th>Học kỳ</th>
+                    <th>Điểm TB</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.StudentID</td>
+                        <td>@item.FullName</td>
+                        <td>@item.ClassName</td>
+                        <td>@item.MajorName</td>
+                        <td>@item.AcademicYear</td>
+                        <td>@item.Semester</td>
+                        <td>@item.AverageScore?.ToString("0.00")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Phân trang -->
+    @if (ViewBag.TotalCount > ViewBag.PageSize)
+    {
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                @for (int i = 1; i <= Math.Ceiling((double)ViewBag.TotalCount / ViewBag.PageSize); i++)
+                {
+                    <li class="page-item @(i == ViewBag.Page ? "active" : "")">
+                        <a class="page-link"
+                           href="@Url.Action("GenerateGradeReport", new {
+                               academicYear = ViewBag.AcademicYear,
+                               semester = ViewBag.Semester,
+                               classId = ViewBag.ClassId,
+                               majorId = ViewBag.MajorId,
+                               page = i,
+                               pageSize = ViewBag.PageSize
+                           })">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+}
+else
+{
+    <div class="alert alert-info">
+        @if (ViewData.ModelState.IsValid)
+        {
+            <text>Không có dữ liệu điểm cho năm học và học kỳ đã chọn.</text>
+        }
+        else
+        {
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        }
+    </div>
+}
+

@@ -1,0 +1,49 @@
+﻿@model IEnumerable<StudentManagement.Models.Student>
+
+@{
+    ViewData["Title"] = "Danh sách sinh viên";
+}
+
+<h2>Danh sách sinh viên</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Thêm sinh viên mới</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Mã SV</th>
+            <th>Họ và tên</th>
+            <th>Ngày sinh</th>
+            <th>Giới tính</th>
+            <th>Email</th>
+            <th>Số điện thoại</th>
+            <th>Địa chỉ</th>
+            <th>Lớp</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.StudentID</td>
+                <td>@item.FullName</td>
+                <td>@item.DateOfBirth.ToShortDateString()</td>
+                <td>@item.Gender</td>
+                <td>@item.Email</td>
+                <td>@item.PhoneNumber</td>
+                <td>@item.Address</td>
+                <td>@item.Class.ClassName</td>
+                <td>@item.Status</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.StudentID" class="btn btn-info btn-sm">Chi tiết</a>
+                    <a asp-action="Edit" asp-route-id="@item.StudentID" class="btn btn-warning btn-sm">Sửa</a>
+                    <a asp-action="Delete" asp-route-id="@item.StudentID" class="btn btn-danger btn-sm">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

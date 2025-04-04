@@ -1,0 +1,69 @@
+﻿@model StudentManagement.Models.Class
+
+@{
+    ViewData["Title"] = "Chi tiết lớp học";
+}
+
+<h2>Chi tiết lớp học</h2>
+
+<div>
+    <h4>@Model.ClassName</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Mã lớp</dt>
+        <dd class="col-sm-10">@Model.ClassID</dd>
+        <dt class="col-sm-2">Tên lớp</dt>
+        <dd class="col-sm-10">@Model.ClassName</dd>
+        <dt class="col-sm-2">Mã ngành</dt>
+        <dd class="col-sm-10">@Model.MajorID</dd>
+        <dt class="col-sm-2">Mã GV</dt>
+        <dd class="col-sm-10">@Model.TeacherID</dd>
+        <dt class="col-sm-2">Ngày bắt đầu</dt>
+        <dd class="col-sm-10">@Model.StartDate.ToShortDateString()</dd>
+        <dt class="col-sm-2">Ngày kết thúc</dt>
+        <dd class="col-sm-10">@Model.EndDate.ToShortDateString()</dd>
+    </dl>
+</div>
+
+<h3>Danh sách sinh viên</h3>
+@if (Model.Students != null && Model.Students.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Mã SV</th>
+                <th>Họ và tên</th>
+                <th>Ngày sinh</th>
+                <th>Giới tính</th>
+                <th>Email</th>
+                <th>Số điện thoại</th>
+                <th>Địa chỉ</th>
+                <th>Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var student in Model.Students)
+            {
+                <tr>
+                    <td>@student.StudentID</td>
+                    <td>@student.FullName</td>
+                    <td>@student.DateOfBirth.ToShortDateString()</td>
+                    <td>@student.Gender</td>
+                    <td>@student.Email</td>
+                    <td>@student.PhoneNumber</td>
+                    <td>@student.Address</td>
+                    <td>@student.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Chưa có sinh viên nào trong lớp này.</p>
+}
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ClassID" class="btn btn-warning">Sửa</a>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</div>
