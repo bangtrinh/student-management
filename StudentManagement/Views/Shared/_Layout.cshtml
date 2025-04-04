@@ -99,19 +99,20 @@
         <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
             <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
-            <a asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i> <span>Trang chủ</span></a>
+            <a asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i> <span>Trang chủ</span></a>
             @if (User.IsInRole("Teacher"))
             {
-                <a asp-controller="Teacher" asp-action="MyCourses"><i class="fas fa-school"></i> <span>Lớp học phần</span></a>
-                <a asp-controller="Teacher" asp-action="Schedule"><i class="fas fa-chart-bar"></i> <span>Lịch giảng dạy</span></a>
+                <a asp-area="" asp-controller="Teacher" asp-action="MyCourses"><i class="fas fa-school"></i> <span>Lớp học phần</span></a>
+                <a asp-area="" asp-controller="Teacher" asp-action="Schedule"><i class="fas fa-chart-bar"></i> <span>Lịch giảng dạy</span></a>
             }
             @if (User.IsInRole("Student"))
             {
-                <a asp-controller="Student" asp-action="Profile"><i class="fas fa-id-card"></i> <span>Thông tin cá nhân</span></a>
-                <a asp-controller="Student" asp-action="Schedule"><i class="fas fa-id-card"></i> <span>Thời khóa biểu</span></a>
-                <a asp-controller="Grade" asp-action="MyGrades"><i class="fas fa-chart-bar"></i> <span>Điểm số</span></a>
-                <a asp-controller="Student" asp-action="MyCourses"><i class="fas fa-id-card"></i> <span>Môn học</span></a>
-                <a asp-controller="CourseRegister" asp-action="Index"><i class="fas fa-id-card"></i> <span>Đăng ký môn</span></a>
+                <a asp-area="" asp-controller="Student" asp-action="Profile"><i class="fas fa-id-card"></i> <span>Thông tin cá nhân</span></a>
+                <a asp-area="" asp-controller="Student" asp-action="Schedule"><i class="fas fa-id-card"></i> <span>Thời khóa biểu</span></a>
+                <a asp-area="" asp-controller="Grade" asp-action="MyGrades"><i class="fas fa-chart-bar"></i> <span>Điểm số</span></a>
+                <a asp-area="" asp-controller="Student" asp-action="MyCourses"><i class="fas fa-id-card"></i> <span>Môn học</span></a>
+                <a asp-area="" asp-controller="CourseRegister" asp-action="Index"><i class="fas fa-id-card"></i> <span>Đăng ký môn</span></a>
+                <a asp-area="" asp-controller="ChatBot" asp-action="Index"><i class="fas fa-robot"></i> <span>Trợ lý ảo</span></a>
             }
             @if (User.IsInRole("Admin"))
             {
