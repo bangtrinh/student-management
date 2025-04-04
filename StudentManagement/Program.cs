@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
+using StudentManagement.Hubs;
 using StudentManagement.Models;
 using StudentManagement.Repositories;
 using StudentManagement.Services;
@@ -38,6 +39,10 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true; // Cookie cần thiết để Session hoạt động
 });
 
+builder.Services.AddSignalR(options => {
+    options.EnableDetailedErrors = true;
+});
+
 builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
@@ -48,8 +53,12 @@ builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<IGradeRepository, GradeRepository>();
 builder.Services.AddScoped<IScheduleRepository, ScheduleRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
 builder.Services.AddScoped<IGradeService, GradeService>();
+builder.Services.AddScoped<IMessageService, MessageService>();
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -111,5 +120,7 @@ app.UseEndpoints(endpoints =>
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}"); // Kích hoạt các route từ Controller.
 });
+
+app.MapHub<ChatHub>("/chathub"); // Đảm bảo đúng chữ hoa/chữ thường
 
 app.Run();
