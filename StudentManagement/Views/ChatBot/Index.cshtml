@@ -1,0 +1,64 @@
+﻿@{
+    // Đặt tiêu đề trang hiển thị trên tab trình duyệt
+    ViewData["Title"] = "Chat với Bot";
+}
+
+<!-- Tiêu đề chính trên giao diện -->
+<h2>Chat với trợ lý ảo</h2>
+
+<!-- Hộp chat hiển thị lịch sử trò chuyện -->
+<div id="chat-box" style="border:1px solid #ccc; padding:10px; height:400px; overflow-y:auto; background:#f9f9f9;"></div>
+
+<!-- Form gửi tin nhắn -->
+<form id="chat-form">
+    <!-- Ô nhập nội dung tin nhắn -->
+    <input type="text" id="userMessage" class="form-control" placeholder="Nhập tin nhắn..." required />
+
+    <!-- Nút gửi -->
+    <button type="submit" class="btn btn-primary mt-2">Gửi</button>
+</form>
+
+<!-- Phần script xử lý gửi/nhận tin nhắn từ bot -->
+@section Scripts {
+    <script>
+        // Lấy các phần tử DOM cần dùng
+        const chatBox = document.getElementById("chat-box");
+        const form = document.getElementById("chat-form");
+        const input = document.getElementById("userMessage");
+
+        // Gắn sự kiện submit vào form chat
+        form.addEventListener("submit", async function (e) {
+            e.preventDefault(); // Ngăn reload trang mặc định của form
+
+            const message = input.value.trim(); // Lấy nội dung người dùng nhập
+            if (!message) return; // Nếu rỗng thì không xử lý
+
+            // Hiển thị tin nhắn của người dùng lên chat box
+            chatBox.innerHTML += `<div><strong>Bạn:</strong> ${message}</div>`;
+            input.value = ""; // Xóa ô nhập sau khi gửi
+
+            // Gửi yêu cầu POST đến action ChatBot/SendMessage
+            const res = await fetch("/ChatBot/SendMessage", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `message=${encodeURIComponent(message)}`
+            });
+
+            // Nhận và xử lý kết quả từ controller
+            const data = await res.json();
+
+            if (data.success) {
+                // Hiển thị phản hồi từ bot (có chuyển \n thành <br/> để xuống dòng đúng cách)
+                chatBox.innerHTML += `<div><strong>Bot:</strong> ${data.reply.replace(/\n/g, "<br/>")}</div>`;
+            } else {
+                // Nếu có lỗi, hiển thị thông báo lỗi
+                chatBox.innerHTML += `<div><strong>Bot:</strong> ${data.message}</div>`;
+            }
+
+            // Cuộn xuống dòng cuối cùng để thấy tin nhắn mới
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+    </script>
+}
