@@ -1,6 +1,7 @@
 ﻿@using System.Security.Claims
-
+@using System.Globalization
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -82,131 +83,6 @@
             flex: 1;
             padding: 20px;
         }
-
-        /* Chat Widget Styles */
-        .chat-widget {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 350px;
-            z-index: 999;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            border-radius: 10px;
-            overflow: hidden;
-            display: none;
-        }
-
-        .chat-header {
-            background-color: #4a6baf;
-            color: white;
-            padding: 12px 15px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .chat-body {
-            height: 400px;
-            background-color: white;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 15px;
-            overflow-y: auto;
-            background-color: #f5f5f5;
-        }
-
-        .chat-input {
-            padding: 10px;
-            background-color: #fff;
-            border-top: 1px solid #eee;
-            display: flex;
-        }
-
-            .chat-input input {
-                flex: 1;
-                padding: 8px 12px;
-                border: 1px solid #ddd;
-                border-radius: 20px;
-                outline: none;
-            }
-
-            .chat-input button {
-                margin-left: 10px;
-                border: none;
-                background-color: #4a6baf;
-                color: white;
-                border-radius: 50%;
-                width: 40px;
-                height: 40px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-            }
-
-        .chat-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background-color: #4a6baf;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-            z-index: 1000;
-        }
-
-        .message {
-            margin-bottom: 15px;
-            max-width: 80%;
-            padding: 10px 15px;
-            border-radius: 18px;
-            position: relative;
-        }
-
-        .sent {
-            background-color: #e3f2fd;
-            margin-left: auto;
-            border-bottom-right-radius: 0;
-        }
-
-        .received {
-            background-color: #f1f1f1;
-            margin-right: auto;
-            border-bottom-left-radius: 0;
-        }
-
-        .message-time {
-            font-size: 11px;
-            color: #6c757d;
-            text-align: right;
-            margin-top: 5px;
-        }
-
-        .contact-item {
-            padding: 8px 12px;
-            cursor: pointer;
-            border-bottom: 1px solid #eee;
-        }
-
-            .contact-item:hover {
-                background-color: #f8f9fa;
-            }
-
-        .contact-list {
-            max-height: 300px;
-            overflow-y: auto;
-        }
     </style>
 </head>
 <body>
@@ -229,41 +105,43 @@
         <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
             <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
-            <a asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i> <span>Trang chủ</span></a>
+            <a asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i> <span>@Localizer["Home"]</span></a>
+
             @if (User.IsInRole("Teacher"))
             {
-                <a asp-area="" asp-controller="Teacher" asp-action="MyCourses"><i class="fas fa-school"></i> <span>Lớp học phần</span></a>
-                <a asp-area="" asp-controller="Teacher" asp-action="Schedule"><i class="fas fa-chart-bar"></i> <span>Lịch giảng dạy</span></a>
-                <a asp-area="" asp-controller="Chat" asp-action="Index"><i class="fas fa-comments"></i> <span>Tin nhắn</span></a>
+                <a asp-area="" asp-controller="Teacher" asp-action="MyCourses"><i class="fas fa-school"></i> <span>@Localizer["Classes"]</span></a>
+                <a asp-area="" asp-controller="Teacher" asp-action="Schedule"><i class="fas fa-chart-bar"></i> <span>@Localizer["TeachingSchedule"]</span></a>
+                <a asp-area="" asp-controller="Chat" asp-action="Index"><i class="fas fa-comments"></i> <span>@Localizer["Messages"]</span></a>
             }
+
             @if (User.IsInRole("Student"))
             {
-                <a asp-area="" asp-controller="Student" asp-action="Profile"><i class="fas fa-id-card"></i> <span>Thông tin cá nhân</span></a>
-                <a asp-area="" asp-controller="Student" asp-action="Schedule"><i class="fas fa-id-card"></i> <span>Thời khóa biểu</span></a>
-                <a asp-area="" asp-controller="Grade" asp-action="MyGrades"><i class="fas fa-chart-bar"></i> <span>Điểm số</span></a>
-                <a asp-area="" asp-controller="Student" asp-action="MyCourses"><i class="fas fa-id-card"></i> <span>Môn học</span></a>
-                <a asp-area="" asp-controller="CourseRegister" asp-action="Index"><i class="fas fa-id-card"></i> <span>Đăng ký môn</span></a>
-                <a asp-area="" asp-controller="Chat" asp-action="Index"><i class="fas fa-comments"></i> <span>Tin nhắn</span></a>
-                <a asp-area="" asp-controller="ChatBot" asp-action="Index"><i class="fas fa-robot"></i> <span>Trợ lý ảo</span></a>
+                <a asp-area="" asp-controller="Student" asp-action="Profile"><i class="fas fa-id-card"></i> <span>@Localizer["Profile"]</span></a>
+                <a asp-area="" asp-controller="Student" asp-action="Schedule"><i class="fas fa-id-card"></i> <span>@Localizer["Schedule"]</span></a>
+                <a asp-area="" asp-controller="Grade" asp-action="MyGrades"><i class="fas fa-chart-bar"></i> <span>@Localizer["Grades"]</span></a>
+                <a asp-area="" asp-controller="Student" asp-action="MyCourses"><i class="fas fa-id-card"></i> <span>@Localizer["Subjects"]</span></a>
+                <a asp-area="" asp-controller="CourseRegister" asp-action="Index"><i class="fas fa-id-card"></i> <span>@Localizer["RegisterCourses"]</span></a>
+                <a asp-area="" asp-controller="Chat" asp-action="Index"><i class="fas fa-comments"></i> <span>@Localizer["Messages"]</span></a>
+                <a asp-area="" asp-controller="ChatBot" asp-action="Index"><i class="fas fa-robot"></i> <span>@Localizer["ChatBot"]</span></a>
             }
+
             @if (User.IsInRole("Admin"))
             {
-                <a asp-area="Admin" asp-controller="Account" asp-action="Index"><i class="fas fa-id-card"></i> <span>Quản lý tài khoản</span></a>
-                <a asp-area="" asp-controller="Student" asp-action="Index"><i class="fas fa-id-card"></i> <span>@Localizer["Students"]</span></a>                
-
-                <a asp-area="" asp-controller="Teacher" asp-action="Index"><i class="fas fa-chalkboard-teacher"></i> <span>Giảng viên</span></a>
-                <a asp-area="" asp-controller="Class" asp-action="Index"><i class="fas fa-id-card"></i> <span>Lớp</span></a>
-                <a asp-area="" asp-controller="Major" asp-action="Index"><i class="fas fa-book"></i> <span>Ngành học</span></a>
-                <a asp-area="" asp-controller="Department" asp-action="Index"><i class="fas fa-building"></i> <span>Khoa</span></a>
-                <a asp-area="" asp-controller="Course" asp-action="Index"><i class="fas fa-book-open"></i> <span>@Localizer["Subjects"]</span></a>
-                <a asp-area="" asp-controller="Schedule" asp-action="Index"><i class="fas fa-id-card"></i> <span>@Localizer["Timetable"]</span></a>
-                <a asp-area="" asp-controller="Report" asp-action="GradeReport"><i class="fas fa-id-card"></i> <span>Thống kê</span></a>
+                <a asp-area="Admin" asp-controller="Account" asp-action="Index"><i class="fas fa-id-card"></i> <span>@Localizer["ManageAccounts"]</span></a>
+                <a asp-area="" asp-controller="Student" asp-action="Index"><i class="fas fa-id-card"></i> <span>@Localizer["Students"]</span></a>
+                <a asp-area="" asp-controller="Teacher" asp-action="Index"><i class="fas fa-chalkboard-teacher"></i> <span>@Localizer["Teachers"]</span></a>
+                <a asp-area="" asp-controller="Class" asp-action="Index"><i class="fas fa-id-card"></i> <span>@Localizer["Classes"]</span></a>
+                <a asp-area="" asp-controller="Major" asp-action="Index"><i class="fas fa-book"></i> <span>@Localizer["Majors"]</span></a>
+                <a asp-area="" asp-controller="Department" asp-action="Index"><i class="fas fa-building"></i> <span>@Localizer["Departments"]</span></a>
+                <a asp-area="" asp-controller="Course" asp-action="Index"><i class="fas fa-book-open"></i> <span>@Localizer["Courses"]</span></a>
+                <a asp-area="" asp-controller="Schedule" asp-action="Index"><i class="fas fa-id-card"></i> <span>@Localizer["Schedule"]</span></a>
+                <a asp-area="" asp-controller="Report" asp-action="GradeReport"><i class="fas fa-id-card"></i> <span>@Localizer["Statistics"]</span></a>
             }
-            <hr>
 
+            <hr>
         </div>
-        
-        @using System.Globalization
+
+        <!-- Language switcher -->
         <form asp-controller="Language" asp-action="SetLanguage" method="post" class="ml-2 mt-2">
             <select name="culture" onchange="this.form.submit()" class="form-select btn btn-outline-secondary w-auto">
                 <option value="vi" selected="@(CultureInfo.CurrentUICulture.Name == "vi" ? "selected" : null)"> Tiếng Việt</option>
@@ -272,7 +150,7 @@
             <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
         </form>
 
-        <!-- Nội dung chính -->
+        <!-- Main content -->
         <div class="content">
             <main role="main" class="pb-3">
                 @RenderBody()
@@ -286,7 +164,6 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     <script>
-        // Toggle sidebar
         function toggleSidebar() {
             document.getElementById("sidebar").classList.toggle("collapsed");
         }
