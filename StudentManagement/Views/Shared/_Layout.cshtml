@@ -141,16 +141,18 @@
             <hr>
         </div>
 
-        <!-- Language switcher -->
-        <form asp-controller="Language" asp-action="SetLanguage" method="post" class="ml-2 mt-2">
+        <form asp-area="" asp-controller="Language" asp-action="SetLanguage" method="post" class="ml-2 mt-2">
             <select name="culture" onchange="this.form.submit()" class="form-select btn btn-outline-secondary w-auto">
-                <option value="vi" selected="@(CultureInfo.CurrentUICulture.Name == "vi" ? "selected" : null)"> Tiếng Việt</option>
-                <option value="en" selected="@(CultureInfo.CurrentUICulture.Name == "en" ? "selected" : null)"> English</option>
+                <option value="vi" selected="@(CultureInfo.CurrentUICulture.Name == "vi" ? "selected" : null)">Tiếng Việt</option>
+                <option value="en" selected="@(CultureInfo.CurrentUICulture.Name == "en" ? "selected" : null)">English</option>
             </select>
             <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
         </form>
 
+<<<<<<< HEAD
         <!-- Main content -->
+=======
+>>>>>>> Apigmail
         <div class="content">
             <main role="main" class="pb-3">
                 @RenderBody()

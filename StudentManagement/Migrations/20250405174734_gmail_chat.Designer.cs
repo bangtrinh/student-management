@@ -12,8 +12,8 @@ using StudentManagement.Models;
 namespace StudentManagement.Migrations
 {
     [DbContext(typeof(StudentDbContext))]
-    [Migration("20250405153501_CreateApi")]
-    partial class CreateApi
+    [Migration("20250405174734_gmail_chat")]
+    partial class gmail_chat
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
