@@ -1,26 +1,28 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Localization;
 using OfficeOpenXml;
 using StudentManagement.Hubs;
 using StudentManagement.Models;
 using StudentManagement.Repositories;
 using StudentManagement.Services;
-using Microsoft.AspNetCore.Localization;
 using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Cho phép dùng Excel không thương mại
 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-// Localization
-builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
-
-// Database
 builder.Services.AddDbContext<StudentDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Identity
+// 🟢 Thêm Localization
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+builder.Services.AddRazorPages(options =>
+{
+    options.Conventions.AuthorizeAreaPage("Identity", "/Account/Manage/ChangePassword");
+});
+
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddDefaultTokenProviders()
     .AddDefaultUI()
@@ -33,19 +35,6 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
 });
 
-// Razor Pages với quyền
-builder.Services.AddRazorPages(options =>
-{
-    options.Conventions.AuthorizeAreaPage("Identity", "/Account/Manage/ChangePassword");
-})
-.AddViewLocalization()
-.AddDataAnnotationsLocalization();
-
-builder.Services.AddControllersWithViews()
-    .AddViewLocalization()
-    .AddDataAnnotationsLocalization();
-
-// Session
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -54,13 +43,18 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// SignalR
 builder.Services.AddSignalR(options =>
 {
     options.EnableDetailedErrors = true;
 });
 
-// Custom Services & Repositories
+// 🟢 Hỗ trợ ViewLocalization + DataAnnotations
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
+
+builder.Services.AddRazorPages();
+
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IClassRepository, ClassRepository>();
 builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
@@ -74,6 +68,7 @@ builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
 builder.Services.AddScoped<IGradeService, GradeService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
+
 builder.Services.AddScoped<EmailService>();
 
 var app = builder.Build();
@@ -82,12 +77,14 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+
     try
     {
         var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-        if (!userManager.Users.Any())
+        var userCount = userManager.Users.Count();
+        if (userCount == 0)
         {
-            await SeedData.Initialize(services); // Seed nếu chưa có user
+            await SeedData.Initialize(services);
         }
     }
     catch (Exception ex)
@@ -96,16 +93,6 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Localization Middleware
-var supportedCultures = new[] { new CultureInfo("vi"), new CultureInfo("en") };
-app.UseRequestLocalization(new RequestLocalizationOptions
-{
-    DefaultRequestCulture = new RequestCulture("vi"),
-    SupportedCultures = supportedCultures,
-    SupportedUICultures = supportedCultures
-});
-
-// Middlewares
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -113,19 +100,22 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
-
 app.UseRouting();
 
-app.UseAuthentication();
+// 🟢 Cấu hình hỗ trợ đa ngôn ngữ
+var supportedCultures = new[] { "en", "vi" };
+var localizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture("vi")
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures);
+
+app.UseRequestLocalization(localizationOptions);
+
 app.UseAuthorization();
 app.UseSession();
 
-// SignalR Hub
-app.MapHub<ChatHub>("/chathub");
-
-// Routing
 app.MapRazorPages();
+app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "Admin",
@@ -133,6 +123,17 @@ app.MapControllerRoute(
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}")
+    .WithStaticAssets();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapRazorPages();
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+});
+
+app.MapHub<ChatHub>("/chathub");
 
 app.Run();
