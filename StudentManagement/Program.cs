@@ -13,22 +13,21 @@ ExcelPackage.LicenseContext = LicenseContext.NonCommercial; // Cho ứng dụng 
 builder.Services.AddDbContext<StudentDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
 builder.Services.AddRazorPages(options =>
 {
     options.Conventions.AuthorizeAreaPage("Identity", "/Account/Manage/ChangePassword");
 });
 
-
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
- .AddDefaultTokenProviders()
- .AddDefaultUI()
- .AddEntityFrameworkStores<StudentDbContext>();
+    .AddDefaultTokenProviders()
+    .AddDefaultUI()
+    .AddEntityFrameworkStores<StudentDbContext>();
 
-builder.Services.ConfigureApplicationCookie(options => {
+builder.Services.ConfigureApplicationCookie(options =>
+{
     options.LoginPath = "/Identity/Account/Login";
     options.LogoutPath = "/Identity/Account/Logout";
-    options.LogoutPath = "/Identity/Account/AccessDenied";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied"; // Sửa nhầm LogoutPath thành AccessDeniedPath
 });
 
 builder.Services.AddDistributedMemoryCache(); // Sử dụng bộ nhớ cache phân tán (có thể thay bằng Redis nếu cần)
@@ -39,7 +38,8 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true; // Cookie cần thiết để Session hoạt động
 });
 
-builder.Services.AddSignalR(options => {
+builder.Services.AddSignalR(options =>
+{
     options.EnableDetailedErrors = true;
 });
 
@@ -59,12 +59,13 @@ builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<IGradeService, GradeService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
 
+builder.Services.AddScoped<EmailService>(); // ✅ Đăng ký EmailService ở đây
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+// Seed dữ liệu nếu chưa có user
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -73,11 +74,9 @@ using (var scope = app.Services.CreateScope())
     {
         var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
 
-        // Kiểm tra xem đã có tài khoản nào hay chưa
         var userCount = userManager.Users.Count();
         if (userCount == 0)
         {
-            // Nếu chưa có tài khoản nào, thực hiện SeedData
             await SeedData.Initialize(services);
         }
     }
@@ -87,11 +86,10 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Configure the HTTP request pipeline.
+// Cấu hình pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -99,6 +97,8 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseSession(); // ✅ Đừng quên bật session nếu đã cấu hình
 
 app.MapRazorPages();
 
@@ -115,12 +115,12 @@ app.MapControllerRoute(
 
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapRazorPages(); // Kích hoạt Razor Pages, thường sử dụng trong Identity.
+    endpoints.MapRazorPages();
     endpoints.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}"); // Kích hoạt các route từ Controller.
+        pattern: "{controller=Home}/{action=Index}/{id?}");
 });
 
-app.MapHub<ChatHub>("/chathub"); // Đảm bảo đúng chữ hoa/chữ thường
+app.MapHub<ChatHub>("/chathub");
 
 app.Run();
