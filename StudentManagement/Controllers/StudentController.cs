@@ -102,12 +102,21 @@ namespace StudentManagement.Controllers
 
 
         [Authorize(Roles = "Admin")]
-        // GET: Student
-        public IActionResult Index()
+        // TÌM KIẾM
+        public IActionResult Index(string searchString)
         {
             var students = _studentRepository.GetAll();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                students = students.Where(s => s.FullName.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
+                                               s.StudentID.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
+                                               s.Email.Contains(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
             return View(students);
         }
+
 
         [Authorize(Roles = "Admin")]
 
