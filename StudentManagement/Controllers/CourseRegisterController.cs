@@ -6,6 +6,9 @@ using Microsoft.Extensions.Configuration.UserSecrets;
 using StudentManagement.Helper;
 using StudentManagement.Models;
 using StudentManagement.Repositories;
+using System.Net;
+using System.Net.Mail;
+using System.Text;
 
 namespace StudentManagement.Controllers
 {
@@ -69,7 +72,7 @@ namespace StudentManagement.Controllers
 
         // Xử lý đăng ký môn học
         [HttpPost]
-        public async Task <IActionResult> Index(List<CourseRegistrationItem> model)
+        public async Task<IActionResult> Index(List<CourseRegistrationItem> model)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -90,8 +93,39 @@ namespace StudentManagement.Controllers
 
             _gradeRepository.UpdateRegistrations(student.StudentID, selectedCourseIds);
 
-            TempData["Success"] = "Cập nhật đăng ký thành công.";
+            // Gửi email xác nhận
+            await SendConfirmationEmail(student.Email, student.FullName, model.Where(x => x.IsSelected).ToList());
+
+            TempData["Success"] = "Cập nhật đăng ký thành công. Kiểm tra email để xem danh sách môn học đã đăng ký.";
             return RedirectToAction("Index");
+        }
+
+        private async Task SendConfirmationEmail(string toEmail, string studentName, List<CourseRegistrationItem> courses)
+        {
+            if (string.IsNullOrEmpty(toEmail) || !courses.Any()) return;
+
+            string subject = "Xác nhận đăng ký môn học";
+            StringBuilder body = new StringBuilder();
+            body.AppendLine($"Chào {studentName},");
+            body.AppendLine("\nBạn đã đăng ký thành công các môn học sau:");
+            body.AppendLine("-------------------------------------------");
+
+            foreach (var course in courses)
+            {
+                body.AppendLine($"- {course.CourseName} | Giảng viên: {course.TeacherName} | Phòng: {course.Room}");
+            }
+
+            body.AppendLine("\nCảm ơn bạn!");
+            body.AppendLine("Student Management System");
+
+            using (var client = new SmtpClient("smtp.gmail.com", 587))
+            {
+                client.Credentials = new NetworkCredential("quanlisvhs@gmail.com", "kjak ucgm bbpj mgdo");
+                client.EnableSsl = true;
+
+                var mailMessage = new MailMessage("your-email@gmail.com", toEmail, subject, body.ToString());
+                await client.SendMailAsync(mailMessage);
+            }
         }
     }
 }

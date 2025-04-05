@@ -10,16 +10,17 @@ using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-ExcelPackage.LicenseContext = LicenseContext.NonCommercial; // Cho ứng dụng phi thương mại
+// Cho phép dùng Excel không thương mại
+ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-// Add Localization
+// Localization
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
-// Add database
+// Database
 builder.Services.AddDbContext<StudentDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add Identity
+// Identity
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddDefaultTokenProviders()
     .AddDefaultUI()
@@ -32,7 +33,19 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
 });
 
-// Add Session
+// Razor Pages với quyền
+builder.Services.AddRazorPages(options =>
+{
+    options.Conventions.AuthorizeAreaPage("Identity", "/Account/Manage/ChangePassword");
+})
+.AddViewLocalization()
+.AddDataAnnotationsLocalization();
+
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
+
+// Session
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -41,22 +54,13 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// Add SignalR
+// SignalR
 builder.Services.AddSignalR(options =>
 {
     options.EnableDetailedErrors = true;
 });
 
-// Add Razor Pages + Controllers + Localization
-builder.Services.AddRazorPages()
-    .AddViewLocalization()
-    .AddDataAnnotationsLocalization();
-
-builder.Services.AddControllersWithViews()
-    .AddViewLocalization()
-    .AddDataAnnotationsLocalization();
-
-// Custom repositories and services
+// Custom Services & Repositories
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IClassRepository, ClassRepository>();
 builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
@@ -70,20 +74,20 @@ builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
 builder.Services.AddScoped<IGradeService, GradeService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddScoped<EmailService>();
 
 var app = builder.Build();
 
-// Seed Data
+// Seed dữ liệu nếu chưa có user
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-
     try
     {
         var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
         if (!userManager.Users.Any())
         {
-            await SeedData.Initialize(services);
+            await SeedData.Initialize(services); // Seed nếu chưa có user
         }
     }
     catch (Exception ex)
@@ -92,14 +96,8 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Supported Cultures
-var supportedCultures = new[]
-{
-    new CultureInfo("vi"),
-    new CultureInfo("en")
-};
-
 // Localization Middleware
+var supportedCultures = new[] { new CultureInfo("vi"), new CultureInfo("en") };
 app.UseRequestLocalization(new RequestLocalizationOptions
 {
     DefaultRequestCulture = new RequestCulture("vi"),
@@ -116,6 +114,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseRouting();
 
 app.UseAuthentication();
@@ -125,7 +124,7 @@ app.UseSession();
 // SignalR Hub
 app.MapHub<ChatHub>("/chathub");
 
-// Razor Pages & MVC Routing
+// Routing
 app.MapRazorPages();
 
 app.MapControllerRoute(

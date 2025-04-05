@@ -22,6 +22,7 @@ namespace StudentManagement.Models
         public DbSet<Grade> Grades { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<OTP> OTPS { get; set; }
 
 
 
