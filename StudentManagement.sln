@@ -5,6 +5,8 @@ VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentManagement", "StudentManagement\StudentManagement.csproj", "{C218835F-6287-4D8F-9D32-E08415C24BAC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "studentManagement1", "C:\Users\ACER\Downloads\StudentManagement\StudentManagement\StudentManagement\studentManagement1.csproj", "{87183932-9D38-471A-AE2D-802A029E36BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{C218835F-6287-4D8F-9D32-E08415C24BAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C218835F-6287-4D8F-9D32-E08415C24BAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C218835F-6287-4D8F-9D32-E08415C24BAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87183932-9D38-471A-AE2D-802A029E36BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87183932-9D38-471A-AE2D-802A029E36BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87183932-9D38-471A-AE2D-802A029E36BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87183932-9D38-471A-AE2D-802A029E36BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
