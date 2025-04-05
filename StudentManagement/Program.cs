@@ -1,17 +1,22 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Localization;
 using OfficeOpenXml;
 using StudentManagement.Hubs;
 using StudentManagement.Models;
 using StudentManagement.Repositories;
 using StudentManagement.Services;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-ExcelPackage.LicenseContext = LicenseContext.NonCommercial; // Cho ứng dụng phi thương mại
+ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
 builder.Services.AddDbContext<StudentDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// 🟢 Thêm Localization
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 builder.Services.AddRazorPages(options =>
 {
@@ -27,21 +32,26 @@ builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Identity/Account/Login";
     options.LogoutPath = "/Identity/Account/Logout";
-    options.AccessDeniedPath = "/Identity/Account/AccessDenied"; // Sửa nhầm LogoutPath thành AccessDeniedPath
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
 });
 
-builder.Services.AddDistributedMemoryCache(); // Sử dụng bộ nhớ cache phân tán (có thể thay bằng Redis nếu cần)
+builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Thời gian timeout của Session (30 phút)
-    options.Cookie.HttpOnly = true; // Cookie chỉ có thể truy cập qua HTTP
-    options.Cookie.IsEssential = true; // Cookie cần thiết để Session hoạt động
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
 });
 
 builder.Services.AddSignalR(options =>
 {
     options.EnableDetailedErrors = true;
 });
+
+// 🟢 Hỗ trợ ViewLocalization + DataAnnotations
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
 
 builder.Services.AddRazorPages();
 
@@ -59,9 +69,7 @@ builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<IGradeService, GradeService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
 
-builder.Services.AddScoped<EmailService>(); // ✅ Đăng ký EmailService ở đây
-
-builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<EmailService>();
 
 var app = builder.Build();
 
@@ -73,7 +81,6 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-
         var userCount = userManager.Users.Count();
         if (userCount == 0)
         {
@@ -86,7 +93,6 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Cấu hình pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -96,12 +102,19 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
-app.UseAuthorization();
+// 🟢 Cấu hình hỗ trợ đa ngôn ngữ
+var supportedCultures = new[] { "en", "vi" };
+var localizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture("vi")
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures);
 
-app.UseSession(); // ✅ Đừng quên bật session nếu đã cấu hình
+app.UseRequestLocalization(localizationOptions);
+
+app.UseAuthorization();
+app.UseSession();
 
 app.MapRazorPages();
-
 app.MapStaticAssets();
 
 app.MapControllerRoute(
