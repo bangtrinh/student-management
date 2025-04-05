@@ -5,19 +5,22 @@ using StudentManagement.Hubs;
 using StudentManagement.Models;
 using StudentManagement.Repositories;
 using StudentManagement.Services;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-ExcelPackage.LicenseContext = LicenseContext.NonCommercial; // Cho ứng dụng phi thương mại
+// Cho phép dùng Excel không thương mại
+ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
+// Localization
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+// Database
 builder.Services.AddDbContext<StudentDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddRazorPages(options =>
-{
-    options.Conventions.AuthorizeAreaPage("Identity", "/Account/Manage/ChangePassword");
-});
-
+// Identity
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddDefaultTokenProviders()
     .AddDefaultUI()
@@ -27,24 +30,37 @@ builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Identity/Account/Login";
     options.LogoutPath = "/Identity/Account/Logout";
-    options.AccessDeniedPath = "/Identity/Account/AccessDenied"; // Sửa nhầm LogoutPath thành AccessDeniedPath
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
 });
 
-builder.Services.AddDistributedMemoryCache(); // Sử dụng bộ nhớ cache phân tán (có thể thay bằng Redis nếu cần)
+// Razor Pages với quyền
+builder.Services.AddRazorPages(options =>
+{
+    options.Conventions.AuthorizeAreaPage("Identity", "/Account/Manage/ChangePassword");
+})
+.AddViewLocalization()
+.AddDataAnnotationsLocalization();
+
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
+
+// Session
+builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Thời gian timeout của Session (30 phút)
-    options.Cookie.HttpOnly = true; // Cookie chỉ có thể truy cập qua HTTP
-    options.Cookie.IsEssential = true; // Cookie cần thiết để Session hoạt động
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
 });
 
+// SignalR
 builder.Services.AddSignalR(options =>
 {
     options.EnableDetailedErrors = true;
 });
 
-builder.Services.AddRazorPages();
-
+// Custom Services & Repositories
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IClassRepository, ClassRepository>();
 builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
@@ -58,10 +74,7 @@ builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
 builder.Services.AddScoped<IGradeService, GradeService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
-
-builder.Services.AddScoped<EmailService>(); // ✅ Đăng ký EmailService ở đây
-
-builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<EmailService>();
 
 var app = builder.Build();
 
@@ -69,15 +82,12 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-
     try
     {
         var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-
-        var userCount = userManager.Users.Count();
-        if (userCount == 0)
+        if (!userManager.Users.Any())
         {
-            await SeedData.Initialize(services);
+            await SeedData.Initialize(services); // Seed nếu chưa có user
         }
     }
     catch (Exception ex)
@@ -86,7 +96,16 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Cấu hình pipeline
+// Localization Middleware
+var supportedCultures = new[] { new CultureInfo("vi"), new CultureInfo("en") };
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("vi"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures
+});
+
+// Middlewares
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -94,15 +113,19 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
+app.UseSession();
 
-app.UseSession(); // ✅ Đừng quên bật session nếu đã cấu hình
+// SignalR Hub
+app.MapHub<ChatHub>("/chathub");
 
+// Routing
 app.MapRazorPages();
-
-app.MapStaticAssets();
 
 app.MapControllerRoute(
     name: "Admin",
@@ -110,17 +133,6 @@ app.MapControllerRoute(
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
-
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapRazorPages();
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
-});
-
-app.MapHub<ChatHub>("/chathub");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
