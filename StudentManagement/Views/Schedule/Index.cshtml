@@ -1,4 +1,6 @@
 ﻿@model List<StudentManagement.Models.Schedule>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -11,20 +13,20 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<h2 class="text-center">Thời Khóa Biểu</h2>
+<h2 class="text-center">@Localizer["Schedule"]</h2>
 
 <form asp-action="Index" method="get" class="mb-3 text-center">
     <div class="form-group d-inline-block">
-        <label for="studentId">Mã sinh viên:</label>
-        <input type="text" name="studentId" id="studentId" class="form-control d-inline-block" style="width: 200px;" value="@Context.Request.Query["studentId"]" />
-        <button type="submit" class="btn btn-primary">Tìm</button>
+        <label for="studentId">@Localizer["StudentId"]:</label>
+        <input type="text" name="studentId" id="studentId" class="form-control d-inline-block" style="width: 200px;" value="@studentId" />
+        <button type="submit" class="btn btn-primary">@Localizer["Search"]</button>
     </div>
 </form>
 
 @if (string.IsNullOrEmpty(studentId))
 {
     <div class="alert alert-info text-center">
-        Vui lòng nhập mã sinh viên để xem thời khóa biểu
+        @Localizer["PleaseEnterStudentId"]
     </div>
 }
 else
@@ -38,7 +40,7 @@ else
     <table class="table table-bordered text-center">
         <thead class="thead-dark">
             <tr>
-                <th class="border">Tiết</th>
+                <th class="border">@Localizer["Period"]</th>
                 @for (int i = 0; i < 7; i++)
                 {
                     var date = startOfWeek.AddDays(i);
@@ -50,7 +52,7 @@ else
             @for (int lesson = 1; lesson <= 15; lesson++)
             {
                 <tr>
-                    <td class="font-weight-bold border bg-light">Tiết @lesson</td>
+                    <td class="font-weight-bold border bg-light">@Localizer["Period"] @lesson</td>
                     @for (int i = 0; i < 7; i++)
                     {
                         var date = startOfWeek.AddDays(i);
@@ -69,11 +71,17 @@ else
                                 {
                                     <td rowspan="@rowspan" class="align-middle border bg-light schedule-cell" data-schedule-id="@schedule.ScheduleID" style="cursor: pointer;">
                                         <div class="font-weight-bold">
-                                            @(schedule.Course?.CourseName ?? "(Khóa học không tồn tại)")
+                                            @(
+                                                string.IsNullOrEmpty(schedule.Course?.CourseName)
+                                                ? Localizer["CourseNotFound"]
+                                                : schedule.Course.CourseName
+                                                )
                                         </div>
-                                        <div>Mã: @schedule.CourseID</div>
+                                        <div>@Localizer["Code"]: @schedule.CourseID</div>
                                         <div>
-                                            @(schedule.Course?.Teacher?.FullName ?? "GV: (Chưa có giáo viên)")
+                                            @Localizer["Teacher"]: @(string.IsNullOrEmpty(schedule.Course?.Teacher?.FullName)
+                                                                     ? Localizer["NoTeacherAssigned"]
+                                                                     : schedule.Course.Teacher.FullName)
                                         </div>
                                         <div>@schedule.StartTime.ToString(@"hh\:mm") - @schedule.EndTime.ToString(@"hh\:mm")</div>
                                     </td>
@@ -95,11 +103,11 @@ else
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="scheduleModalLabel">Chỉnh sửa/Thêm mới lịch học</h5>
+                    <h5 class="modal-title" id="scheduleModalLabel">@Localizer["EditOrAddSchedule"]</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="modalBody">
-                    <!-- Nội dung form sẽ được load động qua AJAX -->
+                    <!-- Form sẽ được load qua AJAX -->
                 </div>
             </div>
         </div>
@@ -168,7 +176,7 @@ else
                         $('#scheduleModal').modal('show');
                     },
                     error: function () {
-                        alert('Không thể tải form chỉnh sửa.');
+                        alert('@Localizer["CannotLoadEditForm"]');
                     }
                 });
             } else {
@@ -181,7 +189,7 @@ else
                         $('#scheduleModal').modal('show');
                     },
                     error: function () {
-                        alert('Không thể tải form thêm mới.');
+                        alert('@Localizer["CannotLoadCreateForm"]');
                     }
                 });
             }
