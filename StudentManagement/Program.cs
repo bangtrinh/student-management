@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Cho phép dùng Excel không thương mại
 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-// Localization
+// Localization cấu hình Resource folder
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 // Database
@@ -33,7 +33,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
 });
 
-// Razor Pages với quyền
+// Razor Pages với hỗ trợ localization
 builder.Services.AddRazorPages(options =>
 {
     options.Conventions.AuthorizeAreaPage("Identity", "/Account/Manage/ChangePassword");
@@ -41,6 +41,7 @@ builder.Services.AddRazorPages(options =>
 .AddViewLocalization()
 .AddDataAnnotationsLocalization();
 
+// Controllers + Views + Localization
 builder.Services.AddControllersWithViews()
     .AddViewLocalization()
     .AddDataAnnotationsLocalization();
@@ -96,16 +97,19 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Localization Middleware
+// ✅ Cấu hình Localization Middleware
 var supportedCultures = new[] { new CultureInfo("vi"), new CultureInfo("en") };
-app.UseRequestLocalization(new RequestLocalizationOptions
+
+var localizationOptions = new RequestLocalizationOptions
 {
     DefaultRequestCulture = new RequestCulture("vi"),
     SupportedCultures = supportedCultures,
     SupportedUICultures = supportedCultures
-});
+};
 
-// Middlewares
+// 🔥 Ưu tiên lấy ngôn ngữ từ cookie do LanguageController đặt
+localizationOptions.RequestCultureProviders.Insert(0, new CookieRequestCultureProvider());
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -116,6 +120,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseRequestLocalization(localizationOptions); // ✅ Đặt ngay sau UseRouting
 
 app.UseAuthentication();
 app.UseAuthorization();

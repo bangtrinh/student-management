@@ -7,7 +7,6 @@ namespace StudentManagement.Controllers
 {
     [Authorize]
     [Authorize(Roles = "Admin")]
-
     public class DepartmentController : Controller
     {
         private readonly IDepartmentRepository _departmentRepository;
@@ -17,10 +16,10 @@ namespace StudentManagement.Controllers
             _departmentRepository = departmentRepository;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var departments = _departmentRepository.GetAll();
-            return View(departments);
+            return View(departments); // View phải là @model IEnumerable<Department>
         }
 
         public IActionResult Details(string id)
@@ -39,7 +38,7 @@ namespace StudentManagement.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Department department)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _departmentRepository.Add(department);
                 return RedirectToAction(nameof(Index));
@@ -59,7 +58,7 @@ namespace StudentManagement.Controllers
         public IActionResult Edit(string id, Department department)
         {
             if (id != department.DepartmentID) return BadRequest();
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _departmentRepository.Update(department);
                 return RedirectToAction(nameof(Index));

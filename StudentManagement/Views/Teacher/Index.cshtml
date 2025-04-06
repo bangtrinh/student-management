@@ -1,25 +1,26 @@
 ﻿@model IEnumerable<StudentManagement.Models.Teacher>
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Danh sách giảng viên";
+    ViewData["Title"] = Localizer["TeacherList"];
 }
 
-<h2>Danh sách giảng viên</h2>
+<h2>@Localizer["TeacherList"]</h2>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Thêm giảng viên mới</a>
+    <a asp-action="Create" class="btn btn-primary">@Localizer["AddTeacher"]</a>
 </p>
 
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Mã GV</th>
-            <th>Họ và tên</th>
-            <th>Email</th>
-            <th>Số điện thoại</th>
-            <th>Khoa</th>
-            <th>Chuyên môn</th>
-            <th>Hành động</th>
+            <th>@Localizer["TeacherId"]</th>
+            <th>@Localizer["FullName"]</th>
+            <th>@Localizer["Email"]</th>
+            <th>@Localizer["Phone"]</th>
+            <th>@Localizer["Department"]</th>
+            <th>@Localizer["Speciality"]</th>
+            <th>@Localizer["Actions"]</th>
         </tr>
     </thead>
     <tbody>
@@ -30,12 +31,12 @@
                 <td>@item.FullName</td>
                 <td>@item.Email</td>
                 <td>@item.PhoneNumber</td>
-                <td>@item.Department.DepartmentName</td>
+                <td>@item.Department?.DepartmentName</td>
                 <td>@item.Specialization</td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.TeacherID" class="btn btn-info btn-sm">Chi tiết</a>
-                    <a asp-action="Edit" asp-route-id="@item.TeacherID" class="btn btn-warning btn-sm">Sửa</a>
-                    <a asp-action="Delete" asp-route-id="@item.TeacherID" class="btn btn-danger btn-sm">Xóa</a>
+                    <a asp-action="Details" asp-route-id="@item.TeacherID" class="btn btn-info btn-sm">@Localizer["Details"]</a>
+                    <a asp-action="Edit" asp-route-id="@item.TeacherID" class="btn btn-warning btn-sm">@Localizer["Edit"]</a>
+                    <a asp-action="Delete" asp-route-id="@item.TeacherID" class="btn btn-danger btn-sm">@Localizer["Delete"]</a>
                 </td>
             </tr>
         }
