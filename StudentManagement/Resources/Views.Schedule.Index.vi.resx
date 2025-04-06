@@ -123,8 +123,11 @@
   <data name="CourseNotFound" xml:space="preserve">
     <value>(Khóa học không tồn tại)</value>
   </data>
-  <data name="EditOrAdd" xml:space="preserve">
+  <data name="EditOrAddSchedule" xml:space="preserve">
     <value>Chỉnh sửa/Thêm mới lịch học</value>
+  </data>
+  <data name="EnterStudentId" xml:space="preserve">
+    <value>Nhập mã sinh viên</value>
   </data>
   <data name="NoTeacher" xml:space="preserve">
     <value>(Chưa có giáo viên)</value>
@@ -132,8 +135,11 @@
   <data name="Period" xml:space="preserve">
     <value>Tiết</value>
   </data>
+  <data name="PleaseEnterStudentId" xml:space="preserve">
+    <value>Vui lòng nhập mã sinh viên</value>
+  </data>
   <data name="Schedule" xml:space="preserve">
-    <value>Thời Khóa Biểu</value>
+    <value>Thời khóa biểu</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value> Tìm</value>
@@ -142,6 +148,6 @@
     <value> Mã sinh viên</value>
   </data>
   <data name="Teacher" xml:space="preserve">
-    <value>Giáo Viên</value>
+    <value>Giảng viên</value>
   </data>
 </root>

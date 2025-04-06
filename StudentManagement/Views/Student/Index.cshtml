@@ -1,62 +1,188 @@
 ﻿@model IEnumerable<StudentManagement.Models.Student>
 @using Microsoft.Extensions.Localization
-@inject IStringLocalizer<StudentManagement.Views.Student.Index> Localizer
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @{
     ViewData["Title"] = Localizer["StudentList"];
 }
 
-<h2>@Localizer["StudentList"]</h2>
+<div class="content py-4">
+    <div class="container-fluid">
 
-<!-- Kiểm tra ngôn ngữ hiện tại -->
-<p><strong>Culture hiện tại:</strong> @System.Globalization.CultureInfo.CurrentUICulture.Name</p>
+        <!-- Header Section -->
+        <div class="d-flex flex-wrap align-items-center justify-content-between mb-4 gap-3">
+            <!-- Title -->
+            <h2 class="mb-0 font-weight-bold text-primary d-flex align-items-center">
+                <i class="fas fa-user-graduate me-2"></i>@Localizer["StudentList"]
+            </h2>
 
-<!-- Form tìm kiếm -->
-<form method="get" class="mb-3">
-    <div class="input-group">
-        <input type="text" name="searchString" class="form-control" placeholder="@Localizer["Search"]..." value="@Context.Request.Query["searchString"]" />
-        <button type="submit" class="btn btn-primary">@Localizer["Search"]</button>
+            <!-- Search Form -->
+            <form method="get" class="d-flex align-items-center search-form mx-3" style="max-width: 700px;">
+    <div class="input-group w-100">
+        <input type="text" name="searchString" class="form-control search-input"
+               placeholder="@Localizer["SearchByNameOrID"]..."
+               value="@Context.Request.Query["searchString"]" />
+        <div class="input-group-append">
+            <button type="submit" class="btn btn-primary search-btn" title="@Localizer["Search"]">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
     </div>
 </form>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">@Localizer["AddStudent"]</a>
-</p>
+            <!-- Add Button -->
+            <a asp-action="Create" class="btn btn-primary shadow-sm d-flex align-items-center">
+                <i class="fas fa-user-plus mr-2"></i>@Localizer["Add"]
+            </a>
+        </div>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>@Localizer["StudentId"]</th>
-            <th>@Localizer["FullName"]</th>
-            <th>@Localizer["BirthDate"]</th>
-            <th>@Localizer["Gender"]</th>
-            <th>@Localizer["Email"]</th>
-            <th>@Localizer["Phone"]</th>
-            <th>@Localizer["Address"]</th>
-            <th>@Localizer["Class"]</th>
-            <th>@Localizer["Status"]</th>
-            <th>@Localizer["Actions"]</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.StudentID</td>
-                <td>@item.FullName</td>
-                <td>@item.DateOfBirth.ToString("dd/MM/yyyy")</td>
-                <td>@item.Gender</td>
-                <td>@item.Email</td>
-                <td>@item.PhoneNumber</td>
-                <td>@item.Address</td>
-                <td>@item.Class.ClassName</td>
-                <td>@item.Status</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.StudentID" class="btn btn-info btn-sm">@Localizer["Details"]</a>
-                    <a asp-action="Edit" asp-route-id="@item.StudentID" class="btn btn-warning btn-sm">@Localizer["Edit"]</a>
-                    <a asp-action="Delete" asp-route-id="@item.StudentID" class="btn btn-danger btn-sm">@Localizer["Delete"]</a>
-                </td>
-            </tr>
+        <!-- Student Table -->
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <div class="table-responsive rounded">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="text-center" style="width: 100px;">@Localizer["StudentId"]</th>
+                                <th>@Localizer["FullName"]</th>
+                                <th class="text-center" style="width: 120px;">@Localizer["BirthDate"]</th>
+                                <th class="text-center" style="width: 100px;">@Localizer["Gender"]</th>
+                                <th class="text-center" style="width: 120px;">@Localizer["Class"]</th>
+                                <th class="text-center" style="width: 120px;">@Localizer["Status"]</th>
+                                <th class="text-center">@Localizer["Actions"]</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr class="border-bottom">
+                                    <td class="text-center font-weight-bold text-muted">@item.StudentID</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-sm bg-light rounded-circle mr-3 d-flex align-items-center justify-content-center">
+                                                <i class="fas fa-user text-muted"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-0">@item.FullName</h6>
+                                                <small class="text-muted">@item.Email</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center text-muted">@item.DateOfBirth.ToString("dd/MM/yyyy")</td>
+                                    <td class="text-center text-muted">@item.Gender</td>
+                                    <td class="text-center">
+                                        <span class="badge badge-light p-2">@item.Class.ClassName</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge @(item.Status == "Đang học" || item.Status == "Active" ? "badge-success" : "badge-warning") p-2">
+                                            @item.Status
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-icon btn-link text-dark" type="button"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-right shadow-sm border-0">
+                                                <a class="dropdown-item d-flex align-items-center"
+                                                   asp-action="Details"
+                                                   asp-route-id="@item.StudentID">
+                                                    <i class="fas fa-eye mr-2 text-info"></i>@Localizer["Details"]
+                                                </a>
+                                                <a class="dropdown-item d-flex align-items-center"
+                                                   asp-action="Edit"
+                                                   asp-route-id="@item.StudentID">
+                                                    <i class="fas fa-edit mr-2 text-primary"></i>@Localizer["Edit"]
+                                                </a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item d-flex align-items-center text-danger"
+                                                   asp-action="Delete"
+                                                   asp-route-id="@item.StudentID">
+                                                    <i class="fas fa-trash mr-2"></i>@Localizer["Delete"]
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                @if (!Model.Any())
+                {
+                    <div class="text-center py-5">
+                        <i class="fas fa-user-graduate fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">@Localizer["NoStudentsFound"]</h5>
+                        <a asp-action="Create" class="btn btn-primary mt-3">
+                            <i class="fas fa-plus mr-2"></i>@Localizer["AddNewStudent"]
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+}
+
+
+@section Styles {
+    <style>
+        .avatar-sm {
+            width: 36px;
+            height: 36px;
+            font-size: 14px;
         }
-    </tbody>
-</table>
+
+        .table th {
+            border-top: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            color: #6c757d;
+        }
+
+        .table td {
+            vertical-align: middle;
+            padding: 12px 8px;
+        }
+
+        .dropdown-menu {
+            min-width: 160px;
+            border-radius: 0.375rem;
+        }
+
+        .dropdown-item {
+            padding: 0.5rem 1.5rem;
+            font-size: 0.875rem;
+        }
+
+        .badge-light {
+            background-color: #f8f9fa;
+            color: #495057;
+            font-weight: 500;
+        }
+
+        .badge-warning {
+            background-color: #ffc107;
+            color: #212529;
+        }
+
+        .badge-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .action-btn:hover {
+            background-color: rgba(0,0,0,0.05);
+        }        
+    </style>
+}

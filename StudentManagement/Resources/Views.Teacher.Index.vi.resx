@@ -117,17 +117,32 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Actions" xml:space="preserve">
-    <value>Hành động</value>
+  <data name="TeacherList" xml:space="preserve">
+    <value> Danh sách giảng viên</value>
   </data>
   <data name="AddTeacher" xml:space="preserve">
     <value>Thêm giảng viên mới</value>
   </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Xóa</value>
+  <data name="TeacherId" xml:space="preserve">
+    <value>Mã GV</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Họ và tên</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value> Số điện thoại</value>
   </data>
   <data name="Department" xml:space="preserve">
     <value> Khoa</value>
+  </data>
+  <data name="Speciality" xml:space="preserve">
+    <value>Chuyên môn</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Hành động</value>
   </data>
   <data name="Details" xml:space="preserve">
     <value> Chi tiết</value>
@@ -135,22 +150,10 @@
   <data name="Edit" xml:space="preserve">
     <value>Sửa</value>
   </data>
-  <data name="Email" xml:space="preserve">
-    <value>Email</value>
+  <data name="Delete" xml:space="preserve">
+    <value>Xóa</value>
   </data>
-  <data name="FullName" xml:space="preserve">
-    <value>Họ và tên</value>
-  </data>
-  <data name="Phone" xml:space="preserve">
-    <value> Số điện thoại</value>
-  </data>
-  <data name="Speciality" xml:space="preserve">
-    <value>Chuyên môn</value>
-  </data>
-  <data name="TeacherId" xml:space="preserve">
-    <value>Mã GV</value>
-  </data>
-  <data name="TeacherList" xml:space="preserve">
-    <value> Danh sách giảng viên</value>
+  <data name="SearchByNameOrID" xml:space="preserve">
+    <value>Tìm kiếm bằng tên hoặc ID</value>
   </data>
 </root>

@@ -120,20 +120,20 @@
   <data name="Phone" xml:space="preserve">
     <value>Phone</value>
   </data>
-  <data name="AddStudent" xml:space="preserve">
-    <value>StudentList</value>
+  <data name="StudentList" xml:space="preserve">
+    <value>Student list</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Search</value>
   </data>
   <data name="StudentId" xml:space="preserve">
-    <value>StudentId</value>
+    <value>Student ID</value>
   </data>
   <data name="FullName" xml:space="preserve">
-    <value>FullName</value>
+    <value>Fullname</value>
   </data>
   <data name="BirthDate" xml:space="preserve">
-    <value>BirthDate</value>
+    <value>Birthdate</value>
   </data>
   <data name="Gender" xml:space="preserve">
     <value>Gender</value>
@@ -161,5 +161,17 @@
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
+  </data>
+  <data name="AddStudent" xml:space="preserve">
+    <value>Add student</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Inactive" xml:space="preserve">
+    <value>Inactive</value>
+  </data>
+  <data name="OnLeave" xml:space="preserve">
+    <value>On leave</value>
   </data>
 </root>

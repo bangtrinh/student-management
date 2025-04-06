@@ -127,10 +127,10 @@
     <value>Class ID</value>
   </data>
   <data name="ClassList" xml:space="preserve">
-    <value>ClassList</value>
+    <value>Class list</value>
   </data>
   <data name="ClassName" xml:space="preserve">
-    <value> Class Name</value>
+    <value> Class name</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
@@ -142,13 +142,16 @@
     <value>Edit</value>
   </data>
   <data name="EndDate" xml:space="preserve">
-    <value> End Date</value>
+    <value> End date</value>
   </data>
   <data name="Major" xml:space="preserve">
     <value> Major</value>
   </data>
+  <data name="SearchByNameOrID" xml:space="preserve">
+    <value>Search by name or ID</value>
+  </data>
   <data name="StartDate" xml:space="preserve">
-    <value> Start Date</value>
+    <value> Start date</value>
   </data>
   <data name="Teacher" xml:space="preserve">
     <value>Teacher</value>

@@ -120,14 +120,14 @@
   <data name="Phone" xml:space="preserve">
     <value> Số điện thoại</value>
   </data>
-  <data name="AddStudent" xml:space="preserve">
-    <value>Thêm sinh viên mới</value>
+  <data name="StudentList" xml:space="preserve">
+    <value>Danh sách sinh viên</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Tìm kiếm</value>
   </data>
   <data name="StudentId" xml:space="preserve">
-    <value>Mã SV</value>
+    <value>Mã sinh viên</value>
   </data>
   <data name="FullName" xml:space="preserve">
     <value> Họ và tên</value>
@@ -161,5 +161,17 @@
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Xóa</value>
+  </data>
+  <data name="AddStudent" xml:space="preserve">
+    <value>Thêm sinh viên</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Đang học</value>
+  </data>
+  <data name="Inactive" xml:space="preserve">
+    <value>Thôi học</value>
+  </data>
+  <data name="OnLeave" xml:space="preserve">
+    <value>Bảo lưu</value>
   </data>
 </root>

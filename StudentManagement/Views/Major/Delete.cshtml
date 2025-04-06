@@ -1,25 +1,107 @@
 ﻿@model StudentManagement.Models.Major
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<StudentManagement.SharedResources> Localizer
 
 @{
-    ViewData["Title"] = "Xóa ngành học";
+    ViewData["Title"] = Localizer["DeleteMajorTitle"];
 }
 
-<h2>Xóa ngành học</h2>
+<div class="content py-4">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-sm border-danger">
+                    <div class="card-header bg-white border-bottom-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3 class="card-title mb-0 text-danger">
+                                <i class="fas fa-exclamation-triangle me-2"></i>@Localizer["DeleteMajorTitle"]
+                            </h3>
+                        </div>
+                    </div>
 
-<h3>Bạn có chắc muốn xóa ngành học này?</h3>
-<div>
-    <h4>@Model.MajorName</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">Mã ngành</dt>
-        <dd class="col-sm-10">@Model.MajorID</dd>
-        <dt class="col-sm-2">Tên ngành</dt>
-        <dd class="col-sm-10">@Model.MajorName</dd>
-    </dl>
+                    <div class="card-body">
+                        <div class="alert alert-danger border-danger" role="alert">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-exclamation-circle fa-2x me-3"></i>
+                                <div>
+                                    <h5 class="alert-heading mb-1">@Localizer["DeleteWarning"]</h5>
+                                    <p class="mb-0">@Localizer["DeleteConfirmationMessage"]</p>
+                                </div>
+                            </div>
+                        </div>
 
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="MajorID" />
-        <input type="submit" value="Xóa" class="btn btn-danger" />
-        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
-    </form>
+                        <div class="card border-0 shadow-none mb-4">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="avatar-lg bg-light-danger text-danger rounded-circle d-flex align-items-center justify-content-center me-4">
+                                        <i class="fas fa-graduation-cap fa-lg"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="mb-1">@Model.MajorName</h4>
+                                        <span class="text-muted">ID: @Model.MajorID</span>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label text-muted small mb-1">@Localizer["Department"]</label>
+                                            <p class="mb-0">@Model.Department?.DepartmentName</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label text-muted small mb-1">@Localizer["TrainingTime"]</label>
+                                            <p class="mb-0">@Model.Duration @Localizer["Year"]</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form asp-action="Delete" class="mt-4">
+                            <input type="hidden" asp-for="MajorID" />
+
+                            <div class="d-flex justify-content-end gap-3">
+                                <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                                    <i class="fas fa-times me-2"></i>@Localizer["Back"]
+                                </a>
+                                <button type="submit" class="btn btn-danger px-4">
+                                    <i class="fas fa-trash-alt me-2"></i>@Localizer["Confirm"]
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Styles {
+    <style>
+        .avatar-lg {
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+        }
+
+        .bg-light-danger {
+            background-color: rgba(220,53,69,0.1);
+        }
+
+        .text-danger {
+            color: #dc3545 !important;
+        }
+
+        .border-danger {
+            border-color: #dc3545 !important;
+        }
+    </style>
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

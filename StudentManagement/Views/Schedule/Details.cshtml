@@ -1,24 +1,70 @@
 ﻿@model StudentManagement.Models.Schedule
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<StudentManagement.SharedResources> Localizer
+
 @{
-    Layout = "~/Views/Shared/_PartialViewLayout.cshtml"; 
+    Layout = "~/Views/Shared/_PartialViewLayout.cshtml";
+    ViewData["Title"] = Localizer["ScheduleDetails"];
 }
-<div>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">Schedule ID</dt>
-        <dd class="col-sm-10">@Model.ScheduleID</dd>
 
-        <dt class="col-sm-2">Course</dt>
-        <dd class="col-sm-10">@Model.Course.CourseName</dd>
+<div class="card shadow-sm">
+    <div class="card-header bg-white border-bottom-0">
+        <h5 class="card-title mb-0 text-primary">
+            <i class="fas fa-calendar-alt me-2"></i>@Localizer["ScheduleDetails"]
+        </h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-4">
+                    <label class="form-label text-muted small mb-1">@Localizer["ID"]</label>
+                    <p class="fs-5">
+                        <i class="fas fa-id-card me-2 text-muted"></i>
+                        @Model.ScheduleID
+                    </p>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label text-muted small mb-1">@Localizer["Course"]</label>
+                    <p class="fs-5">
+                        <i class="fas fa-book me-2 text-muted"></i>
+                        @Model.Course?.CourseName
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-4">
+                    <label class="form-label text-muted small mb-1">@Localizer["Teacher"]</label>
+                    <p class="fs-5">
+                        <i class="fas fa-chalkboard-teacher me-2 text-muted"></i>
+                        @Model.Course?.Teacher?.FullName
+                    </p>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label text-muted small mb-1">@Localizer["Date"]</label>
+                    <p class="fs-5">
+                        <i class="fas fa-calendar-day me-2 text-muted"></i>
+                        @Model.ClassDate.ToString("dd/MM/yyyy")
+                    </p>
+                </div>
+            </div>
+        </div>
 
-        <dt class="col-sm-2">Teacher</dt>
-        <dd class="col-sm-10">@Model.Course.Teacher.FullName</dd>
-
-        <dt class="col-sm-2">Date</dt>
-        <dd class="col-sm-10">@Model.ClassDate.ToString("dd/MM/yyyy")</dd>
-    </dl>
+        <div class="d-flex justify-content-end gap-3 mt-4 pt-3 border-top">
+            <a asp-action="Edit" asp-route-id="@Model.ScheduleID" class="btn btn-warning px-4">
+                <i class="fas fa-edit me-2"></i>@Localizer["Edit"]
+            </a>
+            <a asp-action="Delete" asp-route-id="@Model.ScheduleID" class="btn btn-danger px-4">
+                <i class="fas fa-trash-alt me-2"></i>@Localizer["Delete"]
+            </a>
+            <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                <i class="fas fa-arrow-left me-2"></i>@Localizer["Back"]
+            </a>
+        </div>
+    </div>
 </div>
 
-<a asp-action="Edit" asp-route-id="@Model.ScheduleID" class="btn btn-warning">Edit</a>
-<a asp-action="Delete" asp-route-id="@Model.ScheduleID" class="btn btn-danger">Delete</a>
-<a asp-action="Index" class="btn btn-secondary">Back to List</a>
+<style>
+    .fs-5 {
+        font-size: 1.1rem !important;
+    }
+</style>

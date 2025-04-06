@@ -1,27 +1,102 @@
 ﻿@model StudentManagement.Models.Class
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<StudentManagement.SharedResources> Localizer
 
 @{
-    ViewData["Title"] = "Xóa lớp học";
+    ViewData["Title"] = Localizer["DeleteClassTitle"];
 }
 
-<h2>Xóa lớp học</h2>
+<div class="content py-4">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-sm border-danger">
+                    <div class="card-header bg-white border-bottom-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3 class="card-title mb-0 text-danger">
+                                <i class="fas fa-exclamation-triangle me-2"></i>@Localizer["DeleteClassTitle"]
+                            </h3>
+                            <a asp-action="Index" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>@Localizer["BackToList"]
+                            </a>
+                        </div>
+                    </div>
 
-<h3>Bạn có chắc muốn xóa lớp học này?</h3>
-<div>
-    <h4>@Model.ClassName</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">Mã lớp</dt>
-        <dd class="col-sm-10">@Model.ClassID</dd>
-        <dt class="col-sm-2">Tên lớp</dt>
-        <dd class="col-sm-10">@Model.ClassName</dd>
-        <dt class="col-sm-2">Mã GV</dt>
-        <dd class="col-sm-10">@Model.TeacherID</dd>
-    </dl>
+                    <div class="card-body">
+                        <div class="alert alert-danger border-danger" role="alert">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-exclamation-circle fa-2x me-3"></i>
+                                <div>
+                                    <h5 class="alert-heading mb-1">@Localizer["DeleteWarning"]</h5>
+                                    <p class="mb-0">@Localizer["DeleteConfirmationMessage"]</p>
+                                </div>
+                            </div>
+                        </div>
 
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="ClassID" />
-        <input type="submit" value="Xóa" class="btn btn-danger" />
-        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
-    </form>
+                        <div class="card border-0 shadow-none mb-4">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="avatar-lg bg-light-danger text-danger rounded-circle d-flex align-items-center justify-content-center me-4">
+                                        <i class="fas fa-users fa-lg"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="mb-1">@Model.ClassName</h4>
+                                        <span class="text-muted">ID: @Model.ClassID</span>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label text-muted small mb-1">@Localizer["Major"]</label>
+                                            <p class="mb-0">@Model.Major.MajorName</p>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label text-muted small mb-1">@Localizer["StartDate"]</label>
+                                            <p class="mb-0">@Model.StartDate.ToString("dd/MM/yyyy")</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label text-muted small mb-1">@Localizer["Teacher"]</label>
+                                            <p class="mb-0">@Model.Teacher.FullName</p>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label text-muted small mb-1">@Localizer["EndDate"]</label>
+                                            <p class="mb-0">@Model.EndDate.ToString("dd/MM/yyyy")</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form asp-action="Delete" class="mt-4">
+                            <input type="hidden" asp-for="ClassID" />
+
+                            <div class="d-flex justify-content-end gap-3">
+                                <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                                    <i class="fas fa-times me-2"></i>@Localizer["Cancel"]
+                                </a>
+                                <button type="submit" class="btn btn-danger px-4">
+                                    <i class="fas fa-trash-alt me-2"></i>@Localizer["ConfirmDelete"]
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Styles {
+    <style>
+        <link rel="stylesheet" href="~/css/form-style.css" asp-append-version="true" / >
+    </style>
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

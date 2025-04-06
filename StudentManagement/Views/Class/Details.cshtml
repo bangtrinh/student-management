@@ -1,69 +1,168 @@
 ﻿@model StudentManagement.Models.Class
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<StudentManagement.SharedResources> Localizer
 
 @{
-    ViewData["Title"] = "Chi tiết lớp học";
+    ViewData["Title"] = Localizer["ClassDetailsTitle"];
 }
 
-<h2>Chi tiết lớp học</h2>
+<div class="content py-4">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white border-bottom-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3 class="card-title mb-0 text-primary">
+                                <i class="fas fa-users me-2"></i>@Localizer["ClassDetailsTitle"]
+                            </h3>
+                        </div>
+                    </div>
 
-<div>
-    <h4>@Model.ClassName</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">Mã lớp</dt>
-        <dd class="col-sm-10">@Model.ClassID</dd>
-        <dt class="col-sm-2">Tên lớp</dt>
-        <dd class="col-sm-10">@Model.ClassName</dd>
-        <dt class="col-sm-2">Mã ngành</dt>
-        <dd class="col-sm-10">@Model.MajorID</dd>
-        <dt class="col-sm-2">Mã GV</dt>
-        <dd class="col-sm-10">@Model.TeacherID</dd>
-        <dt class="col-sm-2">Ngày bắt đầu</dt>
-        <dd class="col-sm-10">@Model.StartDate.ToShortDateString()</dd>
-        <dt class="col-sm-2">Ngày kết thúc</dt>
-        <dd class="col-sm-10">@Model.EndDate.ToShortDateString()</dd>
-    </dl>
+                    <div class="card-body">
+                        <!-- Class Header -->
+                        <div class="d-flex align-items-center mb-4">
+                            <div>
+                                <h3 class="mb-1">@Model.ClassName</h3>
+                                <span class="badge bg-primary">@Model.ClassID</span>
+                                <span class="badge bg-success ms-2">@Model.Major.MajorName</span>
+                            </div>
+                        </div>
+
+                        <!-- Class Information -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="info-card mb-4">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-chalkboard-teacher me-2 text-muted"></i>
+                                        <h6 class="mb-0">@Localizer["Advisor"]</h6>
+                                    </div>
+                                    <p class="mb-0 ps-4">@Model.Teacher.FullName</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="info-card mb-4">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fas fa-calendar-alt me-2 text-muted"></i>
+                                        <h6 class="mb-0">@Localizer["StudyPeriod"]</h6>
+                                    </div>
+                                    <p class="mb-0 ps-4">
+                                        @Model.StartDate.ToString("dd/MM/yyyy") - @Model.EndDate.ToString("dd/MM/yyyy")
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Student List -->
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-user-graduate me-2"></i>
+                                    @Localizer["StudentList"] (@Model.Students?.Count ?? 0)
+                                </h5>
+                            </div>
+
+                            @if (Model.Students != null && Model.Students.Any())
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle">
+                                        <thead class="bg-light">
+                                            <tr>
+                                                <th class="text-center">@Localizer["StudentId"]</th>
+                                                <th>@Localizer["FullName"]</th>
+                                                <th class="text-center">@Localizer["BirthDate"]</th>
+                                                <th class="text-center">@Localizer["Gender"]</th>
+                                                <th>@Localizer["Email"]</th>
+                                                <th class="text-center">@Localizer["Status"]</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var student in Model.Students)
+                                            {
+                                                <tr class="border-bottom">
+                                                    <td class="text-center font-weight-bold">@student.StudentID</td>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="avatar-sm bg-light rounded-circle me-3 d-flex align-items-center justify-content-center">
+                                                                <i class="fas fa-user text-muted"></i>
+                                                            </div>
+                                                            <div>
+                                                                <h6 class="mb-0">@student.FullName</h6>
+                                                                <small class="text-muted">@student.PhoneNumber</small>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center">@student.DateOfBirth.ToString("dd/MM/yyyy")</td>
+                                                    <td class="text-center">
+                                                        @if (student.Gender == "Nam")
+                                                        {
+                                                            <i class="fas fa-mars text-primary"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="fas fa-venus text-pink"></i>
+                                                        }
+                                                    </td>
+                                                    <td>@student.Email</td>
+                                                    <td class="text-center">
+                                                        <span class="badge @(student.Status == "Đang học" ? "badge-success" : "badge-warning")">
+                                                            @student.Status
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="alert alert-light text-center py-4">
+                                    <i class="fas fa-user-graduate fa-3x text-muted mb-3"></i>
+                                    <h5 class="text-muted">@Localizer["NoInfoFound"]</h5>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-end gap-3 mt-4 pt-3 border-top">
+                            <a asp-action="Edit" asp-route-id="@Model.ClassID" class="btn btn-warning px-4">
+                                <i class="fas fa-edit me-2"></i>@Localizer["Edit"]
+                            </a>
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                                <i class="fas fa-arrow-left me-2"></i>@Localizer["Back"]
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<h3>Danh sách sinh viên</h3>
-@if (Model.Students != null && Model.Students.Any())
-{
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Mã SV</th>
-                <th>Họ và tên</th>
-                <th>Ngày sinh</th>
-                <th>Giới tính</th>
-                <th>Email</th>
-                <th>Số điện thoại</th>
-                <th>Địa chỉ</th>
-                <th>Trạng thái</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var student in Model.Students)
-            {
-                <tr>
-                    <td>@student.StudentID</td>
-                    <td>@student.FullName</td>
-                    <td>@student.DateOfBirth.ToShortDateString()</td>
-                    <td>@student.Gender</td>
-                    <td>@student.Email</td>
-                    <td>@student.PhoneNumber</td>
-                    <td>@student.Address</td>
-                    <td>@student.Status</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>Chưa có sinh viên nào trong lớp này.</p>
+@section Styles {
+    <style>
+        <link rel="stylesheet" href="~/css/form-style.css" asp-append-version="true" / >
+        .badge-light {
+            background-color: #f8f9fa;
+            color: #495057;
+            font-weight: 500;
+        }
+
+        .badge-warning {
+            background-color: #ffc107;
+            color: #212529;
+        }
+
+        .badge-success {
+            background-color: #28a745;
+            color: white;
+        }
+    </style>
 }
 
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.ClassID" class="btn btn-warning">Sửa</a>
-    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
-</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
