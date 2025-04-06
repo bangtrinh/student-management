@@ -6,6 +6,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using StudentManagement.Controllers;
 using StudentManagement.Models;
 using StudentManagement.Services;
 
@@ -51,7 +52,7 @@ namespace StudentManagement.Areas.Identity.Pages.Account
             var otpRecord = new OTP
             {
                 Email = Input.Email,
-                Code = otp,
+                Code = SecurityHelper.HashSHA256(otp),
                 ExpiryTime = DateTime.Now.AddMinutes(5)
             };
 

@@ -12,7 +12,7 @@ namespace StudentManagement.Models
         public string Email { get; set; }
 
         [Required]
-        [StringLength(8)]
+        [StringLength(64)]
         public string Code { get; set; }
 
         public DateTime ExpiryTime { get; set; } // OTP hết hạn sau 5 phút
