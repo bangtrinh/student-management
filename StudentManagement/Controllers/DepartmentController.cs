@@ -6,7 +6,7 @@ using StudentManagement.Repositories;
 namespace StudentManagement.Controllers
 {
     [Authorize]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "RequireAdminRole")]
 
     public class DepartmentController : Controller
     {
@@ -39,7 +39,7 @@ namespace StudentManagement.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Department department)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _departmentRepository.Add(department);
                 return RedirectToAction(nameof(Index));
@@ -59,7 +59,7 @@ namespace StudentManagement.Controllers
         public IActionResult Edit(string id, Department department)
         {
             if (id != department.DepartmentID) return BadRequest();
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _departmentRepository.Update(department);
                 return RedirectToAction(nameof(Index));

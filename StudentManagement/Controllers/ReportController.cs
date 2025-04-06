@@ -7,9 +7,12 @@ using StudentManagement.Repositories;
 using StudentManagement.Helpers;
 using StudentManagement.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace StudentManagement.Controllers
 {
+    [Authorize]
+    [Authorize(Policy = "RequireAdminRole")]
     public class ReportController : Controller
     {
         private readonly IGradeService _gradeService;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.EntityFrameworkCore;
 
 namespace StudentManagement.Models
@@ -39,6 +40,7 @@ namespace StudentManagement.Models
         public string Status { get; set; }
 
         // Navigation property
+        [ValidateNever]
         public virtual Class Class { get; set; }
     }
 }

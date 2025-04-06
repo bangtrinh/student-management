@@ -8,7 +8,7 @@ using StudentManagement.Repositories;
 namespace StudentManagement.Controllers
 {
     [Authorize]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "RequireAdminRole")]
     public class ScheduleController : Controller
     {
         private readonly IScheduleRepository _scheduleRepository;
@@ -86,7 +86,7 @@ namespace StudentManagement.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Schedule schedule)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _scheduleRepository.Add(schedule);
                 Console.WriteLine(schedule);
@@ -143,7 +143,7 @@ namespace StudentManagement.Controllers
         {
             if (id != schedule.ScheduleID) return BadRequest();
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _scheduleRepository.Update(schedule);
                 return RedirectToAction(nameof(Index), new { studentId = schedule.StudentID });
