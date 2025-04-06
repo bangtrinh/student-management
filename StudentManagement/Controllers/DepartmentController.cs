@@ -17,10 +17,10 @@ namespace StudentManagement.Controllers
             _departmentRepository = departmentRepository;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var departments = _departmentRepository.GetAll();
-            return View(departments);
+            return View(departments); // View phải là @model IEnumerable<Department>
         }
 
         public IActionResult Details(string id)

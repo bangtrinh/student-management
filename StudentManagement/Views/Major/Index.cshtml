@@ -1,23 +1,25 @@
 ﻿@model IEnumerable<StudentManagement.Models.Major>
+@using Microsoft.Extensions.Localization
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Danh sách ngành học";
+    ViewData["Title"] = Localizer["MajorList"];
 }
 
-<h2>Danh sách ngành học</h2>
+<h2>@Localizer["MajorList"]</h2>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Thêm ngành học mới</a>
+    <a asp-action="Create" class="btn btn-primary">@Localizer["AddMajor"]</a>
 </p>
 
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Mã ngành</th>
-            <th>Tên ngành</th>
-            <th>Khoa</th>
-            <th>Thời gian đào tạo</th>
-            <th>Hành động</th>
+            <th>@Localizer["MajorId"]</th>
+            <th>@Localizer["MajorName"]</th>
+            <th>@Localizer["Department"]</th>
+            <th>@Localizer["TrainingTime"]</th>
+            <th>@Localizer["Actions"]</th>
         </tr>
     </thead>
     <tbody>
@@ -26,12 +28,12 @@
             <tr>
                 <td>@item.MajorID</td>
                 <td>@item.MajorName</td>
-                <td>@item.Department.DepartmentName</td>
-                <td>@item.Duration năm</td>
+                <td>@item.Department?.DepartmentName</td>
+                <td>@item.Duration @Localizer["Year"]</td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.MajorID" class="btn btn-info btn-sm">Chi tiết</a>
-                    <a asp-action="Edit" asp-route-id="@item.MajorID" class="btn btn-warning btn-sm">Sửa</a>
-                    <a asp-action="Delete" asp-route-id="@item.MajorID" class="btn btn-danger btn-sm">Xóa</a>
+                    <a asp-action="Details" asp-route-id="@item.MajorID" class="btn btn-info btn-sm">@Localizer["Details"]</a>
+                    <a asp-action="Edit" asp-route-id="@item.MajorID" class="btn btn-warning btn-sm">@Localizer["Edit"]</a>
+                    <a asp-action="Delete" asp-route-id="@item.MajorID" class="btn btn-danger btn-sm">@Localizer["Delete"]</a>
                 </td>
             </tr>
         }

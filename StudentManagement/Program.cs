@@ -12,6 +12,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
+
+// Localization cấu hình Resource folder
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+// Database
+
 builder.Services.AddDbContext<StudentDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -34,6 +40,21 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LogoutPath = "/Identity/Account/Logout";
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
 });
+
+// Razor Pages với hỗ trợ localization
+builder.Services.AddRazorPages(options =>
+{
+    options.Conventions.AuthorizeAreaPage("Identity", "/Account/Manage/ChangePassword");
+})
+.AddViewLocalization()
+.AddDataAnnotationsLocalization();
+
+// Controllers + Views + Localization
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
+
+// Session
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
@@ -112,6 +133,18 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine($"Error seeding data: {ex.Message}");
     }
 }
+// ✅ Cấu hình Localization Middleware
+var supportedCultures = new[] { new CultureInfo("vi"), new CultureInfo("en") };
+
+var localizationOptions = new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("vi"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures
+};
+
+// 🔥 Ưu tiên lấy ngôn ngữ từ cookie do LanguageController đặt
+localizationOptions.RequestCultureProviders.Insert(0, new CookieRequestCultureProvider());
 
 if (!app.Environment.IsDevelopment())
 {
@@ -122,15 +155,11 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
-// 🟢 Cấu hình hỗ trợ đa ngôn ngữ
-var supportedCultures = new[] { "en", "vi" };
-var localizationOptions = new RequestLocalizationOptions()
-    .SetDefaultCulture("vi")
-    .AddSupportedCultures(supportedCultures)
-    .AddSupportedUICultures(supportedCultures);
+app.UseRequestLocalization(localizationOptions); // ✅ Đặt ngay sau UseRouting
+
+app.UseAuthentication();
 
 app.UseRequestLocalization(localizationOptions);
-
 app.UseAuthorization();
 app.UseSession();
 

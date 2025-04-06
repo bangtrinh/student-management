@@ -1,25 +1,27 @@
 ﻿@model IEnumerable<StudentManagement.Models.Course>
+@using Microsoft.Extensions.Localization
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Danh sách môn học";
+    ViewData["Title"] = Localizer["CourseList"];
 }
 
-<h2>Danh sách môn học</h2>
+<h2>@Localizer["CourseList"]</h2>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Thêm môn học mới</a>
+    <a asp-action="Create" class="btn btn-primary">@Localizer["AddCourse"]</a>
 </p>
 
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Mã môn học</th>
-            <th>Tên môn học</th>
-            <th>Số tín chỉ</th>
-            <th>Mã ngành</th>
-            <th>Mã GV</th>
-            <th>Phòng học</th>
-            <th>Hành động</th>
+            <th>@Localizer["CourseId"]</th>
+            <th>@Localizer["CourseName"]</th>
+            <th>@Localizer["Credits"]</th>
+            <th>@Localizer["MajorId"]</th>
+            <th>@Localizer["TeacherId"]</th>
+            <th>@Localizer["Room"]</th>
+            <th>@Localizer["Actions"]</th>
         </tr>
     </thead>
     <tbody>
@@ -33,9 +35,9 @@
                 <td>@item.TeacherID</td>
                 <td>@item.Room</td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.CourseID" class="btn btn-info btn-sm">Chi tiết</a>
-                    <a asp-action="Edit" asp-route-id="@item.CourseID" class="btn btn-warning btn-sm">Sửa</a>
-                    <a asp-action="Delete" asp-route-id="@item.CourseID" class="btn btn-danger btn-sm">Xóa</a>
+                    <a asp-action="Details" asp-route-id="@item.CourseID" class="btn btn-info btn-sm">@Localizer["Details"]</a>
+                    <a asp-action="Edit" asp-route-id="@item.CourseID" class="btn btn-warning btn-sm">@Localizer["Edit"]</a>
+                    <a asp-action="Delete" asp-route-id="@item.CourseID" class="btn btn-danger btn-sm">@Localizer["Delete"]</a>
                 </td>
             </tr>
         }
