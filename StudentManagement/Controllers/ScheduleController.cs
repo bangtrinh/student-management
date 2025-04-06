@@ -8,7 +8,7 @@ using StudentManagement.Repositories;
 namespace StudentManagement.Controllers
 {
     [Authorize]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "RequireAdminRole")]
     public class ScheduleController : Controller
     {
         private readonly IScheduleRepository _scheduleRepository;
@@ -29,13 +29,18 @@ namespace StudentManagement.Controllers
         {
             DateTime today = DateTime.Today;
             DateTime startOfWeek = weekStart ?? today.AddDays(-(int)today.DayOfWeek + 1); // Mặc định lấy đầu tuần hiện tại (Thứ 2)
+            var schedules = new List<Schedule>();
 
-            var schedules = _scheduleRepository.GetSchedulesByWeek(studentId, startOfWeek);
+            if (!string.IsNullOrEmpty(studentId))
+            {
+                schedules = _scheduleRepository.GetSchedulesByWeek(studentId, startOfWeek).ToList();
+            }
 
             ViewBag.StartOfWeek = startOfWeek;
             ViewBag.EndOfWeek = startOfWeek.AddDays(6);
             ViewBag.PrevWeek = startOfWeek.AddDays(-7);
             ViewBag.NextWeek = startOfWeek.AddDays(7);
+            ViewBag.StudentId = studentId; 
 
             return View(schedules);
         }
@@ -74,7 +79,6 @@ namespace StudentManagement.Controllers
             ViewBag.ClassDate = classDate;
             ViewBag.StartTime = schedule.StartTime.ToString(@"hh\:mm");
             ViewBag.EndTime = schedule.EndTime.ToString(@"hh\:mm");
-           
             return View(schedule);
         }
 
@@ -82,7 +86,7 @@ namespace StudentManagement.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Schedule schedule)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _scheduleRepository.Add(schedule);
                 Console.WriteLine(schedule);
@@ -139,7 +143,7 @@ namespace StudentManagement.Controllers
         {
             if (id != schedule.ScheduleID) return BadRequest();
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _scheduleRepository.Update(schedule);
                 return RedirectToAction(nameof(Index), new { studentId = schedule.StudentID });

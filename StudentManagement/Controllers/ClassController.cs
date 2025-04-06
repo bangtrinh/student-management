@@ -7,7 +7,7 @@ using StudentManagement.Repositories;
 namespace StudentManagement.Controllers
 {
     [Authorize]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "RequireAdminRole")]
 
     public class ClassController : Controller
     {
@@ -52,7 +52,7 @@ namespace StudentManagement.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Class classEntity)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _classRepository.Add(classEntity);
                 return RedirectToAction(nameof(Index));
@@ -77,7 +77,7 @@ namespace StudentManagement.Controllers
         public IActionResult Edit(string id, Class classEntity)
         {
             if (id != classEntity.ClassID) return BadRequest();
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _classRepository.Update(classEntity);
                 return RedirectToAction(nameof(Index));

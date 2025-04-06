@@ -6,7 +6,8 @@ using StudentManagement.Repositories;
 namespace StudentManagement.Controllers
 {
     [Authorize]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "RequireAdminRole")]
+
     public class DepartmentController : Controller
     {
         private readonly IDepartmentRepository _departmentRepository;

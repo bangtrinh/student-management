@@ -27,7 +27,7 @@ namespace StudentManagement.Controllers
             _departmentRepository = departmentRepository;
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
 
         public IActionResult Index()
         {
@@ -35,7 +35,7 @@ namespace StudentManagement.Controllers
             return View(teachers);
         }
 
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Policy = "RequireTeacherRole")]
 
         public async Task<IActionResult> MyCourses()
         {
@@ -57,7 +57,7 @@ namespace StudentManagement.Controllers
             return View(courses);
         }
 
-        [Authorize(Roles = "Admin,Teacher")]
+        [Authorize(Policy = "RequireAdminOrTeacher")]
         public IActionResult Details(string id)
         {
             var teacher = _teacherRepository.GetById(id);
@@ -65,7 +65,7 @@ namespace StudentManagement.Controllers
             return View(teacher);
         }
 
-        [Authorize(Roles = "Teacher")]
+        [Authorize(Policy = "RequireTeacherRole")]
         public async Task<IActionResult> Schedule(DateTime? weekStart)
         {
             // Xác định tuần bắt đầu
@@ -100,7 +100,7 @@ namespace StudentManagement.Controllers
             return View(schedule);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
         public IActionResult Create()
         {
             var departments = _departmentRepository.GetAll();
@@ -108,20 +108,41 @@ namespace StudentManagement.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Teacher teacher)
+        public async Task<IActionResult> Create(Teacher teacher)
         {
-            if (!ModelState.IsValid)
+            var departments = _departmentRepository.GetAll();
+            ViewBag.Departments = new SelectList(departments, "DepartmentID", "DepartmentName");
+            if (ModelState.IsValid)
             {
-                _teacherRepository.Add(teacher);
-                return RedirectToAction(nameof(Index));
+                var user = new IdentityUser
+                {
+                    UserName = teacher.Email,
+                    Email = teacher.Email,
+                    PhoneNumber = teacher.PhoneNumber,
+                    EmailConfirmed = true // Xác nhận email tự động
+                };
+
+                // Mật khẩu mặc định
+                string defaultPassword = "Abc@123"; // Hoặc có thể tạo password ngẫu nhiên
+
+                // Tạo user trong Identity
+                var result = await _userManager.CreateAsync(user, defaultPassword);
+
+                if (result.Succeeded)
+                {
+                    // Thêm role Student cho user
+                    await _userManager.AddToRoleAsync(user, "Teacher");
+                    _teacherRepository.Add(teacher);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View(teacher);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
         public IActionResult Edit(string id)
         {
           
@@ -132,7 +153,7 @@ namespace StudentManagement.Controllers
             return View(teacher);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(string id, Teacher teacher)
@@ -146,7 +167,7 @@ namespace StudentManagement.Controllers
             return View(teacher);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
         public IActionResult Delete(string id)
         {
             var teacher = _teacherRepository.GetById(id);
@@ -154,7 +175,7 @@ namespace StudentManagement.Controllers
             return View(teacher);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

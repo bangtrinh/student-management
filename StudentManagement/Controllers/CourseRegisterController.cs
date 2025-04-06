@@ -13,7 +13,7 @@ using System.Text;
 namespace StudentManagement.Controllers
 {
     [Authorize]
-    [Authorize(Roles = "Student")]
+    [Authorize(Policy = "RequireStudentRole")]
     public class CourseRegisterController : Controller
     {
         private readonly IGradeRepository _gradeRepository;
@@ -53,18 +53,25 @@ namespace StudentManagement.Controllers
                 ?? new List<Grade>();
 
             // Chuyển thành danh sách CourseRegistrationItem
-            var model = allCourses.Select(c =>
-            {
-                var reg = registeredCourses.FirstOrDefault(r => r.CourseID == c.CourseID);
-                return new CourseRegistrationItem
-                {
-                    CourseID = c.CourseID,
-                    CourseName = c.CourseName,
-                    TeacherName = c.Teacher?.FullName,
-                    Room = c.Room,
-                    IsSelected = reg != null && reg.Score == null
-                };
-            }).ToList();
+            var model = allCourses
+                        .Where(c =>
+                        {
+                            var reg = registeredCourses.FirstOrDefault(r => r.CourseID == c.CourseID);
+                            return reg == null || reg.Score == null;
+                        })
+                        .Select(c =>
+                        {
+                            var reg = registeredCourses.FirstOrDefault(r => r.CourseID == c.CourseID);
+                            return new CourseRegistrationItem
+                            {
+                                CourseID = c.CourseID,
+                                CourseName = c.CourseName,
+                                TeacherName = c.Teacher?.FullName,
+                                Room = c.Room,
+                                IsSelected = reg != null && reg.Score == null
+                            };
+                        })
+                        .ToList();
 
             ViewBag.StudentId = student.StudentID;
             return View(model); // Đúng kiểu List<CourseRegistrationItem>

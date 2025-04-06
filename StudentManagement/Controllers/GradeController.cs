@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentManagement.Models;
+using StudentManagement.Models.ViewModel;
 using StudentManagement.Repositories;
 
 namespace StudentManagement.Controllers
 {
+    [Authorize]
     public class GradeController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
@@ -20,41 +22,14 @@ namespace StudentManagement.Controllers
             _gradeRepository = gradeRepository;
         }
 
-        [Authorize(Roles = "Student")]
-        public async Task<IActionResult> MyGrades()
-        {
-            // Lấy user hiện tại
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            // Lấy email của user
-            string userEmail = user.Email;
-
-            // Tìm StudentID của sinh viên có email trùng với user đăng nhập
-            var student = _studentRepository.GetStudentByEmail(userEmail);
-            if (student == null)
-            {
-                ViewBag.Message = "Bạn chưa có thông tin sinh viên.";
-                return View();
-            }
-
-            // Lấy danh sách điểm của sinh viên theo StudentID
-            var grades = _gradeRepository.GetGradesByStudent(student.StudentID);
-
-            return View(grades);
-        }
-
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
         public IActionResult Index()
         {
             var grades = _gradeRepository.GetAll();
             return View(grades);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
 
         public IActionResult Details(string id)
         {
@@ -63,14 +38,14 @@ namespace StudentManagement.Controllers
             return View(grade);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
 
         public IActionResult Create()
         {
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -84,7 +59,7 @@ namespace StudentManagement.Controllers
             return View(grade);
         }
 
-        [Authorize(Roles = "Admin, Teacher")]
+        [Authorize(Policy = "RequireAdminOrTeacher")]
 
         public IActionResult EditGrade(string id)
         {
@@ -93,7 +68,7 @@ namespace StudentManagement.Controllers
             return View(grade);
         }
 
-        [Authorize(Roles = "Admin, Teacher")]
+        [Authorize(Policy = "RequireAdminOrTeacher")]
         // Action để lưu điểm đã chỉnh sửa (POST)
         [HttpPost]
         public IActionResult EditGrade([FromBody] GradeUpdateModel model)
@@ -115,14 +90,8 @@ namespace StudentManagement.Controllers
             return Json(new { success = true, message = "Điểm đã được cập nhật thành công!" });
         }
 
-        // Model nhận dữ liệu từ AJAX
-        public class GradeUpdateModel
-        {
-            public int GradeId { get; set; }
-            public float Grade { get; set; }
-        }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
         public IActionResult Delete(string id)
         {
             var grade = _gradeRepository.GetById(id);
@@ -130,7 +99,7 @@ namespace StudentManagement.Controllers
             return View(grade);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

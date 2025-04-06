@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace StudentManagement.Models
 {
@@ -22,8 +23,11 @@ namespace StudentManagement.Models
         [StringLength(10)]
         public string? TeacherID { get; set; } // Nullable
 
+        [ValidateNever]
         public virtual Major Major { get; set; }
+        [ValidateNever]
         public virtual Teacher Teacher { get; set; }
+        [ValidateNever]
         public virtual ICollection<Grade> Grades { get; set; }
     }
 }

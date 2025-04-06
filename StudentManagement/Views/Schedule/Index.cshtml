@@ -4,37 +4,46 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = Localizer["Schedule"];
+
+    var startOfWeek = ViewBag.StartOfWeek as DateTime? ?? DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek + 1);
+    var endOfWeek = startOfWeek.AddDays(6);
+    var prevWeek = startOfWeek.AddDays(-7);
+    var nextWeek = startOfWeek.AddDays(7);
+    var studentId = Context.Request.Query["studentId"].ToString();
 }
 
 <h2 class="text-center">@Localizer["Schedule"]</h2>
 
-<!-- Form nhập studentId -->
 <form asp-action="Index" method="get" class="mb-3 text-center">
     <div class="form-group d-inline-block">
         <label for="studentId">@Localizer["StudentId"]:</label>
-        <input type="text" name="studentId" id="studentId" class="form-control d-inline-block" style="width: 200px;" value="@Context.Request.Query["studentId"]" />
+        <input type="text" name="studentId" id="studentId" class="form-control" value="@studentId" />
         <button type="submit" class="btn btn-primary">@Localizer["Search"]</button>
     </div>
 </form>
 
-@if (Model != null && Model.Any())
+@if (string.IsNullOrEmpty(studentId))
 {
-    @if (ViewBag.StartOfWeek != null && ViewBag.EndOfWeek != null)
-    {
-        <div class="text-center mb-3">
-            <a href="@Url.Action("Index", new { studentId = Context.Request.Query["studentId"], weekStart = ViewBag.PrevWeek })" class="btn btn-outline-dark">←</a>
-            <strong>@ViewBag.StartOfWeek.ToString("dd/MM/yyyy") - @ViewBag.EndOfWeek.ToString("dd/MM/yyyy")</strong>
-            <a href="@Url.Action("Index", new { studentId = Context.Request.Query["studentId"], weekStart = ViewBag.NextWeek })" class="btn btn-outline-dark">→</a>
-        </div>
-    }
+    <div class="alert alert-info text-center">
+        @Localizer["PleaseEnterStudentId"]
+    </div>
+}
+else if (Model != null && Model.Any())
+{
+    <div class="text-center mb-3">
+        <a href="@Url.Action("Index", new { studentId, weekStart = prevWeek })" class="btn btn-outline-dark">←</a>
+        <strong>@startOfWeek:dd/MM/yyyy - @endOfWeek:dd/MM/yyyy</strong>
+        <a href="@Url.Action("Index", new { studentId, weekStart = nextWeek })" class="btn btn-outline-dark">→</a>
+    </div>
+
     <table class="table table-bordered text-center">
         <thead class="thead-dark">
             <tr>
-                <th class="border">@Localizer["Period"]</th>
+                <th>@Localizer["Period"]</th>
                 @for (int i = 0; i < 7; i++)
                 {
-                    var date = ViewBag.StartOfWeek.AddDays(i);
-                    <th class="border">@date.ToString("dddd") <br /> (@date.ToString("dd/MM"))</th>
+                    var date = startOfWeek.AddDays(i);
+                    <th>@date.ToString("dddd")<br>(@date.ToString("dd/MM"))</th>
                 }
             </tr>
         </thead>
@@ -42,12 +51,12 @@
             @for (int lesson = 1; lesson <= 15; lesson++)
             {
                 <tr>
-                    <td class="font-weight-bold border bg-light">@Localizer["Period"] @lesson</td>
+                    <td class="font-weight-bold bg-light">@Localizer["Period"] @lesson</td>
                     @for (int i = 0; i < 7; i++)
                     {
-                        var date = ViewBag.StartOfWeek.AddDays(i);
+                        var date = startOfWeek.AddDays(i);
                         var schedule = Model.FirstOrDefault(s => s.ClassDate.Date == date.Date && GetLessonStart(s.StartTime) == lesson);
-                        var isCoveredByPreviousRowspan = Model.Any(s => s.ClassDate.Date == date.Date &&
+                        bool isCoveredByPreviousRowspan = Model.Any(s => s.ClassDate.Date == date.Date &&
                         GetLessonStart(s.StartTime) < lesson &&
                         GetLessonStart(s.StartTime) + GetLessonCount(s.StartTime, s.EndTime) > lesson);
 
@@ -56,37 +65,16 @@
                             if (schedule != null)
                             {
                                 int rowspan = GetLessonCount(schedule.StartTime, schedule.EndTime);
-                                if (rowspan > 0)
-                                {
-                                    <td rowspan="@rowspan" class="align-middle border bg-light schedule-cell" data-schedule-id="@schedule.ScheduleID" style="cursor: pointer;">
-                                        <div class="font-weight-bold">
-                                            @if (schedule.Course != null)
-                                            {
-                                                @schedule.Course.CourseName
-                                            }
-                                            else
-                                            {
-                                                <text>@Localizer["CourseNotFound"]</text>
-                                            }
-                                        </div>
-                                        <div>@Localizer["Code"]: @schedule.CourseID</div>
-                                        <div>
-                                            @if (schedule.Course?.Teacher != null)
-                                            {
-                                                <text>@Localizer["Teacher"]: @schedule.Course.Teacher.FullName</text>
-                                            }
-                                            else
-                                            {
-                                                <text>@Localizer["NoTeacher"]</text>
-                                            }
-                                        </div>
-                                        <div>@schedule.StartTime.ToString(@"hh\:mm") - @schedule.EndTime.ToString(@"hh\:mm")</div>
-                                    </td>
-                                }
+                                <td rowspan="@rowspan" class="align-middle bg-light schedule-cell" data-schedule-id="@schedule.ScheduleID" style="cursor:pointer;">
+                                    <div class="font-weight-bold">@(schedule.Course?.CourseName)</div>
+                                    <div>@Localizer["Code"]: @schedule.CourseID</div>
+                                    <div>@Localizer["Teacher"]: @(schedule.Course?.Teacher?.FullName)</div>
+                                    <div>@schedule.StartTime:hh\:mm - @schedule.EndTime:hh\:mm</div>
+                                </td>
                             }
                             else
                             {
-                                <td class="border empty-cell schedule-cell" data-date="@date.ToString("yyyy-MM-dd")" data-lesson="@lesson" style="cursor: pointer;"> </td>
+                                <td class="empty-cell schedule-cell" data-date="@date.ToString("yyyy-MM-dd")" data-lesson="@lesson">&nbsp;</td>
                             }
                         }
                     }
@@ -96,70 +84,19 @@
     </table>
 }
 
-<!-- Modal để hiển thị form chỉnh sửa/thêm mới -->
-<div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="scheduleModalLabel">@Localizer["EditOrAdd"]</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="modalBody"></div>
-        </div>
-    </div>
-</div>
-
 @functions {
     int GetLessonStart(TimeSpan startTime)
     {
-        var minutes = (int)startTime.TotalMinutes;
+        int minutes = (int)startTime.TotalMinutes;
         if (minutes >= 405 && minutes < 540) return 1 + (minutes - 405) / 45;
-        else if (minutes >= 560 && minutes < 695) return 4 + (minutes - 560) / 45;
-        else if (minutes >= 750 && minutes < 1020) return 7 + (minutes - 750) / 45;
-        else if (minutes >= 1080 && minutes < 1215) return 13 + (minutes - 1080) / 45;
+        if (minutes >= 560 && minutes < 695) return 4 + (minutes - 560) / 45;
+        if (minutes >= 750 && minutes < 1020) return 7 + (minutes - 750) / 45;
+        if (minutes >= 1080 && minutes < 1215) return 13 + (minutes - 1080) / 45;
         return -1;
     }
-    int GetLessonCount(TimeSpan startTime, TimeSpan endTime) => (int)((endTime - startTime).TotalMinutes / 45);
+
+    int GetLessonCount(TimeSpan startTime, TimeSpan endTime)
+    {
+        return (int)((endTime - startTime).TotalMinutes / 45);
+    }
 }
-
-<script>
-    $(document).ready(function () {
-        $('.schedule-cell').click(function () {
-            var scheduleId = $(this).data('schedule-id');
-            var date = $(this).data('date');
-            var lesson = $(this).data('lesson');
-            var studentId = '@Context.Request.Query["studentId"]';
-            let url = scheduleId ? '@Url.Action("Details", "Schedule")' : '@Url.Action("Create", "Schedule")';
-            let data = scheduleId ? { id: scheduleId } : { studentId: studentId, classDate: date, lesson: lesson };
-            $.ajax({ url: url, type: 'GET', data: data, success: function (res) {
-                $('#modalBody').html(res);
-                $('#scheduleModal').modal('show');
-            }, error: function () { alert('Không thể tải form.'); } });
-        });
-    });
-</script>
-
-<style>
-    .table th, .table td {
-        text-align: center;
-        vertical-align: middle;
-    }
-
-    .form-control {
-        width: 200px;
-        display: inline-block;
-    }
-
-    .btn {
-        margin: 0 10px;
-    }
-
-    .thead-dark th {
-        background-color: #343a40;
-        color: white;
-    }
-
-    .empty-cell {
-        background-color: #f8f9fa;
-    }
-</style>

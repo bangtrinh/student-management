@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -9,7 +10,6 @@ using StudentManagement.Repositories;
 namespace StudentManagement.Controllers
 {
     [Authorize]
-
     public class StudentController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
@@ -29,7 +29,7 @@ namespace StudentManagement.Controllers
         }
 
 
-        [Authorize(Roles = "Admin, Student")]
+        [Authorize(Policy = "RequireAdminOrStudent")]
         public async Task<IActionResult> Profile()
         {
             // Lấy user hiện tại
@@ -54,7 +54,7 @@ namespace StudentManagement.Controllers
             return View(student);
         }
 
-        [Authorize(Roles = "Student")]
+        [Authorize(Policy = "RequireStudentRole")]
         public async Task<IActionResult> MyCourses()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -77,7 +77,7 @@ namespace StudentManagement.Controllers
             return View(courses);
         }
 
-        [Authorize(Roles = "Student")]
+        [Authorize(Policy = "RequireStudentRole")]
         public async Task<IActionResult> Schedule(DateTime? weekStart)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -101,7 +101,7 @@ namespace StudentManagement.Controllers
 
 
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
         // TÌM KIẾM
         public IActionResult Index(string searchString)
         {
@@ -117,8 +117,35 @@ namespace StudentManagement.Controllers
             return View(students);
         }
 
+        [Authorize(Policy = "RequireStudentRole")]
+        public async Task<IActionResult> MyGrades()
+        {
+            // Lấy user hiện tại
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
 
-        [Authorize(Roles = "Admin")]
+            // Lấy email của user
+            string userEmail = user.Email;
+
+            // Tìm StudentID của sinh viên có email trùng với user đăng nhập
+            var student = _studentRepository.GetStudentByEmail(userEmail);
+            if (student == null)
+            {
+                ViewBag.Message = "Bạn chưa có thông tin sinh viên.";
+                return View();
+            }
+
+            // Lấy danh sách điểm của sinh viên theo StudentID
+            var grades = _gradeRepository.GetGradesByStudent(student.StudentID);
+
+            return View(grades);
+        }
+
+
+        [Authorize(Policy = "RequireAdminRole")]
 
         // GET: Student/Details/5
         public IActionResult Details(string id)
@@ -129,7 +156,7 @@ namespace StudentManagement.Controllers
         }
 
         // GET: Student/Create
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
         public IActionResult Create()
         {
             // Lấy danh sách các lớp học
@@ -139,22 +166,44 @@ namespace StudentManagement.Controllers
         }
 
         // POST: Student/Create
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Student student)
+        public async Task<IActionResult> Create(Student student)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                _studentRepository.Add(student);
-                return RedirectToAction(nameof(Index));
+                var user = new IdentityUser
+                {
+                    UserName = student.Email,
+                    Email = student.Email,
+                    PhoneNumber = student.PhoneNumber,
+                    EmailConfirmed = true // Xác nhận email tự động
+                };
+
+                // Mật khẩu mặc định
+                string defaultPassword = "Abc@123"; // Hoặc có thể tạo password ngẫu nhiên
+
+                // Tạo user trong Identity
+                var result = await _userManager.CreateAsync(user, defaultPassword);
+
+                if (result.Succeeded)
+                {
+                    // Thêm role Student cho user
+                    await _userManager.AddToRoleAsync(user, "Student");
+                    _studentRepository.Add(student);
+                    return RedirectToAction(nameof(Index));
+                }
             }
+            var classes = _classRepository.GetAll();
+            ViewBag.Classes = new SelectList(classes, "ClassID", "ClassName");
             return View(student);
         }
 
+
         // GET: Student/Edit/5
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
 
         public IActionResult Edit(string id)
         {
@@ -166,14 +215,14 @@ namespace StudentManagement.Controllers
         }
 
         // POST: Student/Edit/5
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(string id, Student student)
         {
             if (id != student.StudentID) return BadRequest();
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _studentRepository.Update(student);
                 return RedirectToAction(nameof(Index));
@@ -182,7 +231,7 @@ namespace StudentManagement.Controllers
         }
 
         // GET: Student/Delete/5
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
 
         public IActionResult Delete(string id)
         {
@@ -192,8 +241,7 @@ namespace StudentManagement.Controllers
         }
 
         // POST: Student/Delete/5
-        [Authorize(Roles = "Admin")]
-
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(string id)

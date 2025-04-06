@@ -1,15 +1,13 @@
 ﻿@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityUser>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
 <h2 class="text-center">Danh sách người dùng</h2>
 
 <div class="container mt-4">
     <div class="text-end mb-3">
         <a asp-action="Create" class="btn btn-primary">Tạo tài khoản mới</a>
-        <a href="/Identity/Account/Manage/ChangePassword" class="btn btn-primary">
-            Đổi mật khẩu
-        </a>
-
-
     </div>
 
     <div class="card shadow-sm">

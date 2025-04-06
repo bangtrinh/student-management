@@ -4,25 +4,27 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using StudentManagement.Areas.Admin.Models;
 using System.ComponentModel.DataAnnotations;
-using StudentManagement.Areas.Identity.Pages.Account.Manage;
 using System.Threading.Tasks;
 using static StudentManagement.Areas.Identity.Pages.Account.Manage.ChangePasswordModel;
 
 namespace StudentManagement.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "RequireAdminRole")]
     public class AccountController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
 
         public AccountController(
             UserManager<IdentityUser> userManager,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            SignInManager<IdentityUser> signInManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _signInManager = signInManager;
         }
 
         // GET: Hiển thị danh sách người dùng
@@ -82,7 +84,7 @@ namespace StudentManagement.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EditUserViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 model.RoleList = _roleManager.Roles.Select(r => new SelectListItem
                 {
@@ -113,6 +115,7 @@ namespace StudentManagement.Areas.Admin.Controllers
                     await _userManager.AddToRoleAsync(user, model.Role);
                 }
 
+                TempData["SuccessMessage"] = "Tài khoản đã được cập nhật thành công.";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -160,6 +163,7 @@ namespace StudentManagement.Areas.Admin.Controllers
             var result = await _userManager.DeleteAsync(user);
             if (result.Succeeded)
             {
+                TempData["SuccessMessage"] = "Tài khoản đã được xóa thành công.";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -170,14 +174,17 @@ namespace StudentManagement.Areas.Admin.Controllers
 
             return View(user);
         }
-        [Authorize(Roles = "Admin, Student, Teacher")]
-        //ChangePassword
+
+        // GET: Hiển thị form đổi mật khẩu
+        [Authorize(Policy = "AllowAll")]
         [HttpGet]
         public IActionResult ChangePassword()
         {
             return View();
         }
 
+        // POST: Xử lý đổi mật khẩu
+        [Authorize(Policy = "AllowAll")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePassword(ChangePasswordInputModel model)
@@ -191,28 +198,35 @@ namespace StudentManagement.Areas.Admin.Controllers
             if (user == null)
             {
                 TempData["ErrorMessage"] = "Người dùng không tồn tại hoặc phiên đăng nhập không hợp lệ.";
-                return RedirectToAction("Login", "Account");
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
             }
 
             // Tiến hành thay đổi mật khẩu
             var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
+                // Làm mới phiên đăng nhập
+                await _signInManager.RefreshSignInAsync(user);
+
                 TempData["SuccessMessage"] = "Mật khẩu đã được thay đổi thành công.";
 
                 // Kiểm tra vai trò và điều hướng phù hợp
                 if (await _userManager.IsInRoleAsync(user, "Student"))
                 {
-                    return RedirectToAction("Profile", "Student"); // Trang profile của sinh viên
+                    return RedirectToAction("Profile", "Student", new { area = "" }); // Điều chỉnh area nếu cần
                 }
                 else if (await _userManager.IsInRoleAsync(user, "Teacher"))
                 {
-                    return RedirectToAction("Profile", "Teacher"); // Trang profile của giảng viên
+                    return RedirectToAction("Profile", "Teacher", new { area = "" }); // Điều chỉnh area nếu cần
+                }
+                else if (await _userManager.IsInRoleAsync(user, "Admin"))
+                {
+                    return RedirectToAction(nameof(Index));
                 }
 
                 // Trường hợp không xác định vai trò
                 TempData["ErrorMessage"] = "Không thể xác định vai trò của người dùng.";
-                return RedirectToAction("Index", "Home"); // Điều hướng về trang chủ
+                return RedirectToAction("Index", "Home", new { area = "" });
             }
 
             // Xử lý lỗi nếu đổi mật khẩu thất bại
@@ -221,11 +235,7 @@ namespace StudentManagement.Areas.Admin.Controllers
                 ModelState.AddModelError(string.Empty, error.Description);
             }
 
-            // Trả về View cùng lỗi
             return View(model);
         }
-
-
-        // ViewModel để chỉnh sửa tài khoản
     }
 }
