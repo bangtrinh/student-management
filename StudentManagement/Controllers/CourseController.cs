@@ -43,7 +43,7 @@ namespace StudentManagement.Controllers
             return View(course);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
 
         public IActionResult Create()
         {
@@ -55,7 +55,7 @@ namespace StudentManagement.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
 
 
         [HttpPost]
@@ -70,7 +70,7 @@ namespace StudentManagement.Controllers
             return View(course);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
 
         public async Task<IActionResult> Edit(string id)
         {
@@ -89,7 +89,7 @@ namespace StudentManagement.Controllers
             return View(course);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
         // POST: Course/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -111,7 +111,7 @@ namespace StudentManagement.Controllers
             return View(course);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
         public IActionResult Delete(string id)
         {
             var course = _courseRepository.GetById(id);
@@ -119,7 +119,7 @@ namespace StudentManagement.Controllers
             return View(course);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(string id)

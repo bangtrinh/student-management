@@ -82,6 +82,7 @@ else
                                             @Localizer["Teacher"]: @(string.IsNullOrEmpty(schedule.Course?.Teacher?.FullName)
                                                                  ? Localizer["NoTeacherAssigned"]
                                                                  : schedule.Course.Teacher.FullName)
+
                                         </div>
                                         <div>@schedule.StartTime.ToString(@"hh\:mm") - @schedule.EndTime.ToString(@"hh\:mm")</div>
                                     </td>
