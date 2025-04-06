@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -10,6 +11,8 @@ namespace StudentManagement.Controllers
 {
     //Thực hiện code, chỉnh sửa 
     // Controller dùng để xử lý trang ChatBot
+    [Authorize]
+    [Authorize(Policy = "RequireStudentRole")]
     public class ChatBotController : Controller
     {
         // Lưu cấu hình (để lấy API Key và Model)

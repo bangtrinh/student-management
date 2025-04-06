@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace StudentManagement.Models
 {
@@ -27,7 +28,9 @@ namespace StudentManagement.Models
         public string Specialization { get; set; }
 
         // Navigation properties
+        [ValidateNever]
         public virtual Department Department { get; set; }
+        [ValidateNever]
         public virtual ICollection<Class> Classes { get; set; }
     }
 }

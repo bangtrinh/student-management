@@ -48,7 +48,27 @@ builder.Services.AddSignalR(options =>
     options.EnableDetailedErrors = true;
 });
 
-// 🟢 Hỗ trợ ViewLocalization + DataAnnotations
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireAdminRole", policy =>
+        policy.RequireRole(SD.Role_Admin));
+
+    options.AddPolicy("RequireTeacherRole", policy =>
+        policy.RequireRole(SD.Role_Teacher));
+
+    options.AddPolicy("RequireStudentRole", policy =>
+        policy.RequireRole(SD.Role_Student));
+
+    options.AddPolicy("RequireAdminOrTeacher", policy =>
+        policy.RequireRole(SD.Role_Admin, SD.Role_Teacher));
+
+    options.AddPolicy("RequireAdminOrStudent", policy =>
+    policy.RequireRole(SD.Role_Admin, SD.Role_Student));
+
+    options.AddPolicy("AllowAll", policy =>
+    policy.RequireRole(SD.Role_Admin, SD.Role_Student, SD.Role_Teacher));
+}); 
+
 builder.Services.AddControllersWithViews()
     .AddViewLocalization()
     .AddDataAnnotationsLocalization();

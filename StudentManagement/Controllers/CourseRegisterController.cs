@@ -13,7 +13,7 @@ using System.Text;
 namespace StudentManagement.Controllers
 {
     [Authorize]
-    [Authorize(Roles = "Student")]
+    [Authorize(Policy = "RequireStudentRole")]
     public class CourseRegisterController : Controller
     {
         private readonly IGradeRepository _gradeRepository;

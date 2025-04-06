@@ -23,7 +23,7 @@ namespace StudentManagement.Controllers
             _majorRepository = majorRepository;
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Policy = "RequireAdminRole")]
 
         public IActionResult Index()
         {
@@ -31,7 +31,7 @@ namespace StudentManagement.Controllers
             return View(courses);
         }
 
-        [Authorize(Roles = "Admin, Teacher")]
+        [Authorize(Policy = "RequireAdminOrTeacher")]
 
         public IActionResult Details(string id)
         {
@@ -62,7 +62,7 @@ namespace StudentManagement.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Course course)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _courseRepository.Add(course);
                 return RedirectToAction(nameof(Index));
@@ -95,7 +95,7 @@ namespace StudentManagement.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Course course)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _courseRepository.Update(course);
                 return RedirectToAction(nameof(Index));

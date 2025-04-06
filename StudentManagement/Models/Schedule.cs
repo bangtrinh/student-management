@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace StudentManagement.Models
 {
@@ -27,7 +28,9 @@ namespace StudentManagement.Models
         public TimeSpan EndTime { get; set; }    // Giờ kết thúc
 
         // Navigation properties
+        [ValidateNever]
         public virtual Student Student { get; set; }
+        [ValidateNever]
         public virtual Course Course { get; set; }
     }
 }
