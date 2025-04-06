@@ -118,39 +118,63 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AcademicYear " xml:space="preserve">
-    <value>Academic Year</value>
+    <value />
   </data>
   <data name="AllClasses" xml:space="preserve">
-    <value>All Classes</value>
+    <value />
   </data>
   <data name="AllMajors" xml:space="preserve">
-    <value>All Majors</value>
+    <value />
+  </data>
+  <data name="AvgScore" xml:space="preserve">
+    <value />
   </data>
   <data name="Class" xml:space="preserve">
-    <value>Class</value>
+    <value />
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value />
   </data>
   <data name="GenerateReport" xml:space="preserve">
-    <value>Generate Report</value>
+    <value />
   </data>
   <data name="Major " xml:space="preserve">
-    <value>Major </value>
+    <value />
+  </data>
+  <data name="MaxScore" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MinScore" xml:space="preserve">
+    <value />
   </data>
   <data name="NoDataMessage" xml:space="preserve">
-    <value>No score data available for the selected year and semester.</value>
+    <value />
+  </data>
+  <data name="Overview" xml:space="preserve">
+    <value />
   </data>
   <data name="SelectSemester" xml:space="preserve">
-    <value>Select Semester</value>
+    <value />
   </data>
   <data name="Semester" xml:space="preserve">
-    <value>Semester</value>
+    <value />
   </data>
   <data name="Semester1" xml:space="preserve">
-    <value>Semester1</value>
+    <value />
   </data>
   <data name="Semester2" xml:space="preserve">
-    <value>Semester2</value>
+    <value />
+  </data>
+  <data name="Semester3" xml:space="preserve">
+    <value />
   </data>
   <data name="StudentAverageReport" xml:space="preserve">
-    <value>Student GPA Report</value>
+    <value />
+  </data>
+  <data name="StudentId" xml:space="preserve">
+    <value />
+  </data>
+  <data name="TotalStudents" xml:space="preserve">
+    <value />
   </data>
 </root>

@@ -1,40 +1,43 @@
 ﻿@model List<StudentManagement.Models.ViewModel.StudentGradeSummary>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
 @{
-    ViewData["Title"] = "Báo cáo điểm trung bình";
+    ViewData["Title"] = Localizer["StudentAverageReport"];
 }
 
-<h2>Báo cáo điểm trung bình sinh viên</h2>
+<h2>@Localizer["StudentAverageReport"]</h2>
 
 <form asp-action="GradeReport" method="post" class="mb-4">
     <div class="form-row">
         <div class="form-group col-md-3">
-            <label for="academicYear">Năm học (VD: 2023-2024)</label>
+            <label for="academicYear">@Localizer["AcademicYear"] (VD: 2023-2024)</label>
             <input type="text" class="form-control" id="academicYear" name="academicYear"
-                   pattern="\d{4}-\d{4}" title="Nhập năm học theo định dạng YYYY-YYYY" required>
+                   pattern="\d{4}-\d{4}" title="YYYY-YYYY" required />
         </div>
         <div class="form-group col-md-2">
-            <label for="semester">Học kỳ</label>
+            <label for="semester">@Localizer["Semester"]</label>
             <select class="form-control" id="semester" name="semester" required>
-                <option value="">Chọn học kỳ</option>
-                <option value="HK1">Học kỳ 1</option>
-                <option value="HK2">Học kỳ 2</option>
-                <option value="HK3">Học kỳ hè</option>
+                <option value="">@Localizer["SelectSemester"]</option>
+                <option value="HK1">@Localizer["Semester1"]</option>
+                <option value="HK2">@Localizer["Semester2"]</option>
+                <option value="HK3">@Localizer["Semester3"]</option>
             </select>
         </div>
         <div class="form-group col-md-2">
-            <label for="classId">Lớp</label>
+            <label for="classId">@Localizer["Class"]</label>
             <select class="form-control" id="classId" name="classId" asp-items="ViewBag.Classes">
-                <option value="">Tất cả lớp</option>
+                <option value="">@Localizer["AllClasses"]</option>
             </select>
         </div>
         <div class="form-group col-md-2">
-            <label for="majorId">Ngành</label>
+            <label for="majorId">@Localizer["Major"]</label>
             <select class="form-control" id="majorId" name="majorId" asp-items="ViewBag.Majors">
-                <option value="">Tất cả ngành</option>
+                <option value="">@Localizer["AllMajors"]</option>
             </select>
         </div>
         <div class="form-group col-md-3 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary mr-2">Tạo báo cáo</button>
+            <button type="submit" class="btn btn-primary mr-2">@Localizer["GenerateReport"]</button>
             @if (Model != null && Model.Any())
             {
                 <a href="@Url.Action("ExportToExcel", new {
@@ -43,7 +46,7 @@
                     classId = ViewBag.ClassId,
                     majorId = ViewBag.MajorId
                 })" class="btn btn-success">
-                    Xuất Excel
+                    @Localizer["Export"]
                 </a>
             }
         </div>
@@ -56,13 +59,13 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header">
-                    <h5>Tổng quan</h5>
+                    <h5>@Localizer["Overview"]</h5>
                 </div>
                 <div class="card-body">
-                    <p>Tổng số sinh viên: @ViewBag.TotalCount</p>
-                    <p>Điểm cao nhất: @Model.Max(s => s.AverageScore)?.ToString("0.00")</p>
-                    <p>Điểm thấp nhất: @Model.Min(s => s.AverageScore)?.ToString("0.00")</p>
-                    <p>Điểm trung bình chung: @Model.Average(s => s.AverageScore)?.ToString("0.00")</p>
+                    <p>@Localizer["TotalStudents"]: @ViewBag.TotalCount</p>
+                    <p>@Localizer["MaxScore"]: @Model.Max(s => s.AverageScore)?.ToString("0.00")</p>
+                    <p>@Localizer["MinScore"]: @Model.Min(s => s.AverageScore)?.ToString("0.00")</p>
+                    <p>@Localizer["AvgScore"]: @Model.Average(s => s.AverageScore)?.ToString("0.00")</p>
                 </div>
             </div>
         </div>
@@ -71,13 +74,13 @@
         <table class="table table-bordered table-striped">
             <thead class="thead-dark">
                 <tr>
-                    <th>Mã SV</th>
-                    <th>Họ và tên</th>
-                    <th>Lớp</th>
-                    <th>Ngành</th>
-                    <th>Năm học</th>
-                    <th>Học kỳ</th>
-                    <th>Điểm TB</th>
+                    <th>@Localizer["StudentId"]</th>
+                    <th>@Localizer["FullName"]</th>
+                    <th>@Localizer["Class"]</th>
+                    <th>@Localizer["Major"]</th>
+                    <th>@Localizer["AcademicYear"]</th>
+                    <th>@Localizer["Semester"]</th>
+                    <th>@Localizer["AvgScore"]</th>
                 </tr>
             </thead>
             <tbody>
@@ -97,7 +100,6 @@
         </table>
     </div>
 
-    <!-- Phân trang -->
     @if (ViewBag.TotalCount > ViewBag.PageSize)
     {
         <nav aria-label="Page navigation">
@@ -125,7 +127,7 @@ else
     <div class="alert alert-info">
         @if (ViewData.ModelState.IsValid)
         {
-            <text>Không có dữ liệu điểm cho năm học và học kỳ đã chọn.</text>
+            @Localizer["NoDataMessage"]
         }
         else
         {
@@ -133,4 +135,3 @@ else
         }
     </div>
 }
-

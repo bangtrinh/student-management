@@ -118,39 +118,63 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AcademicYear " xml:space="preserve">
-    <value>Năm học</value>
+    <value>Academic Year</value>
   </data>
   <data name="AllClasses" xml:space="preserve">
-    <value>Tất cả lớp</value>
+    <value>All Classes</value>
   </data>
   <data name="AllMajors" xml:space="preserve">
-    <value>Tất cả ngành</value>
+    <value>All majors</value>
+  </data>
+  <data name="AvgScore" xml:space="preserve">
+    <value>Average score</value>
   </data>
   <data name="Class" xml:space="preserve">
-    <value>Lớp</value>
+    <value>Class</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Export</value>
   </data>
   <data name="GenerateReport" xml:space="preserve">
-    <value>Tạo báo cáo</value>
+    <value>Generate report</value>
   </data>
   <data name="Major " xml:space="preserve">
-    <value>Ngành</value>
+    <value>Major </value>
+  </data>
+  <data name="MaxScore" xml:space="preserve">
+    <value>Highest score</value>
+  </data>
+  <data name="MinScore" xml:space="preserve">
+    <value>Lowest score</value>
   </data>
   <data name="NoDataMessage" xml:space="preserve">
-    <value>Không có dữ liệu điểm cho năm học và học kỳ đã chọn.</value>
+    <value>No score data available for the selected year and semester.</value>
+  </data>
+  <data name="Overview" xml:space="preserve">
+    <value>Overview</value>
   </data>
   <data name="SelectSemester" xml:space="preserve">
-    <value> Chọn học kỳ</value>
+    <value>Select semester</value>
   </data>
   <data name="Semester" xml:space="preserve">
-    <value>Học kỳ</value>
+    <value>Semester</value>
   </data>
   <data name="Semester1" xml:space="preserve">
-    <value>Học kỳ 1</value>
+    <value>Semester 1</value>
   </data>
   <data name="Semester2" xml:space="preserve">
-    <value>Học kỳ 2</value>
+    <value>Semester 2</value>
+  </data>
+  <data name="Semester3" xml:space="preserve">
+    <value>Semester 3</value>
   </data>
   <data name="StudentAverageReport" xml:space="preserve">
-    <value> Báo cáo điểm trung bình sinh viên</value>
+    <value>Student GPA Report</value>
+  </data>
+  <data name="StudentId" xml:space="preserve">
+    <value>Student ID</value>
+  </data>
+  <data name="TotalStudents" xml:space="preserve">
+    <value>Total students</value>
   </data>
 </root>
