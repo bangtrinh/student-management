@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using StudentManagement.Models;
 using System.Linq;
+using StudentManagement.Controllers;
 
 public class VerifyOTPModel : PageModel
 {
@@ -12,21 +13,21 @@ public class VerifyOTPModel : PageModel
         _context = context;
     }
 
-    // Dùng BindProperty cho OTP và Email
+ 
     [BindProperty]
     public string OTP { get; set; }
 
-    [BindProperty(SupportsGet = true)] // Bind Email từ query string
+    [BindProperty(SupportsGet = true)] 
     public string Email { get; set; }
 
-    // OnGet sẽ lấy Email từ URL
+  
     public IActionResult OnGet(string email)
     {
-        Email = email; // Gán giá trị email
+        Email = email; 
         return Page();
     }
 
-    // OnPost sẽ xác thực OTP
+    
     public IActionResult OnPost()
     {
         if (string.IsNullOrEmpty(OTP))
@@ -35,14 +36,16 @@ public class VerifyOTPModel : PageModel
             return Page();
         }
 
-        // Tìm OTP trong cơ sở dữ liệu
-        var storedOtp = _context.OTPS
-            .FirstOrDefault(o => o.Email == Email && o.Code == OTP);
 
-        // Kiểm tra xem OTP có hợp lệ không và thời gian hết hạn
+        string hashedOtp = SecurityHelper.HashSHA256(OTP);
+        var storedOtp = _context.OTPS
+            .FirstOrDefault(o => o.Email == Email && o.Code == hashedOtp);
+
+
+
         if (storedOtp != null && storedOtp.ExpiryTime > DateTime.Now)
         {
-            // Nếu OTP hợp lệ, chuyển hướng tới trang reset mật khẩu
+      
             return RedirectToPage("/Account/ResetPassword", new { email = Email });
         }
         else
