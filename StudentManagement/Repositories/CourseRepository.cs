@@ -25,9 +25,27 @@ namespace StudentManagement.Repositories
         public Course GetCourseDetails(string courseId)
         {
             return _context.Courses
+                            .Include(c => c.Major) // Lấy thông tin chuyên ngành
+                            .Include(c => c.Teacher) // Lấy thông tin giảng viên
                             .Include(c => c.Grades) // Lấy danh sách điểm
                             .ThenInclude(g => g.Student) // Lấy thông tin sinh viên
                             .FirstOrDefault(c => c.CourseID == courseId);
+        }
+
+        public Course GetById(string id)
+        {
+            return _context.Courses
+                .Include(c => c.Major)
+                .Include(c => c.Teacher)
+                .FirstOrDefault(c => c.CourseID == id);
+        }
+
+        public IEnumerable<Course> GetAll()
+        {
+            return _context.Courses
+                .Include(c => c.Major)
+                .Include(c => c.Teacher)
+                .ToList();
         }
     }
 }

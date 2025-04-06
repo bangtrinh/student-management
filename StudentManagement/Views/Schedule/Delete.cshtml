@@ -1,29 +1,89 @@
 ﻿@model StudentManagement.Models.Schedule
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<StudentManagement.SharedResources> Localizer
+
 @{
-    ViewData["Title"] = "Delete Schedule";
+    ViewData["Title"] = Localizer["DeleteScheduleTitle"];
 }
 
-<h2>Delete Schedule</h2>
+<div class="content py-4">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-sm border-danger">
+                    <div class="card-header bg-white border-bottom-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3 class="card-title mb-0 text-danger">
+                                <i class="fas fa-exclamation-triangle me-2"></i>@Localizer["DeleteScheduleTitle"]
+                            </h3>
+                        </div>
+                    </div>
 
-<h4>Are you sure you want to delete this schedule?</h4>
-<div>
-    <dl class="row">
-        <dt class="col-sm-2">Schedule ID</dt>
-        <dd class="col-sm-10">@Model.ScheduleID</dd>
+                    <div class="card-body">
+                        <div class="alert alert-danger border-danger" role="alert">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-exclamation-circle fa-2x me-3"></i>
+                                <div>
+                                    <h5 class="alert-heading mb-1">@Localizer["DeleteWarning"]</h5>
+                                    <p class="mb-0">@Localizer["DeleteConfirmationMessage"]</p>
+                                </div>
+                            </div>
+                        </div>
 
-        <dt class="col-sm-2">Course</dt>
-        <dd class="col-sm-10">@Model.Course.CourseName</dd>
+                        <div class="card border-0 shadow-none mb-4">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label text-muted small mb-1">@Localizer["ScheduleId"]</label>
+                                            <p class="mb-0">@Model.ScheduleID</p>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label text-muted small mb-1">@Localizer["Course"]</label>
+                                            <p class="mb-0">@Model.Course?.CourseName</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label text-muted small mb-1">@Localizer["Teacher"]</label>
+                                            <p class="mb-0">@Model.Course?.Teacher?.FullName</p>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label text-muted small mb-1">@Localizer["Date"]</label>
+                                            <p class="mb-0">@Model.ClassDate.ToString("dd/MM/yyyy")</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-        <dt class="col-sm-2">Teacher</dt>
-        <dd class="col-sm-10">@Model.Course.Teacher.FullName</dd>
+                        <form asp-action="Delete" class="mt-4">
+                            <input type="hidden" asp-for="ScheduleID" />
 
-        <dt class="col-sm-2">Date</dt>
-        <dd class="col-sm-10">@Model.ClassDate.ToString("dd/MM/yyyy")</dd>
-    </dl>
+                            <div class="d-flex justify-content-end gap-3">
+                                <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                                    <i class="fas fa-times me-2"></i>@Localizer["Cancel"]
+                                </a>
+                                <button type="submit" class="btn btn-danger px-4">
+                                    <i class="fas fa-trash-alt me-2"></i>@Localizer["Delete"]
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<form asp-controller="Schedule" asp-action="Delete" method="post">
-    <input type="hidden" asp-for="ScheduleID" />
-    <input type="submit" value="Delete" class="btn btn-danger" />
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+@section Styles {
+    <style>
+        .bg-light-danger {
+            background-color: rgba(220,53,69,0.1);
+        }
+
+        .border-danger {
+            border-color: #dc3545 !important;
+        }
+    </style>
+}

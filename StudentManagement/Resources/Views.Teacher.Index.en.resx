@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="TeacherList" xml:space="preserve">
-    <value>TeacherList</value>
+    <value>Teacher list</value>
   </data>
   <data name="AddTeacher" xml:space="preserve">
     <value>Add New Teacher</value>
@@ -152,5 +152,8 @@
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
+  </data>
+  <data name="SearchByNameOrID" xml:space="preserve">
+    <value>Search by name or ID</value>
   </data>
 </root>

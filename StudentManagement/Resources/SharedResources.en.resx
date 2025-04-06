@@ -1,0 +1,480 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Class" xml:space="preserve">
+    <value>Class</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="CreateStudentTitle" xml:space="preserve">
+    <value>Create student</value>
+  </data>
+  <data name="DateOfBirth" xml:space="preserve">
+    <value>Date of birth</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DeleteConfirmationMessage" xml:space="preserve">
+    <value>Confirm deletion</value>
+  </data>
+  <data name="DeleteStudentTitle" xml:space="preserve">
+    <value>Delete student</value>
+  </data>
+  <data name="DeleteWarning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="EditTitle" xml:space="preserve">
+    <value>Edit student profile</value>
+  </data>
+  <data name="EnterAddress" xml:space="preserve">
+    <value>Enter address</value>
+  </data>
+  <data name="SelectClass" xml:space="preserve">
+    <value>Select class</value>
+  </data>
+  <data name="EnterEmail" xml:space="preserve">
+    <value>Enter mail</value>
+  </data>
+  <data name="EnterFullName" xml:space="preserve">
+    <value>Enter fullname</value>
+  </data>
+  <data name="EnterPhoneNumber" xml:space="preserve">
+    <value>Enter phone number</value>
+  </data>
+  <data name="EnterStudentId" xml:space="preserve">
+    <value>Enter student ID</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Fullname</value>
+  </data>
+  <data name="Gender" xml:space="preserve">
+    <value>Gender</value>
+  </data>
+  <data name="Inactive" xml:space="preserve">
+    <value>Inactive</value>
+  </data>
+  <data name="OnLeave" xml:space="preserve">
+    <value>On leave</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Phone number</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="StudentDetailsTitle" xml:space="preserve">
+    <value>Student details</value>
+  </data>
+  <data name="StudentID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="SelectStatus" xml:space="preserve">
+    <value>Select status</value>
+  </data>
+  <data name="SelectGender" xml:space="preserve">
+    <value>Select gender</value>
+  </data>
+  <data name="Department" xml:space="preserve">
+    <value>Department</value>
+  </data>
+  <data name="Speciality" xml:space="preserve">
+    <value>Speciality</value>
+  </data>
+  <data name="ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="NoTeachersFound" xml:space="preserve">
+    <value>No teacher found</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="SearchByNameOrID" xml:space="preserve">
+    <value>Search by name or ID</value>
+  </data>
+  <data name="CreateTeacherTitle" xml:space="preserve">
+    <value>Create teacher</value>
+  </data>
+  <data name="EnterTeacherId" xml:space="preserve">
+    <value>Enter teacher ID</value>
+  </data>
+  <data name="EnterSpeciality" xml:space="preserve">
+    <value>Enter speciality</value>
+  </data>
+  <data name="SelectDepartment" xml:space="preserve">
+    <value>Select department</value>
+  </data>
+  <data name="DeleteTeacherTitle" xml:space="preserve">
+    <value>Delete teacher</value>
+  </data>
+  <data name="EditTeacherTitle" xml:space="preserve">
+    <value>Edit teacher profile</value>
+  </data>
+  <data name="NoInfoFound" xml:space="preserve">
+    <value>No information found</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="AddClassTitle" xml:space="preserve">
+    <value>Create class</value>
+  </data>
+  <data name="EnterClassName" xml:space="preserve">
+    <value>Enter class name</value>
+  </data>
+  <data name="ClassName" xml:space="preserve">
+    <value>Class name</value>
+  </data>
+  <data name="EnterId" xml:space="preserve">
+    <value>Enter ID</value>
+  </data>
+  <data name="Major" xml:space="preserve">
+    <value>Major</value>
+  </data>
+  <data name="SelectMajor" xml:space="preserve">
+    <value>Select major</value>
+  </data>
+  <data name="SelectTeacher" xml:space="preserve">
+    <value>Select academic advisor</value>
+  </data>
+  <data name="Advisor" xml:space="preserve">
+    <value>Academic advisor</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Start date</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>End date</value>
+  </data>
+  <data name="EditClassTitle" xml:space="preserve">
+    <value>Edit class information</value>
+  </data>
+  <data name="ClassDetailsTitle" xml:space="preserve">
+    <value>Class details</value>
+  </data>
+  <data name="DeleteClassTitle" xml:space="preserve">
+    <value>Delete class</value>
+  </data>
+  <data name="StudyPeriod" xml:space="preserve">
+    <value>Study period</value>
+  </data>
+  <data name="Head" xml:space="preserve">
+    <value>Head</value>
+  </data>
+  <data name="AddDepartmentTitle" xml:space="preserve">
+    <value>Create department</value>
+  </data>
+  <data name="EnterDepartmentId" xml:space="preserve">
+    <value>Enter department ID</value>
+  </data>
+  <data name="EnterDepartmentName" xml:space="preserve">
+    <value>Enter department name</value>
+  </data>
+  <data name="HeadOfDepartment" xml:space="preserve">
+    <value>Head of department</value>
+  </data>
+  <data name="DepartmentName" xml:space="preserve">
+    <value>Department name</value>
+  </data>
+  <data name="EnterHeadOfDepartment" xml:space="preserve">
+    <value>Enter head of department</value>
+  </data>
+  <data name="DepartmentDetailsTitle" xml:space="preserve">
+    <value>Department details</value>
+  </data>
+  <data name="EditDepartmentTitle" xml:space="preserve">
+    <value>Edit department</value>
+  </data>
+  <data name="DeleteDepartmentTitle" xml:space="preserve">
+    <value>Delete department</value>
+  </data>
+  <data name="MajorName" xml:space="preserve">
+    <value>Major name</value>
+  </data>
+  <data name="EnterMajorName" xml:space="preserve">
+    <value>Enter major name</value>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>Duration</value>
+  </data>
+  <data name="EnterDuration" xml:space="preserve">
+    <value>Enter duration</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>years</value>
+  </data>
+  <data name="AddMajorTitle" xml:space="preserve">
+    <value>Add major</value>
+  </data>
+  <data name="EditMajorTitle" xml:space="preserve">
+    <value>Edit major</value>
+  </data>
+  <data name="DeleteMajorTitle" xml:space="preserve">
+    <value>Delete major</value>
+  </data>
+  <data name="MajorDetailsTitle" xml:space="preserve">
+    <value>Major details</value>
+  </data>
+  <data name="TrainingTime" xml:space="preserve">
+    <value>Duration</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="CourseList" xml:space="preserve">
+    <value>Course list </value>
+  </data>
+  <data name="Teacher" xml:space="preserve">
+    <value>Teacher</value>
+  </data>
+  <data name="CourseName" xml:space="preserve">
+    <value>Course name </value>
+  </data>
+  <data name="Creadits" xml:space="preserve">
+    <value>Credits</value>
+  </data>
+  <data name="Room" xml:space="preserve">
+    <value>Room</value>
+  </data>
+  <data name="EnterCourseName" xml:space="preserve">
+    <value>Enter course name</value>
+  </data>
+  <data name="EnterCredits" xml:space="preserve">
+    <value>Enter redits</value>
+  </data>
+  <data name="EnterRoom" xml:space="preserve">
+    <value>Enter room</value>
+  </data>
+  <data name="AddCourseTitle" xml:space="preserve">
+    <value>Create course</value>
+  </data>
+  <data name="EditCourseTitle" xml:space="preserve">
+    <value>Edit course</value>
+  </data>
+  <data name="DeleteCourseTitle" xml:space="preserve">
+    <value>Delete course</value>
+  </data>
+  <data name="NoGrade" xml:space="preserve">
+    <value>No grade</value>
+  </data>
+  <data name="CourseDetailsTitle" xml:space="preserve">
+    <value>Course details</value>
+  </data>
+  <data name="EditOrAddSchedule" xml:space="preserve">
+    <value>Edit/Add schedule</value>
+  </data>
+  <data name="PleaseEnterStudentId" xml:space="preserve">
+    <value>Please enter student ID</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="ScheduleDetails" xml:space="preserve">
+    <value>Schedule details</value>
+  </data>
+  <data name="StartTime" xml:space="preserve">
+    <value>Start time</value>
+  </data>
+  <data name="EndTime" xml:space="preserve">
+    <value>End time</value>
+  </data>
+  <data name="SelectCourse" xml:space="preserve">
+    <value>Select course</value>
+  </data>
+  <data name="EditScheduleTitle" xml:space="preserve">
+    <value>Edit schedule</value>
+  </data>
+  <data name="DeleteScheduleTitle" xml:space="preserve">
+    <value>Delete schedule</value>
+  </data>
+  <data name="UserList" xml:space="preserve">
+    <value>Account list</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="SearchByEmail" xml:space="preserve">
+    <value>Search by email</value>
+  </data>
+  <data name="UserInformation" xml:space="preserve">
+    <value>User information</value>
+  </data>
+  <data name="EditUser" xml:space="preserve">
+    <value>Edit user</value>
+  </data>
+  <data name="SelectRole" xml:space="preserve">
+    <value>Select role</value>
+  </data>
+  <data name="DeleteUser" xml:space="preserve">
+    <value>Delete user</value>
+  </data>
+  <data name="DeleteWarningMessage" xml:space="preserve">
+    <value>Confirm account deletion</value>
+  </data>
+  <data name="PasswordPlaceholder" xml:space="preserve">
+    <value>Enter your password</value>
+  </data>
+  <data name="ConfirmPasswordPlaceholder" xml:space="preserve">
+    <value>Confirm your password</value>
+  </data>
+  <data name="CreateAccount" xml:space="preserve">
+    <value>Create account</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Register</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="OldPassword" xml:space="preserve">
+    <value>Old password</value>
+  </data>
+  <data name="EnterNewPassword" xml:space="preserve">
+    <value>Enter new password</value>
+  </data>
+  <data name="EnterOldPassword" xml:space="preserve">
+    <value>Enter old password</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Change password</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+</root>

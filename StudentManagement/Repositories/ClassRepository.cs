@@ -31,7 +31,9 @@ namespace StudentManagement.Repositories
         public Class GetById(string id)
         {
             return _context.Classes
-                .Include(c => c.Students) // Load danh sách sinh viên
+                .Include(c => c.Students)
+                .Include(c => c.Teacher)
+                .Include(c => c.Major)// Load danh sách sinh viên
                 .FirstOrDefault(c => c.ClassID == id);
         }
     }

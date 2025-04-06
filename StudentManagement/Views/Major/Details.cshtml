@@ -1,26 +1,100 @@
 ﻿@model StudentManagement.Models.Major
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<StudentManagement.SharedResources> Localizer
 
 @{
-    ViewData["Title"] = "Chi tiết ngành học";
+    ViewData["Title"] = Localizer["MajorDetailsTitle"];
 }
 
-<h2>Chi tiết ngành học</h2>
+<div class="content py-4">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white border-bottom-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3 class="card-title mb-0 text-primary">
+                                <i class="fas fa-graduation-cap me-2"></i>@Localizer["MajorDetailsTitle"]
+                            </h3>
+                        </div>
+                    </div>
 
-<div>
-    <h4>@Model.MajorName</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">Mã ngành</dt>
-        <dd class="col-sm-10">@Model.MajorID</dd>
-        <dt class="col-sm-2">Tên ngành</dt>
-        <dd class="col-sm-10">@Model.MajorName</dd>
-        <dt class="col-sm-2">Khoa</dt>
-        <dd class="col-sm-10">@Model.Department.DepartmentName</dd>
-        <dt class="col-sm-2">Thời gian đào tạo</dt>
-        <dd class="col-sm-10">@Model.Duration năm</dd>
-    </dl>
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="avatar-lg bg-light rounded-circle me-3 d-flex align-items-center justify-content-center">
+                                <i class="fas fa-graduation-cap fa-2x text-primary"></i>
+                            </div>
+                            <div>
+                                <h3 class="mb-1">@Model.MajorName</h3>
+                                <span class="badge bg-primary">@Model.MajorID</span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-4">
+                                    <label class="form-label text-muted small mb-1">@Localizer["MajorId"]</label>
+                                    <p class="fs-5">
+                                        <i class="fas fa-id-card me-2 text-muted"></i>
+                                        @Model.MajorID
+                                    </p>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label text-muted small mb-1">@Localizer["MajorName"]</label>
+                                    <p class="fs-5">
+                                        <i class="fas fa-signature me-2 text-muted"></i>
+                                        @Model.MajorName
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-4">
+                                    <label class="form-label text-muted small mb-1">@Localizer["Department"]</label>
+                                    <p class="fs-5">
+                                        <i class="fas fa-building me-2 text-muted"></i>
+                                        @Model.Department?.DepartmentName
+                                    </p>
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label text-muted small mb-1">@Localizer["Duration"]</label>
+                                    <p class="fs-5">
+                                        <i class="fas fa-clock me-2 text-muted"></i>
+                                        @Model.Duration @Localizer["Year"]
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-3 mt-4 pt-3 border-top">
+                            <a asp-action="Edit" asp-route-id="@Model.MajorID" class="btn btn-warning px-4">
+                                <i class="fas fa-edit me-2"></i>@Localizer["Edit"]
+                            </a>
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                                <i class="fas fa-arrow-left me-2"></i>@Localizer["Back"]
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.MajorID" class="btn btn-warning">Sửa</a>
-    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
-</div>
+
+@section Styles {
+    <style>
+        .avatar-lg {
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+        }
+
+        .badge {
+            font-size: 0.85rem;
+            padding: 0.35em 0.65em;
+        }
+
+        .fs-5 {
+            font-size: 1.1rem !important;
+        }
+    </style>
+}

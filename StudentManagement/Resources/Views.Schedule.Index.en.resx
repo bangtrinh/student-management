@@ -123,8 +123,11 @@
   <data name="CourseNotFound" xml:space="preserve">
     <value>(Course not found)</value>
   </data>
-  <data name="EditOrAdd" xml:space="preserve">
+  <data name="EditOrAddSchedule" xml:space="preserve">
     <value> Edit/Add Schedule</value>
+  </data>
+  <data name="EnterStudentId" xml:space="preserve">
+    <value>Enter student ID</value>
   </data>
   <data name="NoTeacher" xml:space="preserve">
     <value>(No teacher)</value>
@@ -132,8 +135,11 @@
   <data name="Period" xml:space="preserve">
     <value>Period</value>
   </data>
+  <data name="PleaseEnterStudentId" xml:space="preserve">
+    <value>Please enter student ID</value>
+  </data>
   <data name="Schedule" xml:space="preserve">
-    <value>Class Schedule</value>
+    <value>Class schedule</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value> Search</value>

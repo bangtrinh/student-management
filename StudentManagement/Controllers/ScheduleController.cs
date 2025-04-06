@@ -94,6 +94,8 @@ namespace StudentManagement.Controllers
                 return RedirectToAction(nameof(Index), new { studentId = schedule.StudentID });
             }
 
+            // Lấy danh sách khóa học sinh viên học và có điểm hoặc điểm = null
+
             var courses = _courseRepository.GetAll();
             ViewBag.Courses = new SelectList(courses, "CourseID", "CourseName");
             ViewBag.StudentID = schedule.StudentID;

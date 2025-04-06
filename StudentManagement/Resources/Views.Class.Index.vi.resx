@@ -142,10 +142,13 @@
     <value> Sửa</value>
   </data>
   <data name="EndDate" xml:space="preserve">
-    <value>EndDate</value>
+    <value>Ngày kết thúc</value>
   </data>
   <data name="Major" xml:space="preserve">
     <value>Ngành</value>
+  </data>
+  <data name="SearchByNameOrID" xml:space="preserve">
+    <value>Tìm kiếm bằng tên hoặc ID</value>
   </data>
   <data name="StartDate" xml:space="preserve">
     <value>Ngày bắt đầu</value>

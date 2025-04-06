@@ -1,37 +1,97 @@
 ﻿@model StudentManagement.Models.Major
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<StudentManagement.SharedResources> Localizer
 
 @{
-    ViewData["Title"] = "Thêm ngành học mới";
+    ViewData["Title"] = Localizer["AddMajorTitle"];
 }
 
-<h2>Thêm ngành học mới</h2>
+<div class="content py-4">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white border-bottom-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3 class="card-title mb-0 text-primary">
+                                <i class="fas fa-plus-circle me-2"></i>@Localizer["AddMajorTitle"]
+                            </h3>
+                        </div>
+                    </div>
 
-<form asp-action="Create">
-    <div class="form-group">
-        <label asp-for="MajorID" class="control-label"></label>
-        <input asp-for="MajorID" class="form-control" />
-        <span asp-validation-for="MajorID" class="text-danger"></span>
+                    <div class="card-body">
+                        <form asp-action="Create" class="needs-validation" novalidate>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-4">
+                                        <label asp-for="MajorID" class="form-label fw-bold">@Localizer["ID"]</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                                            <input asp-for="MajorID" class="form-control" placeholder="@Localizer["EnterId"]" />
+                                        </div>
+                                        <span asp-validation-for="MajorID" class="text-danger small"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group mb-4">
+                                        <label asp-for="MajorName" class="form-label fw-bold">@Localizer["MajorName"]</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-graduation-cap"></i></span>
+                                            <input asp-for="MajorName" class="form-control" placeholder="@Localizer["EnterMajorName"]" />
+                                        </div>
+                                        <span asp-validation-for="MajorName" class="text-danger small"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-4">
+                                        <label asp-for="DepartmentID" class="form-label fw-bold">@Localizer["Department"]</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-building"></i></span>
+                                            <select asp-for="DepartmentID" class="form-select" asp-items="ViewBag.Departments">
+                                                <option value="">@Localizer["SelectDepartment"]</option>
+                                            </select>
+                                        </div>
+                                        <span asp-validation-for="DepartmentID" class="text-danger small"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group mb-4">
+                                        <label asp-for="Duration" class="form-label fw-bold">@Localizer["Duration"]</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                                            <input asp-for="Duration" class="form-control" type="number" placeholder="@Localizer["EnterDuration"]" />
+                                        </div>
+                                        <span asp-validation-for="Duration" class="text-danger small"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group mt-4 pt-3 border-top">
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-primary px-4 me-2">
+                                        <i class="fas fa-save me-2"></i>@Localizer["Save"]
+                                    </button>
+                                    <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                                        <i class="fas fa-times me-2"></i>@Localizer["Back"]
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="MajorName" class="control-label"></label>
-        <input asp-for="MajorName" class="form-control" />
-        <span asp-validation-for="MajorName" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="DepartmentID" class="control-label"></label>
-        <select asp-for="DepartmentID" class="form-control" asp-items="ViewBag.Departments"></select>
-        <span asp-validation-for="DepartmentID" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Duration" class="control-label"></label>
-        <input asp-for="Duration" class="form-control" type="number" />
-        <span asp-validation-for="Duration" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <input type="submit" value="Thêm" class="btn btn-primary" />
-        <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
-    </div>
-</form>
+</div>
+
+@section Styles {
+    <style>
+        <link rel="stylesheet" href="~/css/form-style.css" asp-append-version="true" / >
+    </style>
+}
 
 @section Scripts {
     @{

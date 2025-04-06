@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
-@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@inject Microsoft.Extensions.Localization.IStringLocalizer<StudentManagement.SharedResources> Localizer
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))

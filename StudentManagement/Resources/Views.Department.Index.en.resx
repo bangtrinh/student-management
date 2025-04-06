@@ -127,10 +127,10 @@
     <value>Delete</value>
   </data>
   <data name="DepartmentId" xml:space="preserve">
-    <value>Department ID</value>
+    <value>ID</value>
   </data>
   <data name="DepartmentList" xml:space="preserve">
-    <value>Department List</value>
+    <value>Department list</value>
   </data>
   <data name="DepartmentName" xml:space="preserve">
     <value>Department Name</value>

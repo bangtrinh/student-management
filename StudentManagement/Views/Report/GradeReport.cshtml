@@ -6,132 +6,216 @@
     ViewData["Title"] = Localizer["StudentAverageReport"];
 }
 
-<h2>@Localizer["StudentAverageReport"]</h2>
-
-<form asp-action="GradeReport" method="post" class="mb-4">
-    <div class="form-row">
-        <div class="form-group col-md-3">
-            <label for="academicYear">@Localizer["AcademicYear"] (VD: 2023-2024)</label>
-            <input type="text" class="form-control" id="academicYear" name="academicYear"
-                   pattern="\d{4}-\d{4}" title="YYYY-YYYY" required />
-        </div>
-        <div class="form-group col-md-2">
-            <label for="semester">@Localizer["Semester"]</label>
-            <select class="form-control" id="semester" name="semester" required>
-                <option value="">@Localizer["SelectSemester"]</option>
-                <option value="HK1">@Localizer["Semester1"]</option>
-                <option value="HK2">@Localizer["Semester2"]</option>
-                <option value="HK3">@Localizer["Semester3"]</option>
-            </select>
-        </div>
-        <div class="form-group col-md-2">
-            <label for="classId">@Localizer["Class"]</label>
-            <select class="form-control" id="classId" name="classId" asp-items="ViewBag.Classes">
-                <option value="">@Localizer["AllClasses"]</option>
-            </select>
-        </div>
-        <div class="form-group col-md-2">
-            <label for="majorId">@Localizer["Major"]</label>
-            <select class="form-control" id="majorId" name="majorId" asp-items="ViewBag.Majors">
-                <option value="">@Localizer["AllMajors"]</option>
-            </select>
-        </div>
-        <div class="form-group col-md-3 d-flex align-items-end">
-            <button type="submit" class="btn btn-primary mr-2">@Localizer["GenerateReport"]</button>
-            @if (Model != null && Model.Any())
-            {
-                <a href="@Url.Action("ExportToExcel", new {
-                    academicYear = ViewBag.AcademicYear,
-                    semester = ViewBag.Semester,
-                    classId = ViewBag.ClassId,
-                    majorId = ViewBag.MajorId
-                })" class="btn btn-success">
-                    @Localizer["Export"]
-                </a>
-            }
-        </div>
-    </div>
-</form>
-
-@if (Model != null)
-{
-    <div class="row mb-4">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-header">
-                    <h5>@Localizer["Overview"]</h5>
+<div class="content py-4">
+    <div class="container-fluid">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white border-bottom-0">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="card-title mb-0 text-primary">
+                        <i class="fas fa-chart-bar me-2"></i>@Localizer["StudentAverageReport"]
+                    </h3>
                 </div>
-                <div class="card-body">
-                    <p>@Localizer["TotalStudents"]: @ViewBag.TotalCount</p>
-                    <p>@Localizer["MaxScore"]: @Model.Max(s => s.AverageScore)?.ToString("0.00")</p>
-                    <p>@Localizer["MinScore"]: @Model.Min(s => s.AverageScore)?.ToString("0.00")</p>
-                    <p>@Localizer["AvgScore"]: @Model.Average(s => s.AverageScore)?.ToString("0.00")</p>
-                </div>
+            </div>
+
+            <div class="card-body">
+                <form asp-action="GradeReport" method="post" class="mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="academicYear" class="form-label fw-bold">@Localizer["AcademicYear"]</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                    <input type="text" class="form-control" id="academicYear" name="academicYear"
+                                           placeholder="2023-2024" pattern="\d{4}-\d{4}" title="YYYY-YYYY" required />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="semester" class="form-label fw-bold">@Localizer["Semester"]</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-list-ol"></i></span>
+                                    <select class="form-select" id="semester" name="semester" required>
+                                        <option value="">@Localizer["SelectSemester"]</option>
+                                        <option value="HK1">@Localizer["Semester1"]</option>
+                                        <option value="HK2">@Localizer["Semester2"]</option>
+                                        <option value="HK3">@Localizer["Semester3"]</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="classId" class="form-label fw-bold">@Localizer["Class"]</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-users"></i></span>
+                                    <select class="form-select" id="classId" name="classId" asp-items="ViewBag.Classes">
+                                        <option value="">@Localizer["AllClasses"]</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="majorId" class="form-label fw-bold">@Localizer["Major"]</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-graduation-cap"></i></span>
+                                    <select class="form-select" id="majorId" name="majorId" asp-items="ViewBag.Majors">
+                                        <option value="">@Localizer["AllMajors"]</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="fas fa-chart-pie me-1"></i>@Localizer["GenerateReport"]
+                            </button>
+                            @if (Model != null && Model.Any())
+                            {
+                                <a href="@Url.Action("ExportToExcel", new {
+                                    academicYear = ViewBag.AcademicYear,
+                                    semester = ViewBag.Semester,
+                                    classId = ViewBag.ClassId,
+                                    majorId = ViewBag.MajorId
+                                })" class="btn btn-success">
+                                    <i class="fas fa-file-excel me-1"></i>@Localizer["Export"]
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </form>
+
+                @if (Model != null)
+                {
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="card shadow-sm border-primary">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>@Localizer["Overview"]</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">@Localizer["TotalStudents"]:</span>
+                                        <span class="badge bg-primary">@ViewBag.TotalCount</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">@Localizer["MaxScore"]:</span>
+                                        <span class="badge bg-success">@Model.Max(s => s.AverageScore)?.ToString("0.00")</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="fw-bold">@Localizer["MinScore"]:</span>
+                                        <span class="badge bg-danger">@Model.Min(s => s.AverageScore)?.ToString("0.00")</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span class="fw-bold">@Localizer["AvgScore"]:</span>
+                                        <span class="badge bg-info">@Model.Average(s => s.AverageScore)?.ToString("0.00")</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive rounded">
+                        <table class="table table-hover align-middle mb-4">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="text-center">@Localizer["StudentId"]</th>
+                                    <th>@Localizer["FullName"]</th>
+                                    <th>@Localizer["Class"]</th>
+                                    <th>@Localizer["Major"]</th>
+                                    <th class="text-center">@Localizer["AcademicYear"]</th>
+                                    <th class="text-center">@Localizer["Semester"]</th>
+                                    <th class="text-center">@Localizer["AvgScore"]</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr class="border-bottom">
+                                        <td class="text-center font-weight-bold">@item.StudentID</td>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar-sm bg-light rounded-circle me-3 d-flex align-items-center justify-content-center">
+                                                    <i class="fas fa-user text-muted"></i>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-0">@item.FullName</h6>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>@item.ClassName</td>
+                                        <td>@item.MajorName</td>
+                                        <td class="text-center">@item.AcademicYear</td>
+                                        <td class="text-center">@item.Semester</td>
+                                        <td class="text-center font-weight-bold @(item.AverageScore >= 5 ? "text-success" : "text-danger")">
+                                            @item.AverageScore?.ToString("0.00")
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @if (ViewBag.TotalCount > ViewBag.PageSize)
+                    {
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                @for (int i = 1; i <= Math.Ceiling((double)ViewBag.TotalCount / ViewBag.PageSize); i++)
+                                {
+                                    <li class="page-item @(i == ViewBag.Page ? "active" : "")">
+                                        <a class="page-link"
+                                           href="@Url.Action("GenerateGradeReport", new {
+                                               academicYear = ViewBag.AcademicYear,
+                                               semester = ViewBag.Semester,
+                                               classId = ViewBag.ClassId,
+                                               majorId = ViewBag.MajorId,
+                                               page = i,
+                                               pageSize = ViewBag.PageSize
+                                           })">@i</a>
+                                    </li>
+                                }
+                            </ul>
+                        </nav>
+                    }
+                }
+                else
+                {
+                    <div class="text-center py-5">
+                        <i class="fas fa-chart-bar fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">@Localizer["NoDataMessage"]</h5>
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div class="alert alert-danger mt-3">
+                                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                            </div>
+                        }
+                    </div>
+                }
             </div>
         </div>
     </div>
-    <div class="table-responsive mb-4">
-        <table class="table table-bordered table-striped">
-            <thead class="thead-dark">
-                <tr>
-                    <th>@Localizer["StudentId"]</th>
-                    <th>@Localizer["FullName"]</th>
-                    <th>@Localizer["Class"]</th>
-                    <th>@Localizer["Major"]</th>
-                    <th>@Localizer["AcademicYear"]</th>
-                    <th>@Localizer["Semester"]</th>
-                    <th>@Localizer["AvgScore"]</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.StudentID</td>
-                        <td>@item.FullName</td>
-                        <td>@item.ClassName</td>
-                        <td>@item.MajorName</td>
-                        <td>@item.AcademicYear</td>
-                        <td>@item.Semester</td>
-                        <td>@item.AverageScore?.ToString("0.00")</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+</div>
 
-    @if (ViewBag.TotalCount > ViewBag.PageSize)
-    {
-        <nav aria-label="Page navigation">
-            <ul class="pagination">
-                @for (int i = 1; i <= Math.Ceiling((double)ViewBag.TotalCount / ViewBag.PageSize); i++)
-                {
-                    <li class="page-item @(i == ViewBag.Page ? "active" : "")">
-                        <a class="page-link"
-                           href="@Url.Action("GenerateGradeReport", new {
-                               academicYear = ViewBag.AcademicYear,
-                               semester = ViewBag.Semester,
-                               classId = ViewBag.ClassId,
-                               majorId = ViewBag.MajorId,
-                               page = i,
-                               pageSize = ViewBag.PageSize
-                           })">@i</a>
-                    </li>
-                }
-            </ul>
-        </nav>
-    }
-}
-else
-{
-    <div class="alert alert-info">
-        @if (ViewData.ModelState.IsValid)
-        {
-            @Localizer["NoDataMessage"]
+@section Styles {
+    <style>
+        .avatar-sm {
+            width: 36px;
+            height: 36px;
+            font-size: 14px;
         }
-        else
-        {
-            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+        .table th {
+            border-top: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            color: #6c757d;
         }
-    </div>
+
+        .table td {
+            vertical-align: middle;
+            padding: 12px 8px;
+        }
+    </style>
 }
