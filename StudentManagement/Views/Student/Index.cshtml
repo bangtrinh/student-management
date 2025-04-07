@@ -35,8 +35,8 @@
 </form>
 
             <!-- Add Button -->
-            <a asp-action="Create" class="btn btn-primary shadow-sm d-flex align-items-center">
-                <i class="fas fa-user-plus mr-2"></i>@Localizer["Add"]
+            <a asp-action="Create" class="btn btn-primary shadow-sm btn-create-matching">
+                <i class="fas fa-plus mr-2"></i>
             </a>
         </div>
 
@@ -53,7 +53,7 @@
                                 <th class="text-center" style="width: 100px;">@Localizer["Gender"]</th>
                                 <th class="text-center" style="width: 120px;">@Localizer["Class"]</th>
                                 <th class="text-center" style="width: 120px;">@Localizer["Status"]</th>
-                                <th class="text-center">@Localizer["Actions"]</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>

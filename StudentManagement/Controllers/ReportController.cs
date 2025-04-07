@@ -38,22 +38,23 @@ namespace StudentManagement.Controllers
 
         [HttpPost]
         public IActionResult GradeReport(
-            string academicYear,
-            string semester,
-            string classId,
-            string majorId,
-            int page = 1,
-            int pageSize = 10)
+    string academicYear,
+    string semester,
+    string classId,
+    string majorId,
+    int page = 1,
+    int pageSize = 10)
         {
             try
             {
                 var summaries = _gradeService.GetStudentGradeSummaries(academicYear, semester, classId, majorId);
 
-                // Phân trang
-                var pagedSummaries = summaries.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-                var totalCount = summaries.Count;
+                var pagedSummaries = summaries
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
 
-                ViewBag.TotalCount = totalCount;
+                ViewBag.TotalCount = summaries.Count;
                 ViewBag.Page = page;
                 ViewBag.PageSize = pageSize;
                 ViewBag.AcademicYear = academicYear;
@@ -61,38 +62,65 @@ namespace StudentManagement.Controllers
                 ViewBag.ClassId = classId;
                 ViewBag.MajorId = majorId;
 
-                var classes = _classRepository.GetAll();
-                var majors = _majorRepository.GetAll();
-                ViewBag.Classes = new SelectList(classes, "ClassID", "ClassName");
-                ViewBag.Majors = new SelectList(majors, "MajorID", "MajorName");
+                LoadDropdowns();
 
                 return View("GradeReport", pagedSummaries);
             }
             catch (ArgumentException ex)
             {
-                ModelState.AddModelError("", ex.Message);
+                ModelState.AddModelError(string.Empty, ex.Message);
 
-                var classes = _classRepository.GetAll();
-                var majors = _majorRepository.GetAll();
-                ViewBag.Classes = new SelectList(classes, "ClassID", "ClassName");
-                ViewBag.Majors = new SelectList(majors, "MajorID", "MajorName");
+                ViewBag.Page = page;
+                ViewBag.PageSize = pageSize;
+                ViewBag.AcademicYear = academicYear;
+                ViewBag.Semester = semester;
+                ViewBag.ClassId = classId;
+                ViewBag.MajorId = majorId;
 
-                return View("GradeReport");
+                LoadDropdowns();
+
+                return View("GradeReport", new List<StudentGradeSummary>());
             }
         }
 
-        public IActionResult ExportToExcel(
-            string academicYear,
-            string semester,
-            string classId,
-            string majorId)
+        private void LoadDropdowns()
         {
-            var summaries = _gradeService.GetStudentGradeSummaries(academicYear, semester, classId, majorId);
+            var classes = _classRepository.GetAll();
+            var majors = _majorRepository.GetAll();
 
-            var excelBytes = ExcelHelper.GenerateGradeReportExcel(summaries);
-            return File(excelBytes,
-                      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                      $"StudentGradeReport_{academicYear}_{semester}.xlsx");
+            ViewBag.Classes = new SelectList(classes, "ClassID", "ClassName");
+            ViewBag.Majors = new SelectList(majors, "MajorID", "MajorName");
+        }
+
+
+        public IActionResult ExportToExcel(
+    string academicYear,
+    string semester,
+    string classId,
+    string majorId)
+        {
+            try
+            {
+                var summaries = _gradeService.GetStudentGradeSummaries(academicYear, semester, classId, majorId);
+
+                if (summaries == null || !summaries.Any())
+                {
+                    return BadRequest("Không có dữ liệu để xuất file Excel.");
+                }
+
+                var excelBytes = ExcelHelper.GenerateGradeReportExcel(summaries);
+
+                var fileName = $"StudentGradeReport_{academicYear ?? "AllYears"}_{semester ?? "AllSemesters"}_{classId ?? "AllClasses"}_{majorId ?? "AllMajors"}.xlsx";
+
+                return File(
+                    excelBytes,
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    fileName);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

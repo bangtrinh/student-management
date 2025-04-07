@@ -244,7 +244,7 @@
     <value>Edit teacher profile</value>
   </data>
   <data name="NoInfoFound" xml:space="preserve">
-    <value>No information found</value>
+    <value>No information</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Name</value>
@@ -363,7 +363,7 @@
   <data name="CourseName" xml:space="preserve">
     <value>Course name </value>
   </data>
-  <data name="Creadits" xml:space="preserve">
+  <data name="Credits" xml:space="preserve">
     <value>Credits</value>
   </data>
   <data name="Room" xml:space="preserve">
@@ -476,5 +476,92 @@
   </data>
   <data name="Logout" xml:space="preserve">
     <value>Logout</value>
+  </data>
+  <data name="MajorList" xml:space="preserve">
+    <value>Major list</value>
+  </data>
+  <data name="CourseId" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="AcademicYear" xml:space="preserve">
+    <value>Academic year </value>
+  </data>
+  <data name="ConflictSchedule" xml:space="preserve">
+    <value>Invalid schedule. Please double check.</value>
+  </data>
+  <data name="ScheduleTeacher" xml:space="preserve">
+    <value>Schedule</value>
+  </data>
+  <data name="Chat" xml:space="preserve">
+    <value>Chat</value>
+  </data>
+  <data name="ContactList" xml:space="preserve">
+    <value>Contacts</value>
+  </data>
+  <data name="NoContacts" xml:space="preserve">
+    <value>No contact available</value>
+  </data>
+  <data name="EnterMessage" xml:space="preserve">
+    <value>Enter your message</value>
+  </data>
+  <data name="SelectContactToChat" xml:space="preserve">
+    <value>Select a contact to chat</value>
+  </data>
+  <data name="InstructionMessage" xml:space="preserve">
+    <value>You can chat with contacts in the list.</value>
+  </data>
+  <data name="NoMessages" xml:space="preserve">
+    <value>No message sent</value>
+  </data>
+  <data name="Grade" xml:space="preserve">
+    <value>Grade</value>
+  </data>
+  <data name="StudentList" xml:space="preserve">
+    <value>Students</value>
+  </data>
+  <data name="Schedule" xml:space="preserve">
+    <value>Schedule</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>Period</value>
+  </data>
+  <data name="StudentDetails" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="StudentInformation" xml:space="preserve">
+    <value>Personal information</value>
+  </data>
+  <data name="Course" xml:space="preserve">
+    <value>Course</value>
+  </data>
+  <data name="In Progress" xml:space="preserve">
+    <value>In progress</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+    <value>Failed</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="MyGrades" xml:space="preserve">
+    <value>My grades</value>
+  </data>
+  <data name="Semester" xml:space="preserve">
+    <value>Semester</value>
+  </data>
+  <data name="NotAvailable" xml:space="preserve">
+    <value>Not available</value>
+  </data>
+  <data name="RegisterSuccess" xml:space="preserve">
+    <value>Registration updated successfully. Please check your email to view the list of registered courses.</value>
+  </data>
+  <data name="CourseRegistration" xml:space="preserve">
+    <value>Course registration</value>
+  </data>
+  <data name="AvailableCourses" xml:space="preserve">
+    <value>Available courses</value>
+  </data>
+  <data name="NoAvailableCourses" xml:space="preserve">
+    <value>No available courses</value>
   </data>
 </root>

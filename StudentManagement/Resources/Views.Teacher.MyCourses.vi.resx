@@ -120,14 +120,26 @@
   <data name="Actions" xml:space="preserve">
     <value>Hành động</value>
   </data>
-  <data name="AddMajor" xml:space="preserve">
-    <value> Thêm ngành học mới</value>
+  <data name="AddCourse" xml:space="preserve">
+    <value>Thêm môn học mới</value>
+  </data>
+  <data name="ClickToSeeDetails" xml:space="preserve">
+    <value>Nhấp để xem chi tiêt</value>
+  </data>
+  <data name="CourseID" xml:space="preserve">
+    <value>Mã môn học</value>
+  </data>
+  <data name="CourseList" xml:space="preserve">
+    <value>Danh sách môn học</value>
+  </data>
+  <data name="CourseName" xml:space="preserve">
+    <value>Tên môn học</value>
+  </data>
+  <data name="Credits" xml:space="preserve">
+    <value>Số tín chỉ</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Xóa</value>
-  </data>
-  <data name="Department" xml:space="preserve">
-    <value>Khoa</value>
   </data>
   <data name="Details" xml:space="preserve">
     <value>Chi tiết</value>
@@ -136,15 +148,15 @@
     <value>Sửa</value>
   </data>
   <data name="MajorId" xml:space="preserve">
-    <value>ID</value>
+    <value>Mã ngành</value>
   </data>
-  <data name="MajorList" xml:space="preserve">
-    <value>Danh sách ngành học</value>
+  <data name="Room" xml:space="preserve">
+    <value>Phòng học</value>
   </data>
-  <data name="MajorName" xml:space="preserve">
-    <value> Tên ngành</value>
+  <data name="StudentInformation" xml:space="preserve">
+    <value>Thông tin cá nhân</value>
   </data>
-  <data name="TrainingTime" xml:space="preserve">
-    <value>Thời gian đào tạo</value>
+  <data name="TeacherName" xml:space="preserve">
+    <value>Tên giảng viên</value>
   </data>
 </root>

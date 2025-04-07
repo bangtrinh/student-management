@@ -216,4 +216,28 @@
   <data name="Processing" xml:space="preserve">
     <value>Đang xử lý</value>
   </data>
+  <data name="Period" xml:space="preserve">
+    <value>Tiết</value>
+  </data>
+  <data name="ContactList" xml:space="preserve">
+    <value>Danh bạ</value>
+  </data>
+  <data name="NoContacts" xml:space="preserve">
+    <value>Chưa có liên hệ</value>
+  </data>
+  <data name="EnterMessage" xml:space="preserve">
+    <value>Nhập tin nhắn</value>
+  </data>
+  <data name="SelectContactToChat" xml:space="preserve">
+    <value>Chọn một liên hệ để trò chuyện</value>
+  </data>
+  <data name="InstructionMessage" xml:space="preserve">
+    <value>Bạn có thể nhắn tin với các liên hệ trong danh sách</value>
+  </data>
+  <data name="NoAvailableCourses" xml:space="preserve">
+    <value>Không có môn học nào khả dụng</value>
+  </data>
+  <data name="AvailableCourses" xml:space="preserve">
+    <value>Môn đăng ký</value>
+  </data>
 </root>

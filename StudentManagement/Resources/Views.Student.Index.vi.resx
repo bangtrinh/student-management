@@ -127,7 +127,7 @@
     <value>Tìm kiếm</value>
   </data>
   <data name="StudentId" xml:space="preserve">
-    <value>Mã sinh viên</value>
+    <value>ID</value>
   </data>
   <data name="FullName" xml:space="preserve">
     <value> Họ và tên</value>
@@ -173,5 +173,8 @@
   </data>
   <data name="OnLeave" xml:space="preserve">
     <value>Bảo lưu</value>
+  </data>
+  <data name="SearchByNameOrID" xml:space="preserve">
+    <value>Tìm kiếm bằng tên hoặc ID</value>
   </data>
 </root>

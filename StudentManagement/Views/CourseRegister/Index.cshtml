@@ -1,58 +1,96 @@
 ﻿@model IEnumerable<StudentManagement.Models.CourseRegistrationItem>
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<StudentManagement.SharedResources> Localizer
 
-<h2>Đăng ký môn học</h2>
+<div class="container mt-4">
+    <h4 class="mb-4 fw-bold text-dark">
+        <i class="bi bi-journal-plus text-primary me-2"></i> @Localizer["CourseRegistration"]
+    </h4>
 
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success mt-3">
-        @TempData["Success"]
-    </div>
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i> @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    <!-- Thêm biểu mẫu tìm kiếm -->
+    <form asp-action="Search" method="get">
+        <div class="mb-4">
+            <input type="text" name="keyword" placeholder="Nhập tên hoặc mã môn học" class="form-control" />
+            <button type="submit" class="btn btn-primary mt-2">Tìm kiếm</button>
+        </div>
+    </form>
+    @if (Model != null && Model.Any())
+    {
+        <form method="post">
+            <input type="hidden" name="StudentID" value="@ViewBag.StudentId" />
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h6 class="mb-0 fw-semibold">
+                        <i class="bi bi-book text-white me-2"></i> @Localizer["AvailableCourses"]
+                    </h6>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-hover table-striped mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th scope="col" class="ps-3">@Localizer["ID"]</th>
+                                <th scope="col">@Localizer["CourseName"]</th>
+                                <th scope="col">@Localizer["Teacher"]</th>
+                                <th scope="col">@Localizer["Room"]</th>
+                                <th scope="col" class="text-center">@Localizer["Register"]</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Count(); i++)
+                            {
+                                <tr>
+                                    <td class="ps-3">
+                                        <input type="hidden" name="[@i].CourseID" value="@Model.ElementAt(i).CourseID" />
+                                        @Model.ElementAt(i).CourseID
+                                    </td>
+                                    <td>
+                                        <input type="hidden" name="[@i].CourseName" value="@Model.ElementAt(i).CourseName" />
+                                        @Model.ElementAt(i).CourseName
+                                    </td>
+                                    <td>
+                                        <input type="hidden" name="[@i].TeacherName" value="@Model.ElementAt(i).TeacherName" />
+                                        @Model.ElementAt(i).TeacherName
+                                    </td>
+                                    <td>
+                                        <input type="hidden" name="[@i].Room" value="@Model.ElementAt(i).Room" />
+                                        @Model.ElementAt(i).Room
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="checkbox" name="[@i].IsSelected" value="true"
+                                        @(Model.ElementAt(i).IsSelected ? "checked" : "") />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary px-4">
+                    <i class="bi bi-save me-2"></i> @Localizer["Save"]
+                </button>
+            </div>
+        </form>
+    }
+    else
+    {
+        <div class="alert alert-info alert-dismissible fade show text-center" role="alert">
+            <i class="bi bi-info-circle me-2"></i> @Localizer["NoAvailableCourses"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
 }
-<form asp-action="Search" method="get">
-    <input type="text" name="keyword" placeholder="Nhập tên hoặc mã môn học" class="form-control" />
-    <button type="submit" class="btn btn-primary mt-2">Tìm kiếm</button>
-</form>
-<form method="post">
-    <input type="hidden" name="StudentID" value="@ViewBag.StudentId" />
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Mã môn</th>
-                <th>Tên môn</th>
-                <th>Giảng viên</th>
-				<th>Phòng</th>
-                <th>Chọn đăng ký</th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (int i = 0; i < Model.Count(); i++)
-            {
-                <tr>
-                    <td>
-                        <input type="hidden" name="[@i].CourseID" value="@Model.ElementAt(i).CourseID" />
-                        @Model.ElementAt(i).CourseID
-                    </td>
-                    <td>
-                        <input type="hidden" name="[@i].CourseName" value="@Model.ElementAt(i).CourseName" />
-                        @Model.ElementAt(i).CourseName
-                    </td>
-                    <td>
-                        <input type="hidden" name="[@i].TeacherName" value="@Model.ElementAt(i).TeacherName" />
-                        @Model.ElementAt(i).TeacherName
-                    </td>
-                    <td>
-                        <input type="hidden" name="[@i].Room" value="@Model.ElementAt(i).Room" />
-                        @Model.ElementAt(i).Room
-                    </td>
-                    <td>
-                        <input type="checkbox" name="[@i].IsSelected" value="true" @(Model.ElementAt(i).IsSelected ? "checked" : "") />
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <button type="submit" class="btn btn-primary">Lưu đăng ký</button>
-
-</form>
 

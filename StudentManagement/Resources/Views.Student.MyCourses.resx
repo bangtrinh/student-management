@@ -118,33 +118,42 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Actions" xml:space="preserve">
-    <value>Hành động</value>
+    <value />
   </data>
-  <data name="AddMajor" xml:space="preserve">
-    <value> Thêm ngành học mới</value>
+  <data name="AddCourse" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ClickToSeeDetails" xml:space="preserve">
+    <value />
+  </data>
+  <data name="CourseID" xml:space="preserve">
+    <value />
+  </data>
+  <data name="CourseList" xml:space="preserve">
+    <value />
+  </data>
+  <data name="CourseName" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Credits" xml:space="preserve">
+    <value />
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Xóa</value>
-  </data>
-  <data name="Department" xml:space="preserve">
-    <value>Khoa</value>
+    <value />
   </data>
   <data name="Details" xml:space="preserve">
-    <value>Chi tiết</value>
+    <value />
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Sửa</value>
+    <value />
   </data>
   <data name="MajorId" xml:space="preserve">
-    <value>ID</value>
+    <value />
   </data>
-  <data name="MajorList" xml:space="preserve">
-    <value>Danh sách ngành học</value>
+  <data name="Room" xml:space="preserve">
+    <value />
   </data>
-  <data name="MajorName" xml:space="preserve">
-    <value> Tên ngành</value>
-  </data>
-  <data name="TrainingTime" xml:space="preserve">
-    <value>Thời gian đào tạo</value>
+  <data name="TeacherName" xml:space="preserve">
+    <value />
   </data>
 </root>

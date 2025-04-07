@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol.Core.Types;
 using StudentManagement.Models;
 using StudentManagement.Repositories;
 
@@ -15,7 +14,6 @@ namespace StudentManagement.Controllers
         private readonly IStudentRepository _studentRepository;
         private readonly IMajorRepository _majorRepository;
         private readonly ITeacherRepository _teacherRepository;
-        private readonly ICourseRepository courseRepository;
 
         public CourseController(ICourseRepository courseRepository, IStudentRepository studentRepository, ITeacherRepository teacherRepository, IMajorRepository majorRepository)
         {
@@ -27,9 +25,7 @@ namespace StudentManagement.Controllers
 
         [Authorize(Policy = "RequireAdminRole")]
 
-        //Tìm kiếm
-        [Authorize(Policy = "RequireAdminRole")]
-        
+
 
         [Authorize(Policy = "RequireAdminOrTeacher")]
 
@@ -127,19 +123,21 @@ namespace StudentManagement.Controllers
             _courseRepository.Delete(id);
             return RedirectToAction(nameof(Index));
         }
-        public IActionResult Index()
+        //Tìm kiếm
+        [Authorize(Policy = "RequireAdminRole")]
+        public IActionResult Index(string searchString)
         {
-            var courses = courseRepository.GetAll()
-                .Select(c => new Course
-                {
-                    CourseID = c.CourseID,
-                    CourseName = c.CourseName,
-                    TeacherID = c.Teacher.FullName,
-                    Room = c.Room
-                }).ToList();
+            var courses = _courseRepository.GetAll();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                courses = courses.Where(c => c.CourseID.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
+                                               c.CourseName.Contains(searchString, StringComparison.OrdinalIgnoreCase));
+
+            }
 
             return View(courses);
         }
 
+        }
     }
-}

@@ -142,7 +142,7 @@
     <value>Courses</value>
   </data>
   <data name="RegisterCourses" xml:space="preserve">
-    <value>Course Registration</value>
+    <value>Course registration</value>
   </data>
   <data name="ChatBot" xml:space="preserve">
     <value>AI Assistant</value>
@@ -166,7 +166,7 @@
     <value>Departments</value>
   </data>
   <data name="Subjects" xml:space="preserve">
-    <value>Subjects</value>
+    <value>Courses</value>
   </data>
   <data name="Schedule" xml:space="preserve">
     <value>Schedule</value>
@@ -196,7 +196,7 @@
     <value>End date</value>
   </data>
   <data name="StartDate" xml:space="preserve">
-    <value>StartDate</value>
+    <value>Start date</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>Create account</value>
@@ -215,5 +215,29 @@
   </data>
   <data name="Processing" xml:space="preserve">
     <value>Processing</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>Period</value>
+  </data>
+  <data name="ContactList" xml:space="preserve">
+    <value>Contacts</value>
+  </data>
+  <data name="NoContacts" xml:space="preserve">
+    <value>No contacts available</value>
+  </data>
+  <data name="EnterMessage" xml:space="preserve">
+    <value>Enter your message</value>
+  </data>
+  <data name="SelectContactToChat" xml:space="preserve">
+    <value>Select a contact to chat</value>
+  </data>
+  <data name="InstructionMessage" xml:space="preserve">
+    <value>You can chat with contacts in the list.</value>
+  </data>
+  <data name="NoAvailableCourses" xml:space="preserve">
+    <value>No available courses</value>
+  </data>
+  <data name="AvailableCourses" xml:space="preserve">
+    <value>Available courses</value>
   </data>
 </root>

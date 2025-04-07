@@ -29,8 +29,7 @@
                     <a asp-action="Index" class="btn btn-secondary ms-2">@Localizer["ClearFilter"]</a>
                 }
             </form>
-
-            <a asp-action="Create" class="btn btn-primary shadow-sm d-flex align-items-center">
+            <a asp-action="Create" class="btn btn-primary shadow-sm btn-create-matching">
                 <i class="fas fa-plus mr-2"></i>
             </a>
         </div>
@@ -47,7 +46,7 @@
                                 <th>@Localizer["Major"]</th>
                                 <th>@Localizer["Teacher"]</th>
                                 <th class="text-center">@Localizer["Room"]</th>
-                                <th class="text-center" style="width: 120px;">@Localizer["Actions"]</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -168,6 +167,10 @@
         .badge-primary {
             background-color: #007bff;
             color: white;
+        }
+
+        .action-btn:hover {
+            background-color: rgba(0,0,0,0.05);
         }
     </style>
 }

@@ -1,56 +1,79 @@
 ﻿@model List<StudentManagement.Models.Grade>
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
-<h4 class="mb-3 fw-bold">📚 Danh sách môn học</h4>
+<div class="container mt-4">
+    <h4 class="mb-4 fw-bold text-dark">
+        <i class="bi bi-journal-bookmark-fill text-primary me-2"></i> @Localizer["CourseList"]
+    </h4>
 
-@if (ViewBag.Message != null)
-{
-    <div class="alert alert-warning">@ViewBag.Message</div>
-}
-
-else if (Model != null && Model.Any())
-{
-    var groupedCourses = Model.GroupBy(g => new { g.AcademicYear, g.Semester });
-
-    @foreach (var group in groupedCourses)
+    @if (ViewBag.Message != null)
     {
-        <div class="mb-4">
-            <h6 class="text-primary fw-semibold">📅 Học kỳ @group.Key.Semester - Năm học @group.Key.AcademicYear</h6>
-            <table class="table table-striped mt-2">
-                <thead class="bg-light">
-                    <tr>
-                        <th>Mã MH</th>
-                        <th>Môn học</th>
-                        <th class="text-center">Trạng thái</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var course in group)
-                    {
-                        <tr>
-                            <td>@(course.Course?.CourseID ?? "N/A")</td>
-                            <td>@(course.Course?.CourseName ?? "N/A")</td>
-                            <td class="text-center">
-                                @if (course.Score == null)
-                                {
-                                    <span class="badge bg-success">🟢 Đang học</span>
-                                }
-                                else if (course.Score < 5)
-                                {
-                                    <span class="badge bg-danger">🔴 Rớt</span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-primary">🔵 Hoàn thành</span>
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            @ViewBag.Message
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="@Localizer["Back"]"></button>
         </div>
     }
-}
-else
-{
-    <div class="alert alert-info">Bạn chưa có môn học nào.</div>
+    else if (Model != null && Model.Any())
+    {
+        var groupedCourses = Model
+        .OrderBy(g => g.AcademicYear)
+        .ThenBy(g => g.Semester)
+        .GroupBy(g => new { g.AcademicYear, g.Semester });
+
+        @foreach (var group in groupedCourses)
+        {
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h6 class="mb-0 fw-semibold">
+                        <i class="bi bi-calendar3 me-2"></i> @Localizer["{0} - {1}", group.Key.Semester, group.Key.AcademicYear]
+                    </h6>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped table-hover mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="ps-3">@Localizer["ID"]</th>
+                                <th>@Localizer["CourseName"]</th>
+                                <th class="text-center">@Localizer["Status"]</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var course in group)
+                            {
+                                <tr>
+                                    <td class="ps-3">@(course.Course?.CourseID ?? Localizer["N/A"].Value)</td>
+                                    <td>@(course.Course?.CourseName ?? Localizer["N/A"].Value)</td>
+                                    <td class="text-center">
+                                        @if (course.Score == null)
+                                        {
+                                            <span class="badge bg-success"><i class="bi bi-play-circle me-1"></i> @Localizer["In Progress"]</span>
+                                        }
+                                        else if (course.Score < 5)
+                                        {
+                                            <span class="badge bg-danger"><i class="bi bi-x-circle me-1"></i> @Localizer["Failed"]</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-primary"><i class="bi bi-check-circle me-1"></i> @Localizer["Completed"]</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <i class="bi bi-info-circle me-2"></i> @Localizer["NoInfoFound"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="@Localizer["Back"]"></button>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
 }
