@@ -1,11 +1,14 @@
 ﻿@model StudentManagement.Models.ViewModel.ChatViewModel
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<StudentManagement.SharedResources> Localizer
+
 @{
-    ViewData["Title"] = "Trò chuyện";
+    ViewData["Title"] = Localizer["Chat"];
 }
 
 <div class="chat-app-container">
     <div class="chat-sidebar">
-        <h4 class="sidebar-header">Danh bạ</h4>
+        <h4 class="sidebar-header">@Localizer["ContactList"]</h4>
         <div class="contact-list">
             @if (Model.ContactsWithUnread != null && Model.ContactsWithUnread.Any())
             {
@@ -26,7 +29,7 @@
             }
             else
             {
-                <p class="text-muted p-2">Không có liên hệ nào</p>
+                <p class="text-muted p-2">@Localizer["NoContacts"]</p>
             }
         </div>
     </div>
@@ -48,7 +51,7 @@
             </div>
 
             <div class="chat-input">
-                <input type="text" id="messageInput" placeholder="Nhập tin nhắn..." />
+                <input type="text" id="messageInput" placeholder="@Localizer["EnterMessage"]" />
                 <button id="sendButton" class="btn btn-primary" disabled>
                     <i class="fas fa-paper-plane"></i>
                 </button>
@@ -59,8 +62,8 @@
             <div class="chat-welcome">
                 <div class="welcome-content">
                     <i class="fas fa-comments welcome-icon"></i>
-                    <h4>Chọn một liên hệ để bắt đầu trò chuyện</h4>
-                    <p>Bạn có thể nhắn tin với các liên hệ trong danh sách</p>
+                    <h4>@Localizer["SelectContactToChat"]</h4>
+                    <p>@Localizer["InstructionMessage"]</p>
                 </div>
             </div>
         }
@@ -76,12 +79,10 @@
     <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
     <script>
         $(document).ready(function() {
-            // Khởi tạo biến toàn cục
             let chatConnection;
             const currentUserId = '@Model.CurrentUser?.Id';
             let currentContactId = '@Model.ContactUser?.Id';
 
-            // Khởi tạo kết nối SignalR
             function initializeSignalR() {
                 chatConnection = new signalR.HubConnectionBuilder()
                     .withUrl("/chatHub")
@@ -89,29 +90,22 @@
                     .configureLogging(signalR.LogLevel.Warning)
                     .build();
 
-                // Xử lý tin nhắn đến
                 chatConnection.on("ReceiveMessage", (senderId, message, timestamp) => {
                     const isCurrentUser = senderId === currentUserId;
-
-            // Chỉ append nếu KHÔNG PHẢI do mình gửi
                     appendMessage(senderId, message, timestamp, isCurrentUser);
-
                 });
 
-
-                // Bắt đầu kết nối
                 chatConnection.start()
                     .then(() => {
-                        console.log('Kết nối SignalR thành công');
+                        console.log('SignalR connected');
                         if (currentContactId) {
                             chatConnection.invoke("CheckUserStatus", currentContactId);
                         }
                         setupChatEvents();
                     })
-                    .catch(err => console.error('Lỗi kết nối SignalR:', err.toString()));
+                    .catch(err => console.error('SignalR error:', err.toString()));
             }
 
-            // Thêm tin nhắn vào khung chat
             function appendMessage(senderId, message, timestamp, isSent) {
                 const messageTime = timestamp ? new Date(timestamp).toLocaleTimeString() : new Date().toLocaleTimeString();
                 const messageClass = isSent ? 'sent' : 'received';
@@ -127,31 +121,25 @@
                 scrollToBottom();
             }
 
-            // Cuộn xuống dưới cùng
             function scrollToBottom() {
                 const messagesContainer = $('#chatMessages');
                 messagesContainer.scrollTop(messagesContainer[0].scrollHeight);
             }
 
-            // Thiết lập sự kiện chat
             function setupChatEvents() {
-                // Gửi tin nhắn
                 $('#sendButton').click(sendMessage);
 
-                // Gửi bằng phím Enter
                 $('#messageInput').keypress(function(e) {
                     if (e.which === 13) {
                         sendMessage();
                     }
                 });
 
-                // Kích hoạt nút gửi khi có nội dung
                 $('#messageInput').on('input', function() {
                     $('#sendButton').prop('disabled', $(this).val().trim() === '');
                 });
             }
 
-            // Gửi tin nhắn
             function sendMessage() {
                 const message = $('#messageInput').val().trim();
 
@@ -163,13 +151,12 @@
                             appendMessage(currentUserId, message, null, true);
                         })
                         .catch(err => {
-                            console.error('Lỗi gửi tin nhắn:', err.toString());
+                            console.error('Send message failed:', err.toString());
                             alert('Gửi tin nhắn thất bại. Vui lòng thử lại.');
                         });
                 }
             }
 
-            // Xử lý chọn liên hệ
             $('.contact-item').click(function() {
                 const contactId = $(this).data('userid');
                 if (contactId !== currentContactId) {
@@ -177,7 +164,6 @@
                 }
             });
 
-            // Khởi tạo chat
             initializeSignalR();
         });
     </script>

@@ -26,7 +26,7 @@
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
                                     <input type="text" class="form-control" id="academicYear" name="academicYear"
-                                           placeholder="2023-2024" pattern="\d{4}-\d{4}" title="YYYY-YYYY" required />
+                                           placeholder="2023-2024" pattern="\d{4}-\d{4}" title="YYYY-YYYY" />
                                 </div>
                             </div>
                         </div>
@@ -35,7 +35,7 @@
                                 <label for="semester" class="form-label fw-bold">@Localizer["Semester"]</label>
                                 <div class="input-group">
                                     <span class="input-group-text"><i class="fas fa-list-ol"></i></span>
-                                    <select class="form-select" id="semester" name="semester" required>
+                                    <select class="form-select" id="semester" name="semester" >
                                         <option value="">@Localizer["SelectSemester"]</option>
                                         <option value="HK1">@Localizer["Semester1"]</option>
                                         <option value="HK2">@Localizer["Semester2"]</option>
@@ -68,7 +68,7 @@
                         </div>
                         <div class="col-md-3 d-flex align-items-end">
                             <button type="submit" class="btn btn-primary me-2">
-                                <i class="fas fa-chart-pie me-1"></i>@Localizer["GenerateReport"]
+                                <i class="fas fa-chart-pie me-1"></i>
                             </button>
                             @if (Model != null && Model.Any())
                             {
@@ -78,7 +78,7 @@
                                     classId = ViewBag.ClassId,
                                     majorId = ViewBag.MajorId
                                 })" class="btn btn-success">
-                                    <i class="fas fa-file-excel me-1"></i>@Localizer["Export"]
+                                    <i class="fas fa-file-excel me-1"></i>
                                 </a>
                             }
                         </div>
