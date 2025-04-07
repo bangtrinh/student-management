@@ -1,8 +1,9 @@
 ﻿@model List<StudentManagement.Models.Course>
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 <div class="container mt-4">
     <h2 class="text-center fw-bold text-dark mb-4">
-        <i class="bi bi-list-ul text-primary me-2"></i> Danh Sách Lớp Học
+        <i class="bi bi-list-ul text-primary me-2"></i> @Localizer["CourseList"]
     </h2>
 
     @if (Model.Any())
@@ -15,10 +16,10 @@
                         <div class="card h-100 shadow-sm border-0 hover-card">
                             <div class="card-body text-center">
                                 <h5 class="card-title fw-semibold text-primary">@course.CourseName</h5>
-                                <p class="card-text text-muted">Mã môn: @course.CourseID</p>
+                                <p class="card-text text-muted">@Localizer["CourseID"]: @course.CourseID</p>
                             </div>
                             <div class="card-footer bg-transparent border-0">
-                                <small class="text-muted">Nhấn để xem chi tiết</small>
+                                <small class="text-muted">@Localizer["ClickToSeeDetails"]</small>
                             </div>
                         </div>
                     </a>
@@ -29,7 +30,7 @@
     else
     {
         <div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i> Bạn chưa dạy lớp nào.
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> @Localizer["NoInfoFound"]
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }

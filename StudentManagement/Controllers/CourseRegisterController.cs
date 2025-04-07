@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration.UserSecrets;
+using Microsoft.Extensions.Localization;
 using StudentManagement.Helper;
 using StudentManagement.Models;
 using StudentManagement.Repositories;
@@ -20,17 +22,20 @@ namespace StudentManagement.Controllers
         private readonly IStudentRepository _studentRepository;
         private readonly ICourseRepository _courseRepository;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IStringLocalizer<SharedResources> _localizer;
 
         public CourseRegisterController(
             UserManager<IdentityUser> userManager,
             IGradeRepository gradeRepository,
             IStudentRepository studentRepository,
-            ICourseRepository courseRepository)
+            ICourseRepository courseRepository,
+            IStringLocalizer<SharedResources> localizer)
         {
             _gradeRepository = gradeRepository;
             _studentRepository = studentRepository;
             _courseRepository = courseRepository;
             _userManager = userManager;
+            _localizer = localizer;
         }
 
         public async Task<IActionResult> Index()
@@ -103,7 +108,7 @@ namespace StudentManagement.Controllers
             // Gửi email xác nhận
             await SendConfirmationEmail(student.Email, student.FullName, model.Where(x => x.IsSelected).ToList());
 
-            TempData["Success"] = "Cập nhật đăng ký thành công. Kiểm tra email để xem danh sách môn học đã đăng ký.";
+            TempData["Success"] = _localizer["RegisterSuccess"].Value;
             return RedirectToAction("Index");
         }
 

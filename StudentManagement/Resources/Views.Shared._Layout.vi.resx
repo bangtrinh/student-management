@@ -234,4 +234,10 @@
   <data name="InstructionMessage" xml:space="preserve">
     <value>Bạn có thể nhắn tin với các liên hệ trong danh sách</value>
   </data>
+  <data name="NoAvailableCourses" xml:space="preserve">
+    <value>Không có môn học nào khả dụng</value>
+  </data>
+  <data name="AvailableCourses" xml:space="preserve">
+    <value>Môn đăng ký</value>
+  </data>
 </root>
