@@ -519,4 +519,49 @@
   <data name="StudentList" xml:space="preserve">
     <value>Danh sách sinh viên</value>
   </data>
+  <data name="Schedule" xml:space="preserve">
+    <value>Thời khóa biểu</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>Tiết</value>
+  </data>
+  <data name="StudentDetails" xml:space="preserve">
+    <value>Chi tiết</value>
+  </data>
+  <data name="StudentInformation" xml:space="preserve">
+    <value>Thông tin cá nhân</value>
+  </data>
+  <data name="Course" xml:space="preserve">
+    <value>Môn học</value>
+  </data>
+  <data name="In Progress" xml:space="preserve">
+    <value>Đang học</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+    <value>Rớt</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Hoàn thành</value>
+  </data>
+  <data name="MyGrades" xml:space="preserve">
+    <value>Điểm của tôi</value>
+  </data>
+  <data name="Semester" xml:space="preserve">
+    <value>Học kỳ</value>
+  </data>
+  <data name="NotAvailable" xml:space="preserve">
+    <value>Chưa có</value>
+  </data>
+  <data name="RegisterSuccess" xml:space="preserve">
+    <value>Cập nhật đăng ký thành công. Kiểm tra email để xem danh sách môn học đã đăng ký.</value>
+  </data>
+  <data name="CourseRegistration" xml:space="preserve">
+    <value>Đăng ký môn học</value>
+  </data>
+  <data name="AvailableCourses" xml:space="preserve">
+    <value>Danh sách môn học</value>
+  </data>
+  <data name="NoAvailableCourses" xml:space="preserve">
+    <value>Không có môn học nào để đăng ký</value>
+  </data>
 </root>

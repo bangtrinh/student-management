@@ -519,4 +519,49 @@
   <data name="StudentList" xml:space="preserve">
     <value />
   </data>
+  <data name="Schedule" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StudentDetails" xml:space="preserve">
+    <value />
+  </data>
+  <data name="StudentInformation" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Course" xml:space="preserve">
+    <value />
+  </data>
+  <data name="In Progress" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Failed" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MyGrades" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Semester" xml:space="preserve">
+    <value />
+  </data>
+  <data name="NotAvailable" xml:space="preserve">
+    <value />
+  </data>
+  <data name="RegisterSuccess" xml:space="preserve">
+    <value />
+  </data>
+  <data name="CourseRegistration" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AvailableCourses" xml:space="preserve">
+    <value />
+  </data>
+  <data name="NoAvailableCourses" xml:space="preserve">
+    <value />
+  </data>
 </root>

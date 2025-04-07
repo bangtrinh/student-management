@@ -1,9 +1,9 @@
-﻿@model StudentManagement.Models.Course
+﻿@model IEnumerable<StudentManagement.Models.CourseRegistrationItem>
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<StudentManagement.SharedResources> Localizer
 
 @{
-    ViewData["Title"] = Localizer["CourseDetailsTitle"];
+    ViewData["Title"] = Localizer["CourseRegistrationTitle"];
 }
 
 <div class="content py-4">
@@ -14,121 +14,83 @@
                     <div class="card-header bg-white border-bottom-0">
                         <div class="d-flex justify-content-between align-items-center">
                             <h3 class="card-title mb-0 text-primary">
-                                <i class="fas fa-book me-2"></i>@Localizer["CourseDetailsTitle"]
+                                <i class="fas fa-book me-2"></i>@Localizer["CourseRegistrationTitle"]
                             </h3>
                         </div>
                     </div>
 
                     <div class="card-body">
-                        <!-- Course Header -->
-                        <div class="d-flex align-items-center mb-4">
-                            <div>
-                                <h3 class="mb-1">@Model.CourseName</h3>
-                                <span class="badge bg-primary">@Model.CourseID</span>
-                                <span class="badge bg-success ms-2">@Model.Credits @Localizer["Credits"]</span>
+                        @if (TempData["Success"] != null)
+                        {
+                            <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                                <i class="fas fa-check-circle me-2"></i> @TempData["Success"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="@Localizer["Close"]"></button>
                             </div>
-                        </div>
+                        }
 
-                        <!-- Course Information -->
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <div class="info-card mb-4">
-                                    <div class="d-flex align-items-center mb-2">
-                                        <i class="fas fa-graduation-cap me-2 text-muted"></i>
-                                        <h6 class="mb-0">@Localizer["Major"]</h6>
-                                    </div>
-                                    <p class="mb-0 ps-4">@Model.Major?.MajorName</p>
-                                </div>
+                        <form method="post">
+                            <input type="hidden" name="StudentID" value="@ViewBag.StudentId" />
 
-                                <div class="info-card mb-4">
-                                    <div class="d-flex align-items-center mb-2">
-                                        <i class="fas fa-door-open me-2 text-muted"></i>
-                                        <h6 class="mb-0">@Localizer["Room"]</h6>
-                                    </div>
-                                    <p class="mb-0 ps-4">@Model.Room</p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="info-card mb-4">
-                                    <div class="d-flex align-items-center mb-2">
-                                        <i class="fas fa-chalkboard-teacher me-2 text-muted"></i>
-                                        <h6 class="mb-0">@Localizer["Teacher"]</h6>
-                                    </div>
-                                    <p class="mb-0 ps-4">@Model.Teacher?.FullName</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Student List with Grades -->
-                        <div class="mb-4">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h5 class="mb-0">
-                                    <i class="fas fa-user-graduate me-2"></i>
-                                    @Localizer["StudentList"] 
-                                </h5>
-                            </div>
-
-                            @if (Model.Grades != null && Model.Grades.Any())
-                            {
-                                <div class="table-responsive">
-                                    <table class="table table-hover align-middle">
-                                        <thead class="bg-light">
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle">
+                                    <thead class="bg-light">
+                                        <tr>
+                                            <th class="ps-3">@Localizer["CourseCode"]</th>
+                                            <th>@Localizer["CourseName"]</th>
+                                            <th>@Localizer["Teacher"]</th>
+                                            <th>@Localizer["Room"]</th>
+                                            <th class="text-center">@Localizer["Register"]</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (int i = 0; i < Model.Count(); i++)
+                                        {
                                             <tr>
-                                                <th class="text-center">@Localizer["ID"]</th>
-                                                <th>@Localizer["FullName"]</th>
-                                                <th>@Localizer["Email"]</th>
-                                                <th class="text-center">@Localizer["PhoneNumber"]</th>
-                                                <th class="text-center">@Localizer["Grade"]</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var grade in Model.Grades)
-                                            {
-                                                <tr class="border-bottom">
-                                                    <td class="text-center font-weight-bold">@grade.Student.StudentID</td>
-                                                    <td>
-                                                        <div class="d-flex align-items-center">
-                                                            <div class="avatar-sm bg-light rounded-circle me-3 d-flex align-items-center justify-content-center">
-                                                                <i class="fas fa-user text-muted"></i>
-                                                            </div>
-                                                            <div>
-                                                                <h6 class="mb-0">@grade.Student.FullName</h6>
-                                                            </div>
+                                                <td class="ps-3">
+                                                    <input type="hidden" name="[@i].CourseID" value="@Model.ElementAt(i).CourseID" />
+                                                    <span class="badge bg-primary">@Model.ElementAt(i).CourseID</span>
+                                                </td>
+                                                <td>
+                                                    <input type="hidden" name="[@i].CourseName" value="@Model.ElementAt(i).CourseName" />
+                                                    @Model.ElementAt(i).CourseName
+                                                </td>
+                                                <td>
+                                                    <input type="hidden" name="[@i].TeacherName" value="@Model.ElementAt(i).TeacherName" />
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="avatar-sm bg-light rounded-circle me-2 d-flex align-items-center justify-content-center">
+                                                            <i class="fas fa-user text-muted"></i>
                                                         </div>
-                                                    </td>
-                                                    <td>@grade.Student.Email</td>
-                                                    <td class="text-center">@grade.Student.PhoneNumber</td>
-                                                    <td class="text-center">
-                                                        <input type="number" step="0.1" min="0" max="10"
-                                                               class="form-control form-control-sm grade-input text-center"
-                                                               data-grade-id="@grade.GradeID"
-                                                               value="@(grade.Score.HasValue ? grade.Score.Value.ToString("0.0") : "")"
-                                                               placeholder="@Localizer["NoGrade"]" />
-                                                    </td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="alert alert-light text-center py-4">
-                                    <i class="fas fa-user-graduate fa-3x text-muted mb-3"></i>
-                                    <h5 class="text-muted">@Localizer["NoStudentsEnrolled"]</h5>
-                                </div>
-                            }
-                        </div>
+                                                        <div>@Model.ElementAt(i).TeacherName</div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input type="hidden" name="[@i].Room" value="@Model.ElementAt(i).Room" />
+                                                    <span class="badge bg-light text-dark">
+                                                        <i class="fas fa-door-open me-1"></i>@Model.ElementAt(i).Room
+                                                    </span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <div class="form-check form-switch d-inline-block">
+                                                        <input class="form-check-input" type="checkbox" role="switch"
+                                                               name="[@i].IsSelected" value="true"
+                                                        @(Model.ElementAt(i).IsSelected ? "checked" : "")>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
 
-                        <!-- Action Buttons -->
-                        <div class="d-flex justify-content-end gap-3 mt-4 pt-3 border-top">
-                            <a asp-action="Edit" asp-route-id="@Model.CourseID" class="btn btn-warning px-4">
-                                <i class="fas fa-edit me-2"></i>@Localizer["Edit"]
-                            </a>
-                            <a asp-action="Index" class="btn btn-outline-secondary px-4">
-                                <i class="fas fa-arrow-left me-2"></i>@Localizer["Back"]
-                            </a>
-                        </div>
+                            <div class="d-flex justify-content-end gap-3 mt-4 pt-3 border-top">
+                                <button type="submit" class="btn btn-primary px-4">
+                                    <i class="fas fa-save me-2"></i>@Localizer["SaveRegistration"]
+                                </button>
+                                <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                                    <i class="fas fa-arrow-left me-2"></i>@Localizer["Back"]
+                                </a>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -137,56 +99,27 @@
 </div>
 
 @section Scripts {
-    <script>
-        $(document).ready(function () {
-            $('.grade-input').on('keypress', function (e) {
-                if (e.which === 13) { // Enter
-                    e.preventDefault();
-                    var input = $(this);
-                    var gradeId = input.data('grade-id');
-                    var score = input.val();
-
-                    // Validate input
-                    if (score !== '' && (score < 0 || score > 10)) {
-                        alert('@Localizer["GradeValidation"]');
-                        return;
-                    }
-
-                    // Send AJAX request
-                    $.ajax({
-                        url: '/Grade/EditGrade',
-                        type: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify({ gradeId: gradeId, grade: parseFloat(score) }),
-                        success: function (response) {
-                            alert(response.message);
-                            input.val(parseFloat(score).toFixed(1));
-                        },
-                        error: function (xhr) {
-                            alert(xhr.responseJSON?.message || "@Localizer["ErrorOccurred"]");
-                        }
-                    });
-                }
-            });
-        });
-    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/form-style.css" asp-append-version="true" />
 
     <style>
-        <link rel="stylesheet" href="~/css/form-style.css" asp-append-version="true" / >
-        .badge-light {
-            background-color: #f8f9fa;
-            color: #495057;
-            font-weight: 500;
+        .avatar-sm {
+            width: 32px;
+            height: 32px;
+            font-size: 14px;
         }
 
-        .badge-warning {
-            background-color: #ffc107;
-            color: #212529;
+        .form-check-input {
+            width: 3em;
+            height: 1.5em;
         }
 
-        .badge-success {
-            background-color: #28a745;
-            color: white;
+        .table th {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
         }
     </style>
 }

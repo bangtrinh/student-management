@@ -1,12 +1,15 @@
 ﻿@model StudentManagement.Models.Student
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<StudentManagement.SharedResources> Localizer
+
 
 @{
-    ViewData["Title"] = "Thông tin cá nhân";
+    ViewData["Title"] = Localizer["StudentInformation"];
 }
 
 <div class="container mt-4">
     <h2 class="mb-4 fw-bold text-dark">
-        <i class="bi bi-person-fill text-primary me-2"></i> Thông tin cá nhân
+        <i class="bi bi-person-fill text-primary me-2"></i> @Localizer["StudentInformation"]
     </h2>
 
     @if (Model != null)
@@ -14,49 +17,49 @@
         <div class="card shadow-sm">
             <div class="card-header bg-primary text-white">
                 <h5 class="mb-0 fw-semibold">
-                    <i class="bi bi-info-circle me-2"></i> Chi tiết sinh viên
+                    <i class="bi bi-info-circle me-2"></i> @Localizer["StudentDetails"]
                 </h5>
             </div>
             <div class="card-body">
                 <table class="table table-bordered table-striped mb-0">
                     <tbody>
                         <tr>
-                            <th scope="row" class="bg-light text-dark fw-bold" style="width: 30%;">Mã sinh viên</th>
+                            <th scope="row" class="bg-light text-dark fw-bold" style="width: 30%;">@Localizer["ID"]</th>
                             <td>@Model.StudentID</td>
                         </tr>
                         <tr>
-                            <th scope="row" class="bg-light text-dark fw-bold">Họ và tên</th>
+                            <th scope="row" class="bg-light text-dark fw-bold">@Localizer["FullName"]</th>
                             <td>@Model.FullName</td>
                         </tr>
                         <tr>
-                            <th scope="row" class="bg-light text-dark fw-bold">Ngày sinh</th>
+                            <th scope="row" class="bg-light text-dark fw-bold">@Localizer["DateOfBirth"]</th>
                             <td>@Model.DateOfBirth.ToShortDateString()</td>
                         </tr>
                         <tr>
-                            <th scope="row" class="bg-light text-dark fw-bold">Giới tính</th>
-                            <td>@Model.Gender</td>
+                            <th scope="row" class="bg-light text-dark fw-bold">@Localizer["Gender"]</th>
+                            <td>@Localizer[Model.Gender]</td>
                         </tr>
                         <tr>
-                            <th scope="row" class="bg-light text-dark fw-bold">Email</th>
+                            <th scope="row" class="bg-light text-dark fw-bold">@Localizer["Email"]</th>
                             <td>@Model.Email</td>
                         </tr>
                         <tr>
-                            <th scope="row" class="bg-light text-dark fw-bold">Số điện thoại</th>
+                            <th scope="row" class="bg-light text-dark fw-bold">@Localizer["PhoneNumber"]</th>
                             <td>@Model.PhoneNumber</td>
                         </tr>
                         <tr>
-                            <th scope="row" class="bg-light text-dark fw-bold">Địa chỉ</th>
+                            <th scope="row" class="bg-light text-dark fw-bold">@Localizer["Address"]</th>
                             <td>@Model.Address</td>
                         </tr>
                         <tr>
-                            <th scope="row" class="bg-light text-dark fw-bold">Lớp</th>
+                            <th scope="row" class="bg-light text-dark fw-bold">@Localizer["Class"]</th>
                             <td>@Model.ClassID</td>
                         </tr>
                         <tr>
-                            <th scope="row" class="bg-light text-dark fw-bold">Trạng thái</th>
+                            <th scope="row" class="bg-light text-dark fw-bold">@Localizer["Status"]</th>
                             <td>
                                 <span class="badge @(Model.Status == "Đang học" ? "bg-success" : "bg-warning")">
-                                    @Model.Status
+                                    @Localizer[Model.Status]
                                 </span>
                             </td>
                         </tr>
@@ -69,7 +72,7 @@
     {
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <i class="bi bi-exclamation-triangle-fill me-2"></i> @ViewBag.Message
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="@Localizer["Back"]"></button>
         </div>
     }
 </div>

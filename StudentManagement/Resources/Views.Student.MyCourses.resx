@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,127 +117,43 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Home" xml:space="preserve">
-    <value>Home</value>
+  <data name="Actions" xml:space="preserve">
+    <value />
   </data>
-  <data name="Classroom" xml:space="preserve">
-    <value>Classroom</value>
+  <data name="AddCourse" xml:space="preserve">
+    <value />
   </data>
-  <data name="TeachingSchedule" xml:space="preserve">
-    <value>Teaching Schedule</value>
+  <data name="ClickToSeeDetails" xml:space="preserve">
+    <value />
   </data>
-  <data name="Messages" xml:space="preserve">
-    <value>Messages</value>
+  <data name="CourseID" xml:space="preserve">
+    <value />
   </data>
-  <data name="Profile" xml:space="preserve">
-    <value>Profile</value>
+  <data name="CourseList" xml:space="preserve">
+    <value />
   </data>
-  <data name="Timetable" xml:space="preserve">
-    <value>Timetable</value>
+  <data name="CourseName" xml:space="preserve">
+    <value />
   </data>
-  <data name="Grades" xml:space="preserve">
-    <value>Grades</value>
+  <data name="Credits" xml:space="preserve">
+    <value />
   </data>
-  <data name="Courses" xml:space="preserve">
-    <value>Courses</value>
+  <data name="Delete" xml:space="preserve">
+    <value />
   </data>
-  <data name="RegisterCourses" xml:space="preserve">
-    <value>Course registration</value>
+  <data name="Details" xml:space="preserve">
+    <value />
   </data>
-  <data name="ChatBot" xml:space="preserve">
-    <value>AI Assistant</value>
+  <data name="Edit" xml:space="preserve">
+    <value />
   </data>
-  <data name="ManageAccounts" xml:space="preserve">
-    <value>Accounts</value>
+  <data name="MajorId" xml:space="preserve">
+    <value />
   </data>
-  <data name="Students" xml:space="preserve">
-    <value>Students</value>
+  <data name="Room" xml:space="preserve">
+    <value />
   </data>
-  <data name="Teachers" xml:space="preserve">
-    <value>Teachers</value>
-  </data>
-  <data name="Classes" xml:space="preserve">
-    <value>Classes</value>
-  </data>
-  <data name="Majors" xml:space="preserve">
-    <value>Majors</value>
-  </data>
-  <data name="Departments" xml:space="preserve">
-    <value>Departments</value>
-  </data>
-  <data name="Subjects" xml:space="preserve">
-    <value>Courses</value>
-  </data>
-  <data name="Schedule" xml:space="preserve">
-    <value>Schedule</value>
-  </data>
-  <data name="Statistics" xml:space="preserve">
-    <value>Statistics</value>
-  </data>
-  <data name="Title" xml:space="preserve">
-    <value>Student Management</value>
-  </data>
-  <data name="AddClassTitle" xml:space="preserve">
-    <value>Create class</value>
-  </data>
-  <data name="EnterId" xml:space="preserve">
-    <value>Enter Id</value>
-  </data>
-  <data name="ClassName" xml:space="preserve">
-    <value>Class name</value>
-  </data>
-  <data name="SelectMajor" xml:space="preserve">
-    <value>Select major</value>
-  </data>
-  <data name="SelectTeacher" xml:space="preserve">
-    <value>Select teacher</value>
-  </data>
-  <data name="EndDate" xml:space="preserve">
-    <value>End date</value>
-  </data>
-  <data name="StartDate" xml:space="preserve">
-    <value>Start date</value>
-  </data>
-  <data name="CreateAccount" xml:space="preserve">
-    <value>Create account</value>
-  </data>
-  <data name="EnterEmail" xml:space="preserve">
-    <value>Enter email</value>
-  </data>
-  <data name="PasswordPlaceholder" xml:space="preserve">
-    <value>Enter password</value>
-  </data>
-  <data name="ConfirmPasswordPlaceholder" xml:space="preserve">
-    <value>Confirm password</value>
-  </data>
-  <data name="Register" xml:space="preserve">
-    <value>Register</value>
-  </data>
-  <data name="Processing" xml:space="preserve">
-    <value>Processing</value>
-  </data>
-  <data name="Period" xml:space="preserve">
-    <value>Period</value>
-  </data>
-  <data name="ContactList" xml:space="preserve">
-    <value>Contacts</value>
-  </data>
-  <data name="NoContacts" xml:space="preserve">
-    <value>No contacts available</value>
-  </data>
-  <data name="EnterMessage" xml:space="preserve">
-    <value>Enter your message</value>
-  </data>
-  <data name="SelectContactToChat" xml:space="preserve">
-    <value>Select a contact to chat</value>
-  </data>
-  <data name="InstructionMessage" xml:space="preserve">
-    <value>You can chat with contacts in the list.</value>
-  </data>
-  <data name="NoAvailableCourses" xml:space="preserve">
-    <value>No available courses</value>
-  </data>
-  <data name="AvailableCourses" xml:space="preserve">
-    <value>Available courses</value>
+  <data name="TeacherName" xml:space="preserve">
+    <value />
   </data>
 </root>

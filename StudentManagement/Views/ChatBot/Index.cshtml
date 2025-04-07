@@ -1,64 +1,98 @@
-﻿@{
-    // Đặt tiêu đề trang hiển thị trên tab trình duyệt
-    ViewData["Title"] = "Chat với Bot";
+﻿@using Microsoft.Extensions.Localization
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["ChatWithBot"];
 }
 
-<!-- Tiêu đề chính trên giao diện -->
-<h2>Chat với trợ lý ảo</h2>
+<div class="chat-app-container">
+    <div class="chat-app-main">
+        <div class="chat-header">
+            <div class="header-info">
+                <img src="/images/bot-avatar.png" class="header-avatar" alt="Bot Avatar" />
+                <div>
+                    <h5>@Localizer["VirtualAssistant"]</h5>
+                </div>
+            </div>
+        </div>
 
-<!-- Hộp chat hiển thị lịch sử trò chuyện -->
-<div id="chat-box" style="border:1px solid #ccc; padding:10px; height:400px; overflow-y:auto; background:#f9f9f9;"></div>
+        <div class="chat-messages" id="chatMessages" style="height: calc(100% - 130px); overflow-y: auto;">
+            <!-- Tin nhắn sẽ hiển thị ở đây -->
+        </div>
 
-<!-- Form gửi tin nhắn -->
-<form id="chat-form">
-    <!-- Ô nhập nội dung tin nhắn -->
-    <input type="text" id="userMessage" class="form-control" placeholder="Nhập tin nhắn..." required />
+        <div class="chat-input">
+            <input type="text" id="userMessage" placeholder="@Localizer["TypeYourMessage"]" />
+            <button id="sendButton" class="btn btn-primary" disabled>
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
 
-    <!-- Nút gửi -->
-    <button type="submit" class="btn btn-primary mt-2">Gửi</button>
-</form>
+@section Styles {
+    <link rel="stylesheet" href="~/css/chat.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+}
 
-<!-- Phần script xử lý gửi/nhận tin nhắn từ bot -->
 @section Scripts {
     <script>
-        // Lấy các phần tử DOM cần dùng
-        const chatBox = document.getElementById("chat-box");
-        const form = document.getElementById("chat-form");
+        const chatBox = document.getElementById("chatMessages");
         const input = document.getElementById("userMessage");
+        const sendButton = document.getElementById("sendButton");
 
-        // Gắn sự kiện submit vào form chat
-        form.addEventListener("submit", async function (e) {
-            e.preventDefault(); // Ngăn reload trang mặc định của form
-
-            const message = input.value.trim(); // Lấy nội dung người dùng nhập
-            if (!message) return; // Nếu rỗng thì không xử lý
-
-            // Hiển thị tin nhắn của người dùng lên chat box
-            chatBox.innerHTML += `<div><strong>Bạn:</strong> ${message}</div>`;
-            input.value = ""; // Xóa ô nhập sau khi gửi
-
-            // Gửi yêu cầu POST đến action ChatBot/SendMessage
-            const res = await fetch("/ChatBot/SendMessage", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: `message=${encodeURIComponent(message)}`
-            });
-
-            // Nhận và xử lý kết quả từ controller
-            const data = await res.json();
-
-            if (data.success) {
-                // Hiển thị phản hồi từ bot (có chuyển \n thành <br/> để xuống dòng đúng cách)
-                chatBox.innerHTML += `<div><strong>Bot:</strong> ${data.reply.replace(/\n/g, "<br/>")}</div>`;
-            } else {
-                // Nếu có lỗi, hiển thị thông báo lỗi
-                chatBox.innerHTML += `<div><strong>Bot:</strong> ${data.message}</div>`;
-            }
-
-            // Cuộn xuống dòng cuối cùng để thấy tin nhắn mới
-            chatBox.scrollTop = chatBox.scrollHeight;
+        input.addEventListener("input", function () {
+            sendButton.disabled = input.value.trim() === "";
         });
+
+        sendButton.addEventListener("click", sendMessage);
+        input.addEventListener("keypress", function (e) {
+            if (e.key === "Enter") sendMessage();
+        });
+
+        function sendMessage() {
+            const message = input.value.trim();
+            if (!message) return;
+
+            appendMessage("@Localizer["You"]", message, true);
+            input.value = "";
+            sendButton.disabled = true;
+
+            fetch("/ChatBot/SendMessage", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `message=${encodeURIComponent(message)}`
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    appendMessage("@Localizer["Bot"]", data.reply.replace(/\n/g, "<br/>"), false);
+                } else {
+                    appendMessage("@Localizer["Bot"]", data.message, false, true);
+                }
+                scrollToBottom();
+            })
+            .catch(err => {
+                console.error(err);
+                appendMessage("@Localizer["Bot"]", "Đã xảy ra lỗi khi gửi tin nhắn.", false, true);
+            });
+        }
+
+        function appendMessage(sender, text, isUser, isError = false) {
+            const messageClass = isUser ? "sent" : "received";
+            const errorClass = isError ? "text-danger" : "";
+            const html = `
+                <div class="message ${messageClass}">
+                    <div class="message-text ${errorClass}">
+                        <strong>${sender}:</strong> ${text}
+                    </div>
+                </div>
+            `;
+            chatBox.innerHTML += html;
+            scrollToBottom();
+        }
+
+        function scrollToBottom() {
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
     </script>
 }

@@ -519,4 +519,49 @@
   <data name="StudentList" xml:space="preserve">
     <value>Students</value>
   </data>
+  <data name="Schedule" xml:space="preserve">
+    <value>Schedule</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>Period</value>
+  </data>
+  <data name="StudentDetails" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="StudentInformation" xml:space="preserve">
+    <value>Personal information</value>
+  </data>
+  <data name="Course" xml:space="preserve">
+    <value>Course</value>
+  </data>
+  <data name="In Progress" xml:space="preserve">
+    <value>In progress</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+    <value>Failed</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="MyGrades" xml:space="preserve">
+    <value>My grades</value>
+  </data>
+  <data name="Semester" xml:space="preserve">
+    <value>Semester</value>
+  </data>
+  <data name="NotAvailable" xml:space="preserve">
+    <value>Not available</value>
+  </data>
+  <data name="RegisterSuccess" xml:space="preserve">
+    <value>Registration updated successfully. Please check your email to view the list of registered courses.</value>
+  </data>
+  <data name="CourseRegistration" xml:space="preserve">
+    <value>Course registration</value>
+  </data>
+  <data name="AvailableCourses" xml:space="preserve">
+    <value>Available courses</value>
+  </data>
+  <data name="NoAvailableCourses" xml:space="preserve">
+    <value>No available courses</value>
+  </data>
 </root>
