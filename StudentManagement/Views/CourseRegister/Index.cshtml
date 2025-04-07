@@ -2,45 +2,56 @@
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<StudentManagement.SharedResources> Localizer
 
-<div class="container mt-4">
-    <h4 class="mb-4 fw-bold text-dark">
-        <i class="bi bi-journal-plus text-primary me-2"></i> @Localizer["CourseRegistration"]
-    </h4>
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold text-dark mb-0">
+            <i class="bi bi-journal-plus text-primary me-2"></i> @Localizer["CourseRegistration"]
+        </h4>
+        <form method="get" class="d-flex search-form" style="max-width: 400px;">
+            <div class="input-group shadow-sm">
+                <input type="text" name="searchString" class="form-control"
+                       placeholder="@Localizer["SearchByNameOrID"]..."
+                       value="@Context.Request.Query["searchKeyword"]" />
+                <button type="submit" class="btn btn-outline-primary" title="@Localizer["Search"]">
+                    <i class="fas fa-search"></i>
+                </button>
+                @if (!string.IsNullOrEmpty(Context.Request.Query["searchKeyword"]))
+                {
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="fas fa-times-circle"></i>
+                    </a>
+                }
+            </div>
+        </form>
+    </div>
 
     @if (TempData["Success"] != null)
     {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
             <i class="bi bi-check-circle me-2"></i> @TempData["Success"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     }
-    <!-- Thêm biểu mẫu tìm kiếm -->
-    <form asp-action="Search" method="get">
-        <div class="mb-4">
-            <input type="text" name="keyword" placeholder="Nhập tên hoặc mã môn học" class="form-control" />
-            <button type="submit" class="btn btn-primary mt-2">Tìm kiếm</button>
-        </div>
-    </form>
+
     @if (Model != null && Model.Any())
     {
         <form method="post">
             <input type="hidden" name="StudentID" value="@ViewBag.StudentId" />
 
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h6 class="mb-0 fw-semibold">
-                        <i class="bi bi-book text-white me-2"></i> @Localizer["AvailableCourses"]
-                    </h6>
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white d-flex align-items-center">
+                    <i class="bi bi-book me-2"></i>
+                    <h6 class="mb-0 fw-semibold">@Localizer["AvailableCourses"]</h6>
                 </div>
                 <div class="card-body p-0">
-                    <table class="table table-hover table-striped mb-0">
-                        <thead class="bg-light">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="table-light">
                             <tr>
-                                <th scope="col" class="ps-3">@Localizer["ID"]</th>
-                                <th scope="col">@Localizer["CourseName"]</th>
-                                <th scope="col">@Localizer["Teacher"]</th>
-                                <th scope="col">@Localizer["Room"]</th>
-                                <th scope="col" class="text-center">@Localizer["Register"]</th>
+                                <th class="ps-3">@Localizer["ID"]</th>
+                                <th>@Localizer["CourseName"]</th>
+                                <th>@Localizer["Teacher"]</th>
+                                <th>@Localizer["Room"]</th>
+                                <th class="text-center">@Localizer["Register"]</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -65,6 +76,7 @@
                                     </td>
                                     <td class="text-center">
                                         <input type="checkbox" name="[@i].IsSelected" value="true"
+                                               class="form-check-input"
                                         @(Model.ElementAt(i).IsSelected ? "checked" : "") />
                                     </td>
                                 </tr>
@@ -75,7 +87,7 @@
             </div>
 
             <div class="mt-4 d-flex justify-content-end">
-                <button type="submit" class="btn btn-primary px-4">
+                <button type="submit" class="btn btn-success px-4 shadow-sm">
                     <i class="bi bi-save me-2"></i> @Localizer["Save"]
                 </button>
             </div>
@@ -83,9 +95,8 @@
     }
     else
     {
-        <div class="alert alert-info alert-dismissible fade show text-center" role="alert">
+        <div class="alert alert-info text-center mt-4 shadow-sm" role="alert">
             <i class="bi bi-info-circle me-2"></i> @Localizer["NoInfoFound"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
 </div>
@@ -93,4 +104,3 @@
 @section Scripts {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
 }
-
