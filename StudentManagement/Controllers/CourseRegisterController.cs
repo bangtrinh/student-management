@@ -40,7 +40,7 @@ namespace StudentManagement.Controllers
             _localizer = localizer;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -61,6 +61,10 @@ namespace StudentManagement.Controllers
             // Lấy danh sách các môn học mà sinh viên đã đăng ký
             var registeredCourses = _gradeRepository.GetCoursesByStudentId(student.StudentID)
                 ?? new List<Grade>();
+            if(!string.IsNullOrEmpty(searchString))
+            {
+                allCourses = allCourses.Where(c => c.CourseName.Contains(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
 
             // Chuyển thành danh sách CourseRegistrationItem
             var model = allCourses
@@ -144,24 +148,6 @@ namespace StudentManagement.Controllers
                 var mailMessage = new MailMessage("your-email@gmail.com", toEmail, subject, body.ToString());
                 await client.SendMailAsync(mailMessage);
             }
-        }
-        public IActionResult Search(string keyword)
-        {
-            var courses = _courseRepository.GetAll()
-                .Where(c => c.CourseName.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                            c.CourseID.Contains(keyword, StringComparison.OrdinalIgnoreCase))
-                .Select(c => new CourseRegistrationItem
-                {
-                    CourseID = c.CourseID,
-                    CourseName = c.CourseName,
-                    TeacherName = c.Teacher?.FullName,
-                    Room = c.Room,
-                    IsSelected = false
-                }).ToList();
-
-            return View("Index", courses);
-        }
-
-
+        }      
     }
 }
