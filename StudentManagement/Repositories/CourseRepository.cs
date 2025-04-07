@@ -47,5 +47,12 @@ namespace StudentManagement.Repositories
                 .Include(c => c.Teacher)
                 .ToList();
         }
+        public IEnumerable<Course> GetOpenCourses()
+        {
+            return _context.Courses
+                .Include(c => c.Teacher) // Kết nối với bảng Teacher
+                .ToList();
+        }
+
     }
 }

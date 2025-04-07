@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using StudentManagement.Areas.Admin.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -27,21 +28,32 @@ namespace StudentManagement.Areas.Admin.Controllers
             _signInManager = signInManager;
         }
 
+
         // GET: Hiển thị danh sách người dùng
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public async Task<IActionResult> Index(string searchString)
         {
-            var users = _userManager.Users.ToList();
+            // Lấy toàn bộ danh sách người dùng vào bộ nhớ trước
+            var users = await _userManager.Users.ToListAsync();
+
+            // Nếu có chuỗi tìm kiếm, lọc danh sách người dùng dựa trên email
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.Trim();
+                users = users.Where(u => u.Email.Contains(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
             var userRoles = new Dictionary<string, IList<string>>();
             foreach (var user in users)
             {
                 var roles = await _userManager.GetRolesAsync(user);
                 userRoles[user.Id] = roles;
             }
+
             ViewData["UserRoles"] = userRoles;
 
             return View(users);
         }
-
         // GET: Chuyển hướng đến trang Register để tạo tài khoản mới
         public IActionResult Create()
         {

@@ -249,5 +249,20 @@ namespace StudentManagement.Controllers
             _studentRepository.Delete(id);
             return RedirectToAction(nameof(Index));
         }
+        [Authorize(Policy = "RequireStudentRole")]
+        public IActionResult SearchCourse(string keyword)
+        {
+            var courses = _courseRepository.GetAll(); // Lấy danh sách môn học đang mở
+
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                // Lọc kết quả theo từ khóa
+                courses = courses.Where(c => c.CourseName.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                             c.CourseID.Contains(keyword, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            return View("Register", courses); // Hiển thị kết quả tìm kiếm trên giao diện đăng ký môn học
+        }
+
     }
 }

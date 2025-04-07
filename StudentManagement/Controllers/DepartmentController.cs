@@ -17,10 +17,20 @@ namespace StudentManagement.Controllers
             _departmentRepository = departmentRepository;
         }
 
-        public IActionResult Index()
+        //Tìm kiếm
+        [Authorize(Policy = "RequireAdminRole")]
+        public IActionResult Index(string searchString)
         {
             var departments = _departmentRepository.GetAll();
-            return View(departments); // View phải là @model IEnumerable<Department>
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                departments = departments.Where(d => d.DepartmentID.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
+                                               d.DepartmentName.Contains(searchString, StringComparison.OrdinalIgnoreCase));
+
+            }
+
+            return View(departments);
         }
 
         public IActionResult Details(string id)

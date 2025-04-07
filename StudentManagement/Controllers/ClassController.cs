@@ -22,16 +22,22 @@ namespace StudentManagement.Controllers
             _majorRepository = majorRepository;
         }
 
-        public IActionResult Index()
+       
+        //Tìm kiếm
+        [Authorize(Policy = "RequireAdminRole")]
+        public IActionResult Index(string searchString)
         {
-            var teachers = _teacherRepository.GetAll();
-            var majors = _majorRepository.GetAll();
-            ViewBag.Majors = new SelectList(majors, "MajorID", "MajorName");
-            ViewBag.Teachers = new SelectList(teachers, "TeacherID", "FullName");
             var classes = _classRepository.GetAll();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                classes = classes.Where(c => c.ClassID.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
+                                               c.ClassName.Contains(searchString, StringComparison.OrdinalIgnoreCase));
+                                 
+            }
+
             return View(classes);
         }
-
         public IActionResult Details(string id)
         {
             var classEntity = _classRepository.GetById(id);

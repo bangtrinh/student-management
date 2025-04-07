@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration.UserSecrets;
+using NuGet.Protocol.Core.Types;
 using StudentManagement.Helper;
 using StudentManagement.Models;
 using StudentManagement.Repositories;
@@ -46,35 +47,38 @@ namespace StudentManagement.Controllers
             {
                 return NotFound();
             }
+            
 
-            var allCourses = _courseRepository.GetCoursesByMajor(student.Class.MajorID)
-                ?? new List<Course>();
+            // Lấy tất cả các môn học trong hệ thống
+            var allCourses = _courseRepository.GetAll() ?? new List<Course>();
+
+            // Lấy danh sách các môn học mà sinh viên đã đăng ký
             var registeredCourses = _gradeRepository.GetCoursesByStudentId(student.StudentID)
                 ?? new List<Grade>();
 
             // Chuyển thành danh sách CourseRegistrationItem
             var model = allCourses
-                        .Where(c =>
-                        {
-                            var reg = registeredCourses.FirstOrDefault(r => r.CourseID == c.CourseID);
-                            return reg == null || reg.Score == null;
-                        })
-                        .Select(c =>
-                        {
-                            var reg = registeredCourses.FirstOrDefault(r => r.CourseID == c.CourseID);
-                            return new CourseRegistrationItem
-                            {
-                                CourseID = c.CourseID,
-                                CourseName = c.CourseName,
-                                TeacherName = c.Teacher?.FullName,
-                                Room = c.Room,
-                                IsSelected = reg != null && reg.Score == null
-                            };
-                        })
-                        .ToList();
+                .Where(c =>
+                {
+                    var reg = registeredCourses.FirstOrDefault(r => r.CourseID == c.CourseID);
+                    return reg == null || reg.Score == null;
+                })
+                .Select(c =>
+                {
+                    var reg = registeredCourses.FirstOrDefault(r => r.CourseID == c.CourseID);
+                    return new CourseRegistrationItem
+                    {
+                        CourseID = c.CourseID,
+                        CourseName = c.CourseName,
+                        TeacherName = c.Teacher?.FullName,
+                        Room = c.Room,
+                        IsSelected = reg != null && reg.Score == null
+                    };
+                })
+                .ToList();
 
             ViewBag.StudentId = student.StudentID;
-            return View(model); // Đúng kiểu List<CourseRegistrationItem>
+            return View(model);
         }
 
         // Xử lý đăng ký môn học
@@ -100,12 +104,10 @@ namespace StudentManagement.Controllers
 
             _gradeRepository.UpdateRegistrations(student.StudentID, selectedCourseIds);
 
-            // Gửi email xác nhận
-            await SendConfirmationEmail(student.Email, student.FullName, model.Where(x => x.IsSelected).ToList());
-
-            TempData["Success"] = "Cập nhật đăng ký thành công. Kiểm tra email để xem danh sách môn học đã đăng ký.";
+            TempData["Success"] = "Đăng ký thành công!";
             return RedirectToAction("Index");
         }
+
 
         private async Task SendConfirmationEmail(string toEmail, string studentName, List<CourseRegistrationItem> courses)
         {
@@ -134,5 +136,23 @@ namespace StudentManagement.Controllers
                 await client.SendMailAsync(mailMessage);
             }
         }
+        public IActionResult Search(string keyword)
+        {
+            var courses = _courseRepository.GetAll()
+                .Where(c => c.CourseName.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                            c.CourseID.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                .Select(c => new CourseRegistrationItem
+                {
+                    CourseID = c.CourseID,
+                    CourseName = c.CourseName,
+                    TeacherName = c.Teacher?.FullName,
+                    Room = c.Room,
+                    IsSelected = false
+                }).ToList();
+
+            return View("Index", courses);
+        }
+
+
     }
 }

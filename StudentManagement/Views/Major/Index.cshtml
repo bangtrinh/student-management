@@ -24,6 +24,10 @@
                         </button>
                     </div>
                 </div>
+                @if (!string.IsNullOrEmpty(Context.Request.Query["searchString"]))
+                {
+                    <a asp-action="Index" class="btn btn-secondary ms-2">@Localizer["ClearFilter"]</a>
+                }
             </form>
 
             <a asp-action="Create" class="btn btn-primary shadow-sm d-flex align-items-center">

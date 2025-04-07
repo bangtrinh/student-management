@@ -36,6 +36,10 @@
                             </div>
                         </div>
                     </div>
+                    @if (!string.IsNullOrEmpty(Context.Request.Query["searchString"]))
+                    {
+                        <a asp-action="Index" class="btn btn-secondary ms-2">@Localizer["ClearFilter"]</a>
+                    }
                 </form>
 
                 @if (string.IsNullOrEmpty(studentId))

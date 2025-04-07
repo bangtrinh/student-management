@@ -20,9 +20,19 @@ namespace StudentManagement.Controllers
             _departmentRepository = departmentRepository;
         }
 
-        public IActionResult Index()
+        //Tìm kiếm
+        [Authorize(Policy = "RequireAdminRole")]
+        public IActionResult Index(string searchString)
         {
             var majors = _majorRepository.GetAll();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                majors = majors.Where(m => m.MajorID.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
+                                               m.MajorName.Contains(searchString, StringComparison.OrdinalIgnoreCase));
+
+            }
+
             return View(majors);
         }
 

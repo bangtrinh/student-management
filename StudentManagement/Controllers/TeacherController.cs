@@ -27,14 +27,22 @@ namespace StudentManagement.Controllers
             _departmentRepository = departmentRepository;
         }
 
+     
+        //Tìm kiếm
         [Authorize(Policy = "RequireAdminRole")]
-
-        public IActionResult Index()
+        public IActionResult Index(string searchString)
         {
             var teachers = _teacherRepository.GetAll();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                teachers = teachers.Where(t => t.FullName.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
+                                               t.TeacherID.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
+                                               t.Email.Contains(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
             return View(teachers);
         }
-
         [Authorize(Policy = "RequireTeacherRole")]
 
         public async Task<IActionResult> MyCourses()
@@ -56,7 +64,7 @@ namespace StudentManagement.Controllers
 
             return View(courses);
         }
-
+        
         [Authorize(Policy = "RequireAdminOrTeacher")]
         public IActionResult Details(string id)
         {

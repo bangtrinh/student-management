@@ -8,7 +8,10 @@
         @TempData["Success"]
     </div>
 }
-
+<form asp-action="Search" method="get">
+    <input type="text" name="keyword" placeholder="Nhập tên hoặc mã môn học" class="form-control" />
+    <button type="submit" class="btn btn-primary mt-2">Tìm kiếm</button>
+</form>
 <form method="post">
     <input type="hidden" name="StudentID" value="@ViewBag.StudentId" />
     <table class="table">
