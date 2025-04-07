@@ -363,7 +363,7 @@
   <data name="CourseName" xml:space="preserve">
     <value />
   </data>
-  <data name="Creadits" xml:space="preserve">
+  <data name="Credits" xml:space="preserve">
     <value />
   </data>
   <data name="Room" xml:space="preserve">
@@ -475,6 +475,18 @@
     <value />
   </data>
   <data name="Logout" xml:space="preserve">
+    <value />
+  </data>
+  <data name="MajorList" xml:space="preserve">
+    <value />
+  </data>
+  <data name="CourseId" xml:space="preserve">
+    <value />
+  </data>
+  <data name="AcademicYear" xml:space="preserve">
+    <value />
+  </data>
+  <data name="ConflictSchedule" xml:space="preserve">
     <value />
   </data>
 </root>

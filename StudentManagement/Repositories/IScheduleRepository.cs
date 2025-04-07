@@ -18,6 +18,6 @@ namespace StudentManagement.Repositories
         IEnumerable<Schedule> GetScheduleByStudent(string studentId, DateTime startDate, DateTime endDate);
         IEnumerable<Schedule> GetSchedulesByWeek(string studentId, DateTime startOfWeek);
         IEnumerable<Schedule> GetScheduleByTeacher(string teacherId, DateTime startOfWeek);
-        bool IsScheduleConflict(string studentId, DateTime classDate, TimeSpan startTime, TimeSpan endTime);
+        bool IsScheduleConflict(string studentId, int scheduleID, DateTime classDate, TimeSpan startTime, TimeSpan endTime);
     }
 }

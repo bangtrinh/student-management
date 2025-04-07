@@ -363,7 +363,7 @@
   <data name="CourseName" xml:space="preserve">
     <value>Tên môn học </value>
   </data>
-  <data name="Creadits" xml:space="preserve">
+  <data name="Credits" xml:space="preserve">
     <value>Số tín chỉ</value>
   </data>
   <data name="Room" xml:space="preserve">
@@ -476,5 +476,17 @@
   </data>
   <data name="Logout" xml:space="preserve">
     <value>Đăng xuất</value>
+  </data>
+  <data name="MajorList" xml:space="preserve">
+    <value>Danh sách ngành học</value>
+  </data>
+  <data name="CourseId" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="AcademicYear" xml:space="preserve">
+    <value>Năm học</value>
+  </data>
+  <data name="ConflictSchedule" xml:space="preserve">
+    <value>Thông tin lịch học không phù hợp. Vui lòng kiểm tra lại</value>
   </data>
 </root>

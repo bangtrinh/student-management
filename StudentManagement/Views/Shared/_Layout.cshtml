@@ -113,17 +113,35 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
     <script>
-        function toggleSidebar() {
+        document.addEventListener("DOMContentLoaded", function () {
             const sidebar = document.getElementById("sidebar");
             const content = document.getElementById("content");
-            sidebar.classList.toggle("collapsed");
-            content.classList.toggle("expanded");
-        }
+            const toggleBtn = document.querySelector(".toggle-btn");
 
-        document.addEventListener('DOMContentLoaded', function() {
+            // Kiểm tra nếu là màn hình nhỏ thì auto collapsed
             if (window.innerWidth < 992) {
-                document.getElementById("sidebar").classList.add("collapsed");
-                document.getElementById("content").classList.add("expanded");
+                sidebar.classList.add("collapsed");
+                if (content) content.classList.add("expanded");
+            } else {
+                // Nếu là desktop thì lấy trạng thái từ localStorage
+                if (localStorage.getItem("sidebar-collapsed") === "true") {
+                    sidebar.classList.add("collapsed");
+                    if (content) content.classList.add("expanded");
+                }
+            }
+
+            // Toggle khi bấm nút
+            if (toggleBtn) {
+                toggleBtn.addEventListener("click", function () {
+                    const isCollapsed = sidebar.classList.toggle("collapsed");
+
+                    if (content) content.classList.toggle("expanded");
+
+                    // Chỉ lưu trạng thái nếu là màn hình lớn (tránh lưu khi mobile)
+                    if (window.innerWidth >= 992) {
+                        localStorage.setItem("sidebar-collapsed", isCollapsed);
+                    }
+                });
             }
         });
     </script>

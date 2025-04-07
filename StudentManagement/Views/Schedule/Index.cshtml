@@ -1,6 +1,8 @@
 ﻿@model List<StudentManagement.Models.Schedule>
 @using Microsoft.AspNetCore.Mvc.Localization
+@using StudentManagement.Helpers
 @inject IViewLocalizer Localizer
+
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -10,6 +12,8 @@
     var nextWeek = startOfWeek.AddDays(7);
     var studentId = Context.Request.Query["studentId"];
 }
+
+
 
 <div class="content py-4">
     <div class="container-fluid">
@@ -47,6 +51,13 @@
                 }
                 else
                 {
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i> @TempData["ErrorMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <a href="@Url.Action("Index", new { studentId = studentId, weekStart = prevWeek })"
                            class="btn btn-outline-secondary">
@@ -88,17 +99,17 @@
                                         @for (int i = 0; i < 7; i++)
                                         {
                                             var date = startOfWeek.AddDays(i);
-                                            var schedule = Model?.FirstOrDefault(s => s.ClassDate.Date == date.Date && GetLessonStart(s.StartTime) == lesson);
+                                            var schedule = Model?.FirstOrDefault(s => s.ClassDate.Date == date.Date && ScheduleHelper.GetLessonStart(s.StartTime) == lesson);
 
                                             var isCoveredByPreviousRowspan = Model?.Any(s => s.ClassDate.Date == date.Date &&
-                                            GetLessonStart(s.StartTime) < lesson &&
-                                            GetLessonStart(s.StartTime) + GetLessonCount(s.StartTime, s.EndTime) > lesson) ?? false;
+                                            ScheduleHelper.GetLessonStart(s.StartTime) < lesson &&
+                                            ScheduleHelper.GetLessonStart(s.StartTime) + ScheduleHelper.GetLessonCount(s.StartTime, s.EndTime) > lesson) ?? false;
 
                                             if (!isCoveredByPreviousRowspan)
                                             {
                                                 if (schedule != null)
                                                 {
-                                                    int rowspan = GetLessonCount(schedule.StartTime, schedule.EndTime);
+                                                    int rowspan = ScheduleHelper.GetLessonCount(schedule.StartTime, schedule.EndTime);
                                                     if (rowspan > 0)
                                                     {
                                                         <td rowspan="@rowspan" class="align-middle schedule-cell"
@@ -152,7 +163,6 @@
                                     <h5 class="modal-title" id="scheduleModalLabel">
                                         <i class="fas fa-calendar-edit me-2"></i>@Localizer["EditOrAddSchedule"]
                                     </h5>
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body" id="modalBody">
                                     <!-- Form will be loaded via AJAX -->
@@ -205,48 +215,4 @@
             });
         });
     </script>
-}
-
-@functions {
-    int GetLessonStart(TimeSpan startTime)
-    {
-        var minutes = (int)startTime.TotalMinutes;
-        var baseTime6h45 = 6 * 60 + 45;
-        var baseTime9h20 = 9 * 60 + 20;
-        var baseTime12h30 = 12 * 60 + 30;
-        var baseTime18h = 18 * 60;
-
-        if (minutes >= baseTime6h45 && minutes < baseTime6h45 + 45 * 3)
-            return 1 + (minutes - baseTime6h45) / 45;
-        else if (minutes >= baseTime9h20 && minutes < baseTime9h20 + 45 * 3)
-            return 4 + (minutes - baseTime9h20) / 45;
-        else if (minutes >= baseTime12h30 && minutes < baseTime12h30 + 45 * 6)
-            return 7 + (minutes - baseTime12h30) / 45;
-        else if (minutes >= baseTime18h && minutes < baseTime18h + 45 * 3)
-            return 13 + (minutes - baseTime18h) / 45;
-
-        return -1;
-    }
-
-    int GetLessonCount(TimeSpan startTime, TimeSpan endTime)
-    {
-        return (int)((endTime - startTime).TotalMinutes / 45);
-    }
-
-    TimeSpan GetStartTimeFromLesson(int lesson)
-    {
-        switch (lesson)
-        {
-            case int n when n >= 1 && n <= 3:
-                return TimeSpan.FromMinutes(6 * 60 + 45 + (lesson - 1) * 45);
-            case int n when n >= 4 && n <= 6:
-                return TimeSpan.FromMinutes(9 * 60 + 20 + (lesson - 4) * 45);
-            case int n when n >= 7 && n <= 12:
-                return TimeSpan.FromMinutes(12 * 60 + 30 + (lesson - 7) * 45);
-            case int n when n >= 13 && n <= 15:
-                return TimeSpan.FromMinutes(18 * 60 + (lesson - 13) * 45);
-            default:
-                return TimeSpan.Zero;
-        }
-    }
 }
