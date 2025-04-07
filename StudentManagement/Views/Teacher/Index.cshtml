@@ -29,7 +29,9 @@
                 </div>
                 @if (!string.IsNullOrEmpty(Context.Request.Query["searchString"]))
                 {
-                    <a asp-action="Index" class="btn btn-secondary ms-2">@Localizer["ClearFilter"]</a>
+                    <a asp-action="Index" class="btn btn-outline-secondary ms-2">
+                        <i class="fas fa-filter-circle-xmark"></i>
+                    </a>
                 }
             </form>
 
@@ -117,7 +119,7 @@
                         <i class="fas fa-chalkboard-teacher fa-3x text-muted mb-3"></i>
                         <h5 class="text-muted">@Localizer["NoInfoFound"]</h5>
                         <a asp-action="Create" class="btn btn-primary mt-3">
-                            <i class="fas fa-user-plus mr-2"></i>@Localizer["Add"]
+                            <i class="fas fa-user-plus me-2"></i>@Localizer["Add"]
                         </a>
                     </div>
                 }
