@@ -84,9 +84,19 @@ namespace StudentManagement.Repositories
                 .FirstOrDefault(s => s.ScheduleID == id);
         }
 
-        public bool IsScheduleConflict(string studentId, DateTime classDate, TimeSpan startTime, TimeSpan endTime)
+        public bool IsScheduleConflict(string studentId, int scheduleID, DateTime classDate, TimeSpan startTime, TimeSpan endTime)
         {
+            var minStart = new TimeSpan(6, 30, 0); // 06:30
+            var maxEnd = new TimeSpan(20, 15, 0);  // 20:15
+
+            // Kiểm tra thời gian có hợp lệ không
+            if (startTime < minStart || endTime > maxEnd || startTime >= endTime)
+            {
+                return true; // Sai điều kiện => xung đột
+            }
+
             return _context.Schedules.Any(s =>
+                s.ScheduleID != scheduleID &&
                 s.StudentID == studentId &&
                 s.ClassDate == classDate &&
                 ((s.StartTime < endTime && s.EndTime > startTime)));

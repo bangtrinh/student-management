@@ -124,7 +124,7 @@
     <value>Add New Teacher</value>
   </data>
   <data name="TeacherId" xml:space="preserve">
-    <value>Teacher ID</value>
+    <value>ID</value>
   </data>
   <data name="FullName" xml:space="preserve">
     <value>Full Name </value>

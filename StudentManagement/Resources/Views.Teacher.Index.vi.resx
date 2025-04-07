@@ -124,7 +124,7 @@
     <value>Thêm giảng viên mới</value>
   </data>
   <data name="TeacherId" xml:space="preserve">
-    <value>Mã GV</value>
+    <value>ID</value>
   </data>
   <data name="FullName" xml:space="preserve">
     <value>Họ và tên</value>

@@ -174,4 +174,7 @@
   <data name="OnLeave" xml:space="preserve">
     <value />
   </data>
+  <data name="SearchByNameOrID" xml:space="preserve">
+    <value />
+  </data>
 </root>

@@ -127,7 +127,7 @@
     <value>Search</value>
   </data>
   <data name="StudentId" xml:space="preserve">
-    <value>Student ID</value>
+    <value>ID</value>
   </data>
   <data name="FullName" xml:space="preserve">
     <value>Fullname</value>
@@ -173,5 +173,8 @@
   </data>
   <data name="OnLeave" xml:space="preserve">
     <value>On leave</value>
+  </data>
+  <data name="SearchByNameOrID" xml:space="preserve">
+    <value>Search by name or ID</value>
   </data>
 </root>

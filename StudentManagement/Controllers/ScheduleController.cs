@@ -1,9 +1,12 @@
-﻿using System.Reflection.Metadata.Ecma335;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Localization;
 using StudentManagement.Models;
 using StudentManagement.Repositories;
+using StudentManagement.Resources; 
+using StudentManagement.Helpers;
+
 
 namespace StudentManagement.Controllers
 {
@@ -16,14 +19,24 @@ namespace StudentManagement.Controllers
         private readonly ITeacherRepository _teacherRepository;
         private readonly IStudentRepository _studentRepository;
         private readonly IClassRepository _classRepository;
+        private readonly IStringLocalizer<SharedResources> _localizer;
 
-        public ScheduleController(IScheduleRepository scheduleRepository, ICourseRepository courseRepository, ITeacherRepository teacherRepository, IStudentRepository studentRepository, IClassRepository classRepository)
+
+        public ScheduleController(
+            IScheduleRepository scheduleRepository, 
+            ICourseRepository courseRepository, 
+            ITeacherRepository teacherRepository, 
+            IStudentRepository studentRepository, 
+            IClassRepository classRepository,
+            IStringLocalizer<SharedResources> localizer)
         {
             _scheduleRepository = scheduleRepository;
             _courseRepository = courseRepository;
             _teacherRepository = teacherRepository;
             _studentRepository = studentRepository;
             _classRepository = classRepository;
+            _localizer = localizer;
+
         }
         public IActionResult Index(string? studentId, DateTime? weekStart)
         {
@@ -54,7 +67,7 @@ namespace StudentManagement.Controllers
 
         public IActionResult Create(string studentId, string classDate, int? lesson)
         {
-            var courses = _courseRepository.GetAll();
+            var courses = _courseRepository.GetCoursesByStudent(studentId);
             ViewBag.Courses = new SelectList(courses, "CourseID", "CourseName");
             if (string.IsNullOrEmpty(studentId))
             {
@@ -70,7 +83,7 @@ namespace StudentManagement.Controllers
             // Tự động điền StartTime và EndTime dựa trên tiết học
             if (lesson.HasValue)
             {
-                TimeSpan startTime = GetStartTimeFromLesson(lesson.Value);
+                TimeSpan startTime = ScheduleHelper.GetStartTimeFromLesson(lesson.Value);
                 schedule.StartTime = startTime;
                 schedule.EndTime = startTime.Add(TimeSpan.FromMinutes(45)); // Mặc định 1 tiết = 45 phút
             }
@@ -86,46 +99,26 @@ namespace StudentManagement.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Schedule schedule)
         {
-            if (ModelState.IsValid)
+            // Kiểm tra hợp lệ và không trùng lịch
+            if (ModelState.IsValid && !_scheduleRepository.IsScheduleConflict(
+                schedule.StudentID, schedule.ScheduleID, schedule.ClassDate, schedule.StartTime, schedule.EndTime))
             {
                 _scheduleRepository.Add(schedule);
-                Console.WriteLine(schedule);
-
                 return RedirectToAction(nameof(Index), new { studentId = schedule.StudentID });
             }
 
-            // Lấy danh sách khóa học sinh viên học và có điểm hoặc điểm = null
+            // Nếu bị trùng hoặc không hợp lệ
+            TempData["ErrorMessage"] = _localizer["ConflictSchedule"].Value;
 
-            var courses = _courseRepository.GetAll();
+            // Gửi lại dữ liệu cần cho View để render lại form
+            var courses = _courseRepository.GetCoursesByStudent(schedule.StudentID);
             ViewBag.Courses = new SelectList(courses, "CourseID", "CourseName");
             ViewBag.StudentID = schedule.StudentID;
             ViewBag.ClassDate = schedule.ClassDate.ToString("yyyy-MM-dd");
             ViewBag.StartTime = schedule.StartTime.ToString(@"hh\:mm");
             ViewBag.EndTime = schedule.EndTime.ToString(@"hh\:mm");
-            
-            return View(schedule);
-        }
 
-        // Hàm helper để tính StartTime từ tiết học
-        private TimeSpan GetStartTimeFromLesson(int lesson)
-        {
-            if (lesson >= 1 && lesson <= 3)
-            {
-                return TimeSpan.FromMinutes(6 * 60 + 45 + (lesson - 1) * 45); // 6h45 + (lesson-1)*45
-            }
-            else if (lesson >= 4 && lesson <= 6)
-            {
-                return TimeSpan.FromMinutes(9 * 60 + 20 + (lesson - 4) * 45); // 9h20 + (lesson-4)*45
-            }
-            else if (lesson >= 7 && lesson <= 12)
-            {
-                return TimeSpan.FromMinutes(12 * 60 + 30 + (lesson - 7) * 45); // 12h30 + (lesson-7)*45
-            }
-            else if (lesson >= 13 && lesson <= 15)
-            {
-                return TimeSpan.FromMinutes(18 * 60 + (lesson - 13) * 45); // 18h + (lesson-13)*45
-            }
-            return TimeSpan.Zero;
+            return RedirectToAction(nameof(Index), new { studentId = schedule.StudentID });
         }
 
         public IActionResult Edit(int id)
@@ -133,7 +126,7 @@ namespace StudentManagement.Controllers
             var schedule = _scheduleRepository.GetById(id);
             if (schedule == null) return NotFound();
 
-            var courses = _courseRepository.GetAll();
+            var courses = _courseRepository.GetCoursesByStudent(schedule.StudentID);
             ViewBag.Courses = new SelectList(courses, "CourseID", "CourseName");
 
             return View(schedule);
@@ -145,15 +138,18 @@ namespace StudentManagement.Controllers
         {
             if (id != schedule.ScheduleID) return BadRequest();
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && !_scheduleRepository.IsScheduleConflict(
+                schedule.StudentID, schedule.ScheduleID, schedule.ClassDate, schedule.StartTime, schedule.EndTime))
             {
                 _scheduleRepository.Update(schedule);
                 return RedirectToAction(nameof(Index), new { studentId = schedule.StudentID });
             }
 
-            var courses = _courseRepository.GetAll();
+            TempData["ErrorMessage"] = _localizer["ConflictSchedule"].Value;
+
+            var courses = _courseRepository.GetCoursesByStudent(schedule.StudentID);
             ViewBag.Courses = new SelectList(courses, "CourseID", "CourseName");
-            return View(schedule);
+            return RedirectToAction(nameof(Index), new { studentId = schedule.StudentID });
         }
 
         public IActionResult Delete(int id)

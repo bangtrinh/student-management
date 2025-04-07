@@ -17,6 +17,15 @@ namespace StudentManagement.Repositories
                 .Where(c => c.MajorID == majorId).ToList();
         }
 
+        public IEnumerable<Course> GetCoursesByStudent(string studentId)
+        {
+            return _context.Courses
+                .Where(c => c.Grades.Any(g => g.StudentID == studentId))
+                .Include(c => c.Major)
+                .Include(c => c.Teacher)
+                .ToList();
+        }
+
         public IEnumerable<Course> GetCoursesByTeacher(string teacherId)
         {
             return _context.Courses.Where(c => c.TeacherID == teacherId).ToList();
