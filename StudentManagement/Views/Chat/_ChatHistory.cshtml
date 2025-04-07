@@ -1,5 +1,7 @@
 ﻿@model List<StudentManagement.Models.Message>
 @using System.Security.Claims
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<StudentManagement.SharedResources> Localizer
 @{
     var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 }
@@ -32,7 +34,7 @@
 else
 {
     <div class="no-messages">
-        <p>Chưa có tin nhắn nào trong cuộc trò chuyện này</p>
+        <p>@Localizer["NoMessages"]</p>
     </div>
 }
 

@@ -244,7 +244,7 @@
     <value>Edit teacher profile</value>
   </data>
   <data name="NoInfoFound" xml:space="preserve">
-    <value>No information found</value>
+    <value>No information</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Name</value>
@@ -488,5 +488,35 @@
   </data>
   <data name="ConflictSchedule" xml:space="preserve">
     <value>Invalid schedule. Please double check.</value>
+  </data>
+  <data name="ScheduleTeacher" xml:space="preserve">
+    <value>Schedule</value>
+  </data>
+  <data name="Chat" xml:space="preserve">
+    <value>Chat</value>
+  </data>
+  <data name="ContactList" xml:space="preserve">
+    <value>Contacts</value>
+  </data>
+  <data name="NoContacts" xml:space="preserve">
+    <value>No contact available</value>
+  </data>
+  <data name="EnterMessage" xml:space="preserve">
+    <value>Enter your message</value>
+  </data>
+  <data name="SelectContactToChat" xml:space="preserve">
+    <value>Select a contact to chat</value>
+  </data>
+  <data name="InstructionMessage" xml:space="preserve">
+    <value>You can chat with contacts in the list.</value>
+  </data>
+  <data name="NoMessages" xml:space="preserve">
+    <value>No message sent</value>
+  </data>
+  <data name="Grade" xml:space="preserve">
+    <value>Grade</value>
+  </data>
+  <data name="StudentList" xml:space="preserve">
+    <value>Students</value>
   </data>
 </root>

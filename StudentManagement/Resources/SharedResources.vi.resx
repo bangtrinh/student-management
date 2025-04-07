@@ -244,7 +244,7 @@
     <value>Sửa thông tin giảng viên</value>
   </data>
   <data name="NoInfoFound" xml:space="preserve">
-    <value>Không có thông tin</value>
+    <value>Trống</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Tên</value>
@@ -364,7 +364,7 @@
     <value>Tên môn học </value>
   </data>
   <data name="Credits" xml:space="preserve">
-    <value>Số tín chỉ</value>
+    <value>Tín chỉ</value>
   </data>
   <data name="Room" xml:space="preserve">
     <value>Phòng</value>
@@ -488,5 +488,35 @@
   </data>
   <data name="ConflictSchedule" xml:space="preserve">
     <value>Thông tin lịch học không phù hợp. Vui lòng kiểm tra lại</value>
+  </data>
+  <data name="ScheduleTeacher" xml:space="preserve">
+    <value>Lịch giảng dạy</value>
+  </data>
+  <data name="Chat" xml:space="preserve">
+    <value>Trò chuyện</value>
+  </data>
+  <data name="ContactList" xml:space="preserve">
+    <value>Danh bạ</value>
+  </data>
+  <data name="NoContacts" xml:space="preserve">
+    <value>Chưa có liên hệ</value>
+  </data>
+  <data name="EnterMessage" xml:space="preserve">
+    <value>Nhập tin nhắn</value>
+  </data>
+  <data name="SelectContactToChat" xml:space="preserve">
+    <value>Chọn liên hệ để trò chuyện</value>
+  </data>
+  <data name="InstructionMessage" xml:space="preserve">
+    <value>Bạn có thể nhắn tin với các liên hệ trong danh bạ </value>
+  </data>
+  <data name="NoMessages" xml:space="preserve">
+    <value>Chưa có tin nhắn</value>
+  </data>
+  <data name="Grade" xml:space="preserve">
+    <value>Điểm</value>
+  </data>
+  <data name="StudentList" xml:space="preserve">
+    <value>Danh sách sinh viên</value>
   </data>
 </root>
