@@ -124,7 +124,7 @@
     <value>Classroom</value>
   </data>
   <data name="TeachingSchedule" xml:space="preserve">
-    <value>Teaching Schedule</value>
+    <value>Teaching schedule</value>
   </data>
   <data name="Messages" xml:space="preserve">
     <value>Messages</value>
@@ -239,5 +239,8 @@
   </data>
   <data name="AvailableCourses" xml:space="preserve">
     <value>Available courses</value>
+  </data>
+  <data name="NoInfoFound" xml:space="preserve">
+    <value>No information found</value>
   </data>
 </root>

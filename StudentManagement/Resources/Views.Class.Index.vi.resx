@@ -120,6 +120,9 @@
   <data name="Actions" xml:space="preserve">
     <value>Hành động</value>
   </data>
+  <data name="Add" xml:space="preserve">
+    <value>Tạo mới</value>
+  </data>
   <data name="AddClass" xml:space="preserve">
     <value>Thêm lớp học mới</value>
   </data>
@@ -146,6 +149,9 @@
   </data>
   <data name="Major" xml:space="preserve">
     <value>Ngành</value>
+  </data>
+  <data name="NoInfoFound" xml:space="preserve">
+    <value>Không có thông tin</value>
   </data>
   <data name="SearchByNameOrID" xml:space="preserve">
     <value>Tìm kiếm bằng tên hoặc ID</value>

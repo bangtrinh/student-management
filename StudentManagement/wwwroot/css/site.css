@@ -310,3 +310,17 @@ body {
     align-items: center;
     justify-content: center;
 }
+
+.card-body {
+    overflow: visible !important; /* Cho phép dropdown tràn ra ngoài */
+    position: relative; /* Tạo nền cho z-index hoạt động đúng */
+}
+
+.dropdown-menu {
+    z-index: 1050 !important; /* Ưu tiên hiển thị cao hơn card */
+}
+
+.table-responsive {
+    overflow: visible !important;
+    position: relative !important;
+}

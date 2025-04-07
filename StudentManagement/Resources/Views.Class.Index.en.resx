@@ -120,6 +120,9 @@
   <data name="Actions" xml:space="preserve">
     <value>Actions</value>
   </data>
+  <data name="Add" xml:space="preserve">
+    <value>Create</value>
+  </data>
   <data name="AddClass" xml:space="preserve">
     <value>Add New Class</value>
   </data>
@@ -146,6 +149,9 @@
   </data>
   <data name="Major" xml:space="preserve">
     <value> Major</value>
+  </data>
+  <data name="NoInfoFound" xml:space="preserve">
+    <value>No information found</value>
   </data>
   <data name="SearchByNameOrID" xml:space="preserve">
     <value>Search by name or ID</value>

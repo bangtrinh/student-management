@@ -220,7 +220,7 @@
     <value>Không có giảng viên</value>
   </data>
   <data name="Add" xml:space="preserve">
-    <value>Thêm</value>
+    <value>Thêm mơi</value>
   </data>
   <data name="SearchByNameOrID" xml:space="preserve">
     <value>Tìm kiếm bằng tên hoặc ID</value>
@@ -244,7 +244,7 @@
     <value>Sửa thông tin giảng viên</value>
   </data>
   <data name="NoInfoFound" xml:space="preserve">
-    <value>Trống</value>
+    <value>Không có thông tin</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Tên</value>

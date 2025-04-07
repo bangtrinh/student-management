@@ -64,7 +64,7 @@
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <h5 class="mb-0">
                                     <i class="fas fa-user-graduate me-2"></i>
-                                    @Localizer["StudentList"]
+                                    @Localizer["StudentList"] 
                                 </h5>
                             </div>
 
@@ -99,7 +99,7 @@
                                                     <td>@grade.Student.Email</td>
                                                     <td class="text-center">@grade.Student.PhoneNumber</td>
                                                     <td class="text-center">
-                                                        <input type="number" step="0.1" min="0" max="10"
+                                                        <input type="text"
                                                                class="form-control form-control-sm grade-input text-center"
                                                                data-grade-id="@grade.GradeID"
                                                                value="@(grade.Score.HasValue ? grade.Score.Value.ToString("0.0") : "")"
@@ -125,18 +125,9 @@
                             <a asp-action="Edit" asp-route-id="@Model.CourseID" class="btn btn-warning px-4">
                                 <i class="fas fa-edit me-2"></i>@Localizer["Edit"]
                             </a>
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <a asp-action="Index" class="btn btn-outline-secondary px-4">
-                                    <i class="fas fa-arrow-left me-2"></i>@Localizer["Back"]
-                                </a>
-                            }
-                            @if (User.IsInRole("Teacher"))
-                            {
-                                <a asp-controller="Teacher" asp-action="MyCourses" class="btn btn-outline-secondary px-4">
-                                    <i class="fas fa-arrow-left me-2"></i>@Localizer["Back"]
-                                </a>
-                            }
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4">
+                                <i class="fas fa-arrow-left me-2"></i>@Localizer["Back"]
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -153,23 +144,28 @@
                     e.preventDefault();
                     var input = $(this);
                     var gradeId = input.data('grade-id');
-                    var score = input.val();
+                    var rawInput = input.val().trim();
 
-                    // Validate input
-                    if (score !== '' && (score < 0 || score > 10)) {
+                    // Cho phép cả dấu , và .
+                    var normalized = rawInput.replace(',', '.');
+                    var score = parseFloat(normalized);
+
+                    // Regex kiểm tra định dạng hợp lệ: số từ 0 đến 10, có thể có 1 dấu chấm
+                    var isValidFormat = /^(\d{1,2})([.,]\d)?$/.test(rawInput);
+
+                    if (rawInput === '' || isNaN(score) || score < 0 || score > 10 || !isValidFormat) {
                         alert('@Localizer["GradeValidation"]');
                         return;
                     }
 
-                    // Send AJAX request
                     $.ajax({
                         url: '/Grade/EditGrade',
                         type: 'POST',
                         contentType: 'application/json',
-                        data: JSON.stringify({ gradeId: gradeId, grade: parseFloat(score) }),
+                        data: JSON.stringify({ gradeId: gradeId, grade: score }),
                         success: function (response) {
                             alert(response.message);
-                            input.val(parseFloat(score).toFixed(1));
+                            input.val(score.toFixed(1));
                         },
                         error: function (xhr) {
                             alert(xhr.responseJSON?.message || "@Localizer["ErrorOccurred"]");
@@ -179,6 +175,7 @@
             });
         });
     </script>
+
 
     <style>
         <link rel="stylesheet" href="~/css/form-style.css" asp-append-version="true" / >

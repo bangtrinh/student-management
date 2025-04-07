@@ -23,10 +23,6 @@ namespace StudentManagement.Controllers
             _majorRepository = majorRepository;
         }
 
-        [Authorize(Policy = "RequireAdminRole")]
-
-
-
         [Authorize(Policy = "RequireAdminOrTeacher")]
 
         public IActionResult Details(string id)
