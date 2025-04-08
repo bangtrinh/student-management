@@ -63,6 +63,10 @@ namespace StudentManagement.Controllers
                 _classRepository.Add(classEntity);
                 return RedirectToAction(nameof(Index));
             }
+            var teachers = _teacherRepository.GetAll();
+            var majors = _majorRepository.GetAll();
+            ViewBag.Majors = new SelectList(majors, "MajorID", "MajorName");
+            ViewBag.Teachers = new SelectList(teachers, "TeacherID", "FullName");
             return View(classEntity);
         }
 
@@ -88,6 +92,10 @@ namespace StudentManagement.Controllers
                 _classRepository.Update(classEntity);
                 return RedirectToAction(nameof(Index));
             }
+            var teachers = _teacherRepository.GetAll();
+            var majors = _majorRepository.GetAll();
+            ViewBag.Majors = new SelectList(majors, "MajorID", "MajorName");
+            ViewBag.Teachers = new SelectList(teachers, "TeacherID", "FullName");
             return View(classEntity);
         }
 
