@@ -166,8 +166,10 @@ namespace StudentManagement.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(string id, Teacher teacher)
         {
+            var departments = _departmentRepository.GetAll();
+            ViewBag.Departments = new SelectList(departments, "DepartmentID", "DepartmentName");
             if (id != teacher.TeacherID) return BadRequest();
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _teacherRepository.Update(teacher);
                 return RedirectToAction(nameof(Index));

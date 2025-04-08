@@ -11,7 +11,7 @@ using static StudentManagement.Areas.Identity.Pages.Account.Manage.ChangePasswor
 namespace StudentManagement.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Policy = "RequireAdminRole")]
+    [Authorize(Policy = "GmailAndAdminOnly")]
     public class AccountController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
@@ -33,14 +33,13 @@ namespace StudentManagement.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(string searchString)
         {
-            // Lấy toàn bộ danh sách người dùng vào bộ nhớ trước
             var users = await _userManager.Users.ToListAsync();
 
-            // Nếu có chuỗi tìm kiếm, lọc danh sách người dùng dựa trên email
             if (!string.IsNullOrEmpty(searchString))
             {
                 searchString = searchString.Trim();
-                users = users.Where(u => u.Email.Contains(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
+                users = users.Where(u => u.Email.Contains(searchString, 
+                    StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
             var userRoles = new Dictionary<string, IList<string>>();
@@ -57,7 +56,8 @@ namespace StudentManagement.Areas.Admin.Controllers
         // GET: Chuyển hướng đến trang Register để tạo tài khoản mới
         public IActionResult Create()
         {
-            return RedirectToPage("/Account/Register", new { area = "Identity", returnUrl = Url.Action("Index", "Account", new { area = "Admin" }) });
+            return RedirectToPage("/Account/Register", new { area = "Identity", 
+                returnUrl = Url.Action("Index", "Account", new { area = "Admin" }) });
         }
 
         // GET: Hiển thị form chỉnh sửa tài khoản
@@ -98,6 +98,17 @@ namespace StudentManagement.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
+                int i = 1;
+                foreach (var kvp in ModelState)
+                {
+                    var field = kvp.Key;
+                    var state = kvp.Value;
+
+                    foreach (var error in state.Errors)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"  {i++}. ❌ Field: '{field}' → {error.ErrorMessage}");
+                    }
+                }
                 model.RoleList = _roleManager.Roles.Select(r => new SelectListItem
                 {
                     Text = r.Name,
@@ -115,6 +126,7 @@ namespace StudentManagement.Areas.Admin.Controllers
             user.Email = model.Email;
             user.UserName = model.Email;
             user.PhoneNumber = model.PhoneNumber;
+        
 
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
@@ -134,6 +146,15 @@ namespace StudentManagement.Areas.Admin.Controllers
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
+            }
+            foreach (var kvp in ModelState)
+            {
+                var key = kvp.Key;
+                var state = kvp.Value;
+                foreach (var error in state.Errors)
+                {
+                    Console.WriteLine($" - Lỗi ở '{key}': {error.ErrorMessage}");
+                }
             }
 
             model.RoleList = _roleManager.Roles.Select(r => new SelectListItem

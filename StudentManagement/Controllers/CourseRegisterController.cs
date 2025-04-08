@@ -63,7 +63,8 @@ namespace StudentManagement.Controllers
                 ?? new List<Grade>();
             if(!string.IsNullOrEmpty(searchString))
             {
-                allCourses = allCourses.Where(c => c.CourseName.Contains(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
+                allCourses = allCourses.Where(c => c.CourseName.Contains(searchString, 
+                    StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
             // Chuyển thành danh sách CourseRegistrationItem

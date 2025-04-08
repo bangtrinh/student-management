@@ -7,6 +7,8 @@ using StudentManagement.Models;
 using StudentManagement.Repositories;
 using StudentManagement.Services;
 using System.Globalization;
+using StudentManagement.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -88,6 +90,14 @@ builder.Services.AddAuthorization(options =>
 
     options.AddPolicy("AllowAll", policy =>
     policy.RequireRole(SD.Role_Admin, SD.Role_Student, SD.Role_Teacher));
+
+    options.AddPolicy("GmailAndAdminOnly", policy =>
+    {
+        policy.RequireRole("Admin");
+        policy.Requirements.Add(new GmailEmailRequirement());
+    });
+
+
 }); 
 
 builder.Services.AddControllersWithViews()
@@ -109,6 +119,8 @@ builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
 builder.Services.AddScoped<IGradeService, GradeService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
+builder.Services.AddSingleton<IAuthorizationHandler, GmailEmailHandler>();
+
 
 builder.Services.AddScoped<EmailService>();
 

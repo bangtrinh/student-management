@@ -22,52 +22,6 @@ namespace StudentManagement.Controllers
             _gradeRepository = gradeRepository;
         }
 
-        [Authorize(Policy = "RequireAdminRole")]
-        public IActionResult Index()
-        {
-            var grades = _gradeRepository.GetAll();
-            return View(grades);
-        }
-
-        [Authorize(Policy = "RequireAdminRole")]
-
-        public IActionResult Details(string id)
-        {
-            var grade = _gradeRepository.GetById(id);
-            if (grade == null) return NotFound();
-            return View(grade);
-        }
-
-        [Authorize(Policy = "RequireAdminRole")]
-
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        [Authorize(Policy = "RequireAdminRole")]
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(Grade grade)
-        {
-            if (ModelState.IsValid)
-            {
-                _gradeRepository.Add(grade);
-                return RedirectToAction(nameof(Index));
-            }
-            return View(grade);
-        }
-
-        [Authorize(Policy = "RequireAdminOrTeacher")]
-
-        public IActionResult EditGrade(string id)
-        {
-            var grade = _gradeRepository.GetById(id);
-            if (grade == null) return NotFound();
-            return View(grade);
-        }
-
         [Authorize(Policy = "RequireAdminOrTeacher")]
         // Action để lưu điểm đã chỉnh sửa (POST)
         [HttpPost]
@@ -88,28 +42,7 @@ namespace StudentManagement.Controllers
             _gradeRepository.Update(gradeToUpdate);
 
             return Json(new { success = true, message = "Điểm đã được cập nhật thành công!" });
-        }
-
-
-        [Authorize(Policy = "RequireAdminRole")]
-        public IActionResult Delete(string id)
-        {
-            var grade = _gradeRepository.GetById(id);
-            if (grade == null) return NotFound();
-            return View(grade);
-        }
-
-        [Authorize(Policy = "RequireAdminRole")]
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(string id)
-        {
-            _gradeRepository.Delete(id);
-            return RedirectToAction(nameof(Index));
-        }
-
-      
+        }    
 
     }
 }

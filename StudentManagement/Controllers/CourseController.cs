@@ -59,6 +59,11 @@ namespace StudentManagement.Controllers
                 _courseRepository.Add(course);
                 return RedirectToAction(nameof(Index));
             }
+            var majors = _majorRepository.GetAll();
+            ViewBag.Majors = new SelectList(majors, "MajorID", "MajorName");
+
+            var teachers = _teacherRepository.GetAll();
+            ViewBag.Teachers = new SelectList(teachers, "TeacherID", "FullName");
             return View(course);
         }
 
