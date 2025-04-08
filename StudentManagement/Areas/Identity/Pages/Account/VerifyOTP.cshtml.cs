@@ -45,7 +45,9 @@ public class VerifyOTPModel : PageModel
 
         if (storedOtp != null && storedOtp.ExpiryTime > DateTime.Now)
         {
-      
+            // Xóa mã OTP sau khi xác thực thành công
+            _context.OTPS.Remove(storedOtp);
+            _context.SaveChanges();
             return RedirectToPage("/Account/ResetPassword", new { email = Email });
         }
         else
