@@ -103,7 +103,7 @@ namespace StudentManagement.Controllers
 
         [Authorize(Policy = "RequireAdminRole")]
         // TÌM KIẾM
-        public IActionResult Index(string searchString)
+        public IActionResult Index(string searchString, string sortOrder)
         {
             var students = _studentRepository.GetAll();
 
@@ -113,6 +113,10 @@ namespace StudentManagement.Controllers
                                                s.StudentID.Contains(searchString, StringComparison.OrdinalIgnoreCase) ||
                                                s.Email.Contains(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
             }
+
+            students = sortOrder == "desc"
+                ? students.OrderByDescending(s => s.FullName).ToList()
+                : students.OrderBy(s => s.FullName).ToList();
 
             return View(students);
         }

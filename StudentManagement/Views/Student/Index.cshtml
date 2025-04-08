@@ -17,17 +17,30 @@
             </h2>
 
             <!-- Search Form -->
-            <form method="get" class="d-flex align-items-center search-form mx-3" style="max-width: 700px;">
-    <div class="input-group w-100">
-        <input type="text" name="searchString" class="form-control search-input"
-               placeholder="@Localizer["SearchByNameOrID"]..."
-               value="@Context.Request.Query["searchString"]" />
-        <div class="input-group-append">
-            <button type="submit" class="btn btn-primary search-btn" title="@Localizer["Search"]">
-                <i class="fas fa-search"></i>
-            </button>
+        <form method="get" class="d-flex align-items-center search-form mx-3" style="max-width: 700px;">
+        <div class="input-group w-100">
+            <input type="text" name="searchString" class="form-control search-input"
+                   placeholder="@Localizer["SearchByNameOrID"]..."
+                   value="@Context.Request.Query["searchString"]" />
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-primary search-btn" title="@Localizer["Search"]">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
         </div>
-    </div>
+        <div class="d-flex align-items-center ms-3">
+                    <select class="form-control" style="width: 150px;" onchange="location = this.value;">
+                        @{
+                            var currentSearch = Context.Request.Query["searchString"];
+                            var currentSort = Context.Request.Query["sortOrder"];
+                            var ascUrl = $"?searchString={currentSearch}&sortOrder=asc";
+                            var descUrl = $"?searchString={currentSearch}&sortOrder=desc";
+                        }
+                        <option value="@ascUrl" selected="@(currentSort != "desc")">A-Z</option>
+                        <option value="@descUrl" selected="@(currentSort == "desc")">Z-A</option>
+                    </select>
+        </div>
+
                 @if (!string.IsNullOrEmpty(Context.Request.Query["searchString"]))
                 {
                     <a asp-action="Index" class="btn btn-outline-secondary ms-2">
