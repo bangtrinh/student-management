@@ -16,7 +16,7 @@ namespace StudentManagement.Models
             }
 
             // Tạo tài khoản admin mặc định nếu chưa tồn tại
-            var adminEmail = "admin@example.com";
+            var adminEmail = "admin@gmail.com";
             var adminPassword = "Admin@123"; // Nên thay đổi mật khẩu này sau khi ứng dụng chạy
             var adminUser = await userManager.FindByEmailAsync(adminEmail);
 

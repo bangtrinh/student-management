@@ -564,4 +564,7 @@
   <data name="NoAvailableCourses" xml:space="preserve">
     <value>Không có môn học nào để đăng ký</value>
   </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Xác nhận mật khẩu</value>
+  </data>
 </root>

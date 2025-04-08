@@ -564,4 +564,7 @@
   <data name="NoAvailableCourses" xml:space="preserve">
     <value>No available courses</value>
   </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirm password</value>
+  </data>
 </root>

@@ -38,12 +38,12 @@ namespace StudentManagement.Controllers
 
         [HttpPost]
         public IActionResult GradeReport(
-    string academicYear,
-    string semester,
-    string classId,
-    string majorId,
-    int page = 1,
-    int pageSize = 10)
+                string academicYear,
+                string semester,
+                string classId,
+                string majorId,
+                int page = 1,
+                int pageSize = 10)
         {
             try
             {
@@ -94,10 +94,10 @@ namespace StudentManagement.Controllers
 
 
         public IActionResult ExportToExcel(
-    string academicYear,
-    string semester,
-    string classId,
-    string majorId)
+                string academicYear,
+                string semester,
+                string classId,
+                string majorId)
         {
             try
             {
