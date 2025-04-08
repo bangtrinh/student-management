@@ -7,6 +7,13 @@
     Layout = "~/Views/Shared/_LoginRegisterLayout.cshtml";
 }
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success text-center">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
 <div class="text-center mb-4">
     <h1 class="fw-bold">@ViewData["Title"]</h1>
     <p class="text-muted">@Localizer["UseYourAccountToLogin"]</p>
