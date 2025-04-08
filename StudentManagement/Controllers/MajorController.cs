@@ -59,6 +59,8 @@ namespace StudentManagement.Controllers
                 _majorRepository.Add(major);
                 return RedirectToAction(nameof(Index));
             }
+            var departments = _departmentRepository.GetAll();
+            ViewBag.Departments = new SelectList(departments, "DepartmentID", "DepartmentName");
             return View(major);
         }
 
@@ -81,6 +83,8 @@ namespace StudentManagement.Controllers
                 _majorRepository.Update(major);
                 return RedirectToAction(nameof(Index));
             }
+            var departments = _departmentRepository.GetAll();
+            ViewBag.Departments = new SelectList(departments, "DepartmentID", "DepartmentName");
             return View(major);
         }
 
